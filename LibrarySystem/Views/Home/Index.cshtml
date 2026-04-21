@@ -1,0 +1,121 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- HERO SECTION -->
+<section class="hero-section d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-3 fw-bold mb-4 animate-fade-in text-white">Welcome to the Library</h1>
+                <p class="lead mb-4 fs-5 text-white-50">Discover, borrow, and manage books with ease. Your digital library experience starts here.</p>
+
+                <!-- SEARCH BAR -->
+                <div class="search-box mt-4">
+                    <div class="input-group input-group-lg shadow-lg">
+                        <span class="input-group-text bg-white border-end-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="text-muted" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </span>
+                        <input type="text" class="form-control border-start-0 bg-white" placeholder="Search books, authors, ISBN..." />
+                        <button class="btn btn-primary px-4" type="button">Search</button>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-center gap-3">
+                    <span class="badge bg-light text-dark px-3 py-2">📚 10,000+ Books</span>
+                    <span class="badge bg-light text-dark px-3 py-2">👥 5,000+ Members</span>
+                    <span class="badge bg-light text-dark px-3 py-2">🔄 24/7 Access</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Why Choose Our Library?</h2>
+            <p class="text-muted">Everything you need to manage your reading journey</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card h-100 p-4 text-center border-0 shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
+                            <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255l6.344-1.548a4.5 4.5 0 0 0-.906-7.35A3.012 3.012 0 0 0 13.5.5H3z"/>
+                        </svg>
+                    </div>
+                    <h4 class="fw-bold mb-3">Browse Books</h4>
+                    <p class="text-muted mb-0">Explore our vast collection of thousands of books across various genres and categories.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100 p-4 text-center border-0 shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                        </svg>
+                    </div>
+                    <h4 class="fw-bold mb-3">Easy Transactions</h4>
+                    <p class="text-muted mb-0">Borrow and return books with simple steps. Quick, seamless, and hassle-free process.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100 p-4 text-center border-0 shadow-sm">
+                    <div class="feature-icon mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="text-info" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                    </div>
+                    <h4 class="fw-bold mb-3">Account Management</h4>
+                    <p class="text-muted mb-0">Manage your profile, track your borrowed books, and upload your profile picture.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="stats-section py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <h2 class="fw-bold display-4">10K+</h2>
+                <p class="mb-0">Books</p>
+            </div>
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <h2 class="fw-bold display-4">5K+</h2>
+                <p class="mb-0">Members</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h2 class="fw-bold display-4">15K+</h2>
+                <p class="mb-0">Borrows</p>
+            </div>
+            <div class="col-6 col-md-3">
+                <h2 class="fw-bold display-4">50+</h2>
+                <p class="mb-0">Categories</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CALL TO ACTION -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold mb-3">Ready to Start Your Reading Journey?</h2>
+                <p class="text-muted mb-4">Join thousands of book lovers and access our entire collection today.</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-success btn-lg px-5 shadow">Create an Account</a>
+                    <a href="#" class="btn btn-outline-primary btn-lg px-5">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

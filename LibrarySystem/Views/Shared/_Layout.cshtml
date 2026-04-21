@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LibrarySystem</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LibrarySystem.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+            <div class="container">
+
+                <!-- LEFT: LOGO -->
+                <a class="navbar-brand fw-bold fs-4" asp-controller="Home" asp-action="Index">
+                    📚 Library System
+                </a>
+
+                <!-- TOGGLER -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- CENTER + RIGHT -->
+                <div class="collapse navbar-collapse justify-content-between" id="navMenu">
+
+                    <!-- CENTER: NAV LINKS -->
+                    <ul class="navbar-nav mx-auto nav-links">
+                        <li class="nav-item">
+                            <a class="nav-link px-4" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-4" href="#">Browse</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-4" href="#">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-4" href="#">About</a>
+                        </li>
+                    </ul>
+
+                    <!-- RIGHT: AUTH BUTTONS -->
+                    <div class="d-flex align-items-center gap-3 auth-links">
+                        <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                        <a class="btn btn-primary px-4" asp-controller="Account" asp-action="Register">Register</a>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid p-0">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-1">&copy; 2026 - LibrarySystem - All rights reserved</p>
+            <div>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none me-3">Privacy</a>
+                <a href="#" class="text-decoration-none me-3">Terms</a>
+                <a href="#" class="text-decoration-none">Contact</a>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
