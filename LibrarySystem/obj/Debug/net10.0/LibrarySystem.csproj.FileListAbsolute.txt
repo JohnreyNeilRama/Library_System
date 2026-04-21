@@ -300,4 +300,5 @@ C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\LibraryS.702885DD.Up2Date
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\compressed\ikxdd53x9m-{0}-mwj360by6m-mwj360by6m.gz
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\compressed\9334wbup40-{0}-mwj360by6m-mwj360by6m.gz
-C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\compressed\czotez6djq-{0}-ckf1tyvzu9-ckf1tyvzu9.gz
+C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\LibrarySystem.sourcelink.json
+C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\compressed\czotez6djq-{0}-d5msc0h7ga-d5msc0h7ga.gz

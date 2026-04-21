@@ -3,56 +3,87 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="login-container">
-    <div class="login-card bg-white shadow-lg mx-auto">
+<div class="register-container">
+    <div class="register-card bg-white shadow-lg mx-auto">
 
-        <div class="text-center mb-4">
+        <div class="text-center mb-3">
             <h2 class="fw-bold">Create Account</h2>
-            <p class="text-muted">Join the library system</p>
+            <p class="text-muted small">Join the library system</p>
         </div>
 
         <form asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data">
 
             <div class="auth-form">
-
-                <div class="mb-3">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" class="form-control" placeholder="Enter your name">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" placeholder="Full name">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">ID Number</label>
+                        <input type="text" class="form-control" placeholder="ID number">
+                    </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Course</label>
+                        <select class="form-select">
+                            <option value="" selected>Select course</option>
+                            <option>BS Computer Science</option>
+                            <option>BS Information Technology</option>
+                            <option>BS Information Systems</option>
+                            <option>BS Business Administration</option>
+                            <option>BS Accountancy</option>
+                            <option>BS Hospitality Management</option>
+                            <option>BS Criminology</option>
+                            <option>BS Civil Engineering</option>
+                            <option>BS Electrical Engineering</option>
+                            <option>BS Mechanical Engineering</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Year Level</label>
+                        <select class="form-select">
+                            <option value="" selected>Select year</option>
+                            <option>1st Year</option>
+                            <option>2nd Year</option>
+                            <option>3rd Year</option>
+                            <option>4th Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-2">
                     <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" placeholder="Enter your email">
+                    <input type="email" class="form-control" placeholder="Email">
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+                <div class="row g-2">
+                    <div class="col-md-6">
                         <label class="form-label">Password</label>
                         <input type="password" class="form-control" placeholder="Password">
                     </div>
-
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6">
                         <label class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" placeholder="Confirm Password">
+                        <input type="password" class="form-control" placeholder="Confirm">
                     </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-2">
                     <label class="form-label">Profile Picture</label>
                     <input type="file" class="form-control">
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 py-2">
+                <button type="submit" class="btn btn-primary w-100">
                     Register
                 </button>
 
-                <div class="text-center mt-4">
-                    <span class="text-muted">Already have an account?</span>
-                    <a asp-controller="Account" asp-action="Login" class="fw-semibold text-decoration-none"> Login</a>
+                <div class="text-center mt-3 mb-0">
+                    <span class="text-muted small">Already have an account?</span>
+                    <a asp-controller="Account" asp-action="Login" class="small fw-semibold text-decoration-none"> Login</a>
                 </div>
-
             </div>
         </form>
-
     </div>
 </div>

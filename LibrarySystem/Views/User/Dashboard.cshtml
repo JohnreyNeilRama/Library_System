@@ -1,0 +1,106 @@
+@{
+    ViewData["Title"] = "User Dashboard";
+    Layout = "_UserLayout";
+}
+
+<div class="dashboard-container">
+    <div class="welcome-banner">
+        <div>
+            <h4 class="fw-bold mb-1">Welcome back, John!</h4>
+            <p class="mb-0 opacity-75">Here's your library overview</p>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-num">5</span>
+            <span class="stat-lbl">Borrowed</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">12</span>
+            <span class="stat-lbl">Returned</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">2</span>
+            <span class="stat-lbl">Pending</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">3</span>
+            <span class="stat-lbl">Reserved</span>
+        </div>
+    </div>
+
+    <div class="content-sections">
+        <div class="main-section">
+            <div class="section-card">
+                <div class="section-title">
+                    <h5 class="fw-bold">Currently Borrowed</h5>
+                </div>
+                <div class="books-list">
+                    <div class="book-row">
+                        <div class="book-cover" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                        <div class="book-info">
+                            <h6 class="mb-0">The Great Gatsby</h6>
+                            <small class="text-muted">Due: Apr 29, 2026</small>
+                        </div>
+                        <span class="badge-status warning">Due Soon</span>
+                    </div>
+                    <div class="book-row">
+                        <div class="book-cover" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
+                        <div class="book-info">
+                            <h6 class="mb-0">1984</h6>
+                            <small class="text-muted">Due: Apr 24, 2026</small>
+                        </div>
+                        <span class="badge-status success">On Time</span>
+                    </div>
+                    <div class="book-row">
+                        <div class="book-cover" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+                        <div class="book-info">
+                            <h6 class="mb-0">To Kill a Mockingbird</h6>
+                            <small class="text-muted">Due: Apr 22, 2026</small>
+                        </div>
+                        <span class="badge-status danger">Overdue</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card mt-3">
+                <div class="section-title">
+                    <h5 class="fw-bold">Reserved Books</h5>
+                </div>
+                <div class="reserved-list">
+                    <div class="reserved-row">
+                        <div class="book-cover" style="background: linear-gradient(135deg, #fa709a, #fee140);"></div>
+                        <div class="book-info">
+                            <h6 class="mb-0">The Catcher in the Rye</h6>
+                            <small class="text-muted">Ready for Pickup</small>
+                        </div>
+                        <button class="btn btn-sm btn-success">Pick Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-section">
+            <div class="profile-card">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=0d6efd&color=fff&size=60" alt="Profile" class="avatar-sm">
+                <h6 class="mt-2 mb-0">John Doe</h6>
+                <small class="text-muted">Gold Member</small>
+            </div>
+
+            <div class="activity-card">
+                <h6 class="fw-bold mb-2">Recent Activity</h6>
+                <div class="activity-items">
+                    <div class="activity-item">
+                        <span class="activity-icon">📗</span>
+                        <small>Returned "The Hobbit"</small>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-icon">📖</span>
+                        <small>Borrowed "Pride and Prejudice"</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
