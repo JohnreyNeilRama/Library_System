@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LibrarySystem.styles.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <nav class="user-navbar">
@@ -23,27 +24,17 @@
             </div>
             
             <div class="nav-menu">
-                <a href="#" class="nav-link">Browse</a>
+                <a asp-controller="User" asp-action="Profile" class="nav-link">Profile</a>
+                <a asp-controller="User" asp-action="BorrowedBooks" class="nav-link">Borrowed Books</a>
+                <a asp-controller="User" asp-action="ReturnedBooks" class="nav-link">Returned Books</a>
+                <a href="#" class="nav-link">Transaction History</a>
                 <a href="#" class="nav-link">Categories</a>
-                <a href="#" class="nav-link">About</a>
             </div>
             
             <div class="nav-user">
-                <div class="dropdown">
-                    <button class="user-btn" data-bs-toggle="dropdown">
-                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=0d6efd&color=fff&size=32" alt="User" class="user-avatar">
-                        <span class="user-name">John Doe</span>
-                        <span class="dropdown-arrow">▼</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" asp-controller="User" asp-action="Dashboard">📊 Dashboard</a></li>
-                        <li><a class="dropdown-item" href="#">📚 My Books</a></li>
-                        <li><a class="dropdown-item" href="#">📅 Reservations</a></li>
-                        <li><a class="dropdown-item" href="#">⚙️ Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" asp-controller="Home" asp-action="Index">🚪 Logout</a></li>
-                    </ul>
-                </div>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-logout">
+                    Log Out
+                </a>
             </div>
         </div>
     </nav>
@@ -58,3 +49,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

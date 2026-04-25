@@ -458,10 +458,10 @@ body.account-page main {
 
 .content-sections {
     display: grid;
-    grid-template-columns: 1fr 260px;
-    gap: 1.25rem;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
 }
-
 .section-card {
     background: white;
     border-radius: 10px;
@@ -553,9 +553,9 @@ body.account-page main {
 }
 
 .activity-card {
-    background: white;
-    border-radius: 10px;
-    padding: 1rem;
+    padding: 1.25rem;
+    margin-top: 0;
+}
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
@@ -670,8 +670,9 @@ body.account-page main {
 
 .content-sections {
     display: grid;
-    grid-template-columns: 1fr 340px;
+    grid-template-columns: 320px 1fr;
     gap: 1.5rem;
+    align-items: stretch;
 }
 
 .section-card,
@@ -696,6 +697,15 @@ body.account-page main {
     margin: 0;
 }
 
+
+.section-title .btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.user-info-card .section-title {
+    padding-bottom: 0.75rem;
+}
 .books-list,
 .reserved-list {
     padding: 0;
@@ -760,6 +770,82 @@ body.account-page main {
     text-align: center;
 }
 
+.user-info-card {
+    text-align: left;
+}
+.main-section .profile-card {
+
+.user-info-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+}
+
+
+.side-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.user-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.info-value {
+    font-size: 0.9rem;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.main-section .profile-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.info-value {
+    font-size: 0.9rem;
+    color: #1f2937;
+    font-weight: 500;
+}
+
 .card-top {
     margin-bottom: 1rem;
 }
@@ -807,7 +893,7 @@ body.account-page main {
 
 .activity-card {
     padding: 1.25rem;
-    margin-top: 1rem;
+    margin-top: 0;
 }
 
 .activity-items {
@@ -863,6 +949,11 @@ body.account-page main {
     }
 }
 
+    .user-info-card {
+        width: 100%;
+        max-width: none;
+    }
+
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -889,3 +980,134 @@ body.account-page main {
     }
 }
 
+
+
+
+
+/* User Dashboard - Info Card Layout */
+.user-info-card {
+    text-align: left;
+}
+
+.main-section .profile-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+}
+
+.user-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.info-value {
+    font-size: 0.9rem;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+
+
+/* Dashboard Info Card - refined */
+.user-info-card .section-title {
+    padding-bottom: 0.75rem;
+}
+
+.user-info-card .section-title .btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.user-info-card .user-info-list {
+    margin-top: 0.5rem;
+}
+
+.info-item {
+    padding: 0.25rem 0;
+}
+
+/* Navbar Logout Button */
+.btn-logout {
+    padding: 0.5rem 1rem;
+    background: #dc3545;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background: #bb2d3b;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Dashboard user info card - profile preview */
+.profile-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-preview-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+}
+
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+}
+
+.profile-preview-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a2e;
+}

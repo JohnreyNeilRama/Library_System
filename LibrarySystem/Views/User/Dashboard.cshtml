@@ -1,3 +1,5 @@
+﻿@model LibrarySystem.Controllers.UserInfoViewModel
+
 @{
     ViewData["Title"] = "User Dashboard";
     Layout = "_UserLayout";
@@ -6,8 +8,8 @@
 <div class="dashboard-container">
     <div class="welcome-banner">
         <div>
-            <h4 class="fw-bold mb-1">Welcome back, John!</h4>
-            <p class="mb-0 opacity-75">Here's your library overview</p>
+            <h4 class="fw-bold mb-1">Welcome back, @Model.FullName!</h4>
+            <p class="mb-0 opacity-75">Here is your library overview</p>
         </div>
     </div>
 
@@ -31,10 +33,89 @@
     </div>
 
     <div class="content-sections">
+        <!-- LEFT SIDE: User Info Card -->
         <div class="main-section">
-            <div class="section-card">
+            <div class="profile-card user-info-card">
+                <div class="section-title">
+                    <h5 class="fw-bold mb-0">Personal Information</h5>
+                    <a asp-controller="User" asp-action="Profile" class="btn btn-sm btn-primary">Edit</a>
+                </div>
+
+                <!-- Profile Picture Only (no name) -->
+                <div class="profile-preview">
+                    <div class="profile-preview-avatar">
+                        @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+                        {
+                            <img src="@Model.ProfilePictureUrl" alt="Profile" class="profile-avatar-img">
+                        }
+                        else
+                        {
+                            <div class="profile-avatar-placeholder">
+                                @(Model.FullName?.Split(' ')[0].Substring(0, 1) ?? "U")
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- User Details (including Full Name) -->
+                <div class="user-info-list">
+                    <div class="info-item">
+                        <span class="info-label">Full Name</span>
+                        <span class="info-value">@Model.FullName</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">ID Number</span>
+                        <span class="info-value">@Model.IdNumber</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Course</span>
+                        <span class="info-value">@Model.Course</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Year Level</span>
+                        <span class="info-value">@Model.YearLevel</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">@Model.Email</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: Activity + Borrowed + Reserved -->
+        <div class="side-section">
+            <div class="activity-card">
+                <h6 class="fw-bold mb-2">Recent Activity</h6>
+                <div class="activity-items">
+                    <div class="activity-item">
+                        <span class="activity-icon">📗</span>
+                        <div>
+                            <span>Returned "The Hobbit"</span>
+                            <small class="text-muted">2 days ago</small>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-icon">📖</span>
+                        <div>
+                            <span>Borrowed "Pride and Prejudice"</span>
+                            <small class="text-muted">5 days ago</small>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <span class="activity-icon">📚</span>
+                        <div>
+                            <span>Reserved "The Catcher in the Rye"</span>
+                            <small class="text-muted">1 week ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card mt-3">
                 <div class="section-title">
                     <h5 class="fw-bold">Currently Borrowed</h5>
+                    <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="books-list">
                     <div class="book-row">
@@ -67,6 +148,7 @@
             <div class="section-card mt-3">
                 <div class="section-title">
                     <h5 class="fw-bold">Reserved Books</h5>
+                    <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="reserved-list">
                     <div class="reserved-row">
@@ -76,28 +158,6 @@
                             <small class="text-muted">Ready for Pickup</small>
                         </div>
                         <button class="btn btn-sm btn-success">Pick Up</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="side-section">
-            <div class="profile-card">
-                <img src="https://ui-avatars.com/api/?name=John+Doe&background=0d6efd&color=fff&size=60" alt="Profile" class="avatar-sm">
-                <h6 class="mt-2 mb-0">John Doe</h6>
-                <small class="text-muted">Gold Member</small>
-            </div>
-
-            <div class="activity-card">
-                <h6 class="fw-bold mb-2">Recent Activity</h6>
-                <div class="activity-items">
-                    <div class="activity-item">
-                        <span class="activity-icon">📗</span>
-                        <small>Returned "The Hobbit"</small>
-                    </div>
-                    <div class="activity-item">
-                        <span class="activity-icon">📖</span>
-                        <small>Borrowed "Pride and Prejudice"</small>
                     </div>
                 </div>
             </div>
