@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Administrator\\source\\repos\\Library_System\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{59696BF6-41FC-B727-4A3F-4FB0C1CB4C1D}|LibrarySystem\\LibrarySystem.csproj|c:\\users\\administrator\\source\\repos\\library_system\\librarysystem\\librarysystem.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{59696BF6-41FC-B727-4A3F-4FB0C1CB4C1D}|LibrarySystem\\LibrarySystem.csproj|solutionrelative:librarysystem\\librarysystem.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{59696BF6-41FC-B727-4A3F-4FB0C1CB4C1D}|LibrarySystem\\LibrarySystem.csproj|c:\\users\\administrator\\source\\repos\\library_system\\librarysystem\\models\\usercategorybooksviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{59696BF6-41FC-B727-4A3F-4FB0C1CB4C1D}|LibrarySystem\\LibrarySystem.csproj|solutionrelative:librarysystem\\models\\usercategorybooksviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{59696BF6-41FC-B727-4A3F-4FB0C1CB4C1D}|LibrarySystem\\LibrarySystem.csproj|c:\\users\\administrator\\source\\repos\\library_system\\librarysystem\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{59696BF6-41FC-B727-4A3F-4FB0C1CB4C1D}|LibrarySystem\\LibrarySystem.csproj|solutionrelative:librarysystem\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LibrarySystem",
+              "DocumentMoniker": "C:\\Users\\Administrator\\source\\repos\\Library_System\\LibrarySystem\\LibrarySystem.csproj",
+              "RelativeDocumentMoniker": "LibrarySystem\\LibrarySystem.csproj",
+              "ToolTip": "C:\\Users\\Administrator\\source\\repos\\Library_System\\LibrarySystem\\LibrarySystem.csproj",
+              "RelativeToolTip": "LibrarySystem\\LibrarySystem.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-04-26T07:42:35.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserCategoryBooksViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Administrator\\source\\repos\\Library_System\\LibrarySystem\\Models\\UserCategoryBooksViewModel.cs",
+              "RelativeDocumentMoniker": "LibrarySystem\\Models\\UserCategoryBooksViewModel.cs",
+              "ToolTip": "C:\\Users\\Administrator\\source\\repos\\Library_System\\LibrarySystem\\Models\\UserCategoryBooksViewModel.cs",
+              "RelativeToolTip": "LibrarySystem\\Models\\UserCategoryBooksViewModel.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T07:42:28.191Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Administrator\\source\\repos\\Library_System\\LibrarySystem\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "LibrarySystem\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Administrator\\source\\repos\\Library_System\\LibrarySystem\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "LibrarySystem\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T07:41:06.887Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

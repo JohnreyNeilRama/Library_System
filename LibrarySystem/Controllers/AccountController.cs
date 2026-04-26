@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace LibrarySystem.Controllers
 {
@@ -13,6 +15,12 @@ namespace LibrarySystem.Controllers
         {
             return View();
         }
-    }
 
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
+    }
 }

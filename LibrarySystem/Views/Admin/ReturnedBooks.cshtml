@@ -1,0 +1,92 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Returned Books";
+}
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <h5 class="mb-0 fw-bold">Returned Books</h5>
+        <div class="d-flex gap-2 flex-wrap">
+            <input type="text" class="form-control form-control-sm" placeholder="Search books..." style="min-width:280px" />
+            <select class="form-select form-select-sm" style="width:auto">
+                <option>All Status</option>
+                <option>On Time</option>
+                <option>Returned Late</option>
+            </select>
+            <input type="date" class="form-control form-control-sm" style="width:auto" />
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Borrower</th>
+                <th>Borrow Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td><strong>The Alchemist</strong></td>
+                <td>Paulo Coelho</td>
+                <td>John Doe</td>
+                <td>2026-03-26</td>
+                <td>2026-04-21</td>
+                <td><span class="badge bg-success rounded-pill">On Time</span></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><strong>The Hobbit</strong></td>
+                <td>J.R.R. Tolkien</td>
+                <td>Jane Smith</td>
+                <td>2026-04-01</td>
+                <td>2026-04-23</td>
+                <td><span class="badge bg-success rounded-pill">On Time</span></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><strong>Dune</strong></td>
+                <td>Frank Herbert</td>
+                <td>Bob Wilson</td>
+                <td>2026-03-31</td>
+                <td>2026-04-25</td>
+                <td><span class="badge bg-warning rounded-pill text-dark">Returned Late</span></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><strong>Foundation</strong></td>
+                <td>Isaac Asimov</td>
+                <td>Alice Brown</td>
+                <td>2026-03-18</td>
+                <td>2026-04-16</td>
+                <td><span class="badge bg-success rounded-pill">On Time</span></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td><strong>Brave New World</strong></td>
+                <td>Aldous Huxley</td>
+                <td>Charlie Green</td>
+                <td>2026-03-20</td>
+                <td>2026-04-18</td>
+                <td><span class="badge bg-success rounded-pill">On Time</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</nav>

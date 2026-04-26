@@ -1,0 +1,174 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!-- Stats Section -->
+<section class="stats-section py-4">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="fw-bold display-6 text-primary">10K+</h2>
+                        <p class="text-muted mb-0">Total Books</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="fw-bold display-6 text-success">5K+</h2>
+                        <p class="text-muted mb-0">Active Members</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="fw-bold display-6 text-info">15K+</h2>
+                        <p class="text-muted mb-0">Total Borrows</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="fw-bold display-6 text-warning">50+</h2>
+                        <p class="text-muted mb-0">Categories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions and Recent Activity -->
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-0 fw-bold">
+                        Quick Actions
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="/Admin/ManageBooks" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 py-3">
+                            <div>
+                                <h6 class="mb-1">Manage Borrowed Books</h6>
+                                <small class="text-muted">View and manage borrowed books</small>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </a>
+                        <a href="/Admin/ReturnedBooks" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 py-3">
+                            <div>
+                                <h6 class="mb-1">Returned Books</h6>
+                                <small class="text-muted">View returned books</small>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </a>
+                        <a href="/Admin/TransactionHistory" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 py-3">
+                            <div>
+                                <h6 class="mb-1">Transaction History</h6>
+                                <small class="text-muted">View all transactions</small>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </a>
+                        <a href="/Admin/Categories" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 py-3">
+                            <div>
+                                <h6 class="mb-1">Manage Categories</h6>
+                                <small class="text-muted">View and edit categories</small>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </a>
+                        <a href="/Admin/ManageUsers" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 py-3">
+                            <div>
+                                <h6 class="mb-1">Manage Users</h6>
+                                <small class="text-muted">View and manage users</small>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </a>
+                        <a href="/Admin/Reports" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-4 py-3">
+                            <div>
+                                <h6 class="mb-1">Reports</h6>
+                                <small class="text-muted">View system reports</small>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-0 fw-bold">
+                        Recent Borrowed Books
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Borrower</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>The Great Gatsby</strong></td>
+                                        <td>F. Scott Fitzgerald</td>
+                                        <td>John Doe</td>
+                                        <td>2026-05-04</td>
+                                        <td><span class="badge bg-success rounded-pill">On Time</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>To Kill a Mockingbird</strong></td>
+                                        <td>Harper Lee</td>
+                                        <td>Jane Smith</td>
+                                        <td>2026-04-28</td>
+                                        <td><span class="badge bg-warning rounded-pill text-dark">Due Soon</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>1984</strong></td>
+                                        <td>George Orwell</td>
+                                        <td>Bob Wilson</td>
+                                        <td>2026-04-23</td>
+                                        <td><span class="badge bg-danger rounded-pill">Overdue</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Pride and Prejudice</strong></td>
+                                        <td>Jane Austen</td>
+                                        <td>Alice Brown</td>
+                                        <td>2026-05-10</td>
+                                        <td><span class="badge bg-success rounded-pill">On Time</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>The Catcher in the Rye</strong></td>
+                                        <td>J.D. Salinger</td>
+                                        <td>Charlie Green</td>
+                                        <td>2026-04-29</td>
+                                        <td><span class="badge bg-warning rounded-pill text-dark">Due Soon</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
