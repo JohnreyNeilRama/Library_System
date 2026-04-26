@@ -1,0 +1,469 @@
+@model LibrarySystem.Controllers.UserTransactionHistoryViewModel
+
+@{
+    ViewData["Title"] = "Transaction History";
+    Layout = "_UserLayout";
+}
+
+<div class="transaction-history-container">
+    <div class="page-header">
+        <h1 class="page-title">Transaction History</h1>
+        <p class="page-subtitle">View all your borrowing and returning activities</p>
+    </div>
+
+    <!-- Controls Section -->
+    <div class="controls-section">
+        <form method="get" asp-action="TransactionHistory" class="controls-form">
+            <div class="filter-group">
+                <select name="filter" class="filter-select" onchange="this.form.submit()">
+                    <option value="All" selected="@(IsOptionSelected("All"))">All Transactions</option>
+                    <option value="Borrowed" selected="@(IsOptionSelected("Borrowed"))">Borrowed</option>
+                    <option value="Returned" selected="@(IsOptionSelected("Returned"))">Returned</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <input type="text" name="search" class="search-input" placeholder="Search book titles..." value="@Model?.Search">
+                <button type="submit" class="search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+        @if (Model?.Transactions != null && Model.Transactions.Any())
+        {
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Borrow Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaction in Model.Transactions)
+                    {
+                        <tr>
+                            <td class="book-title-cell">
+                                <div class="book-title-wrapper">
+                                    <div class="book-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="book-info">
+                                        <span class="title">@transaction.Title</span>
+                                        <span class="author">@transaction.Author</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="date-cell">
+                                @transaction.BorrowDate.ToString("MMM dd, yyyy")
+                            </td>
+                            <td class="date-cell">
+                                @(transaction.ReturnDate.HasValue ? transaction.ReturnDate.Value.ToString("MMM dd, yyyy") : "—")
+                            </td>
+                            <td class="status-cell">
+                                @{
+                                    string badgeClass = transaction.Status switch
+                                    {
+                                        "On Time" => "status-on-time",
+                                        "Due Soon" => "status-due-soon",
+                                        "Overdue" => "status-overdue",
+                                        "Returned Late" => "status-overdue",
+                                        _ => "status-returned"
+                                    };
+                                }
+                                <span class="status-badge @badgeClass">@transaction.Status</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Pagination (Optional) -->
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Showing @Model.Transactions.Count transactions
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                </div>
+                <h3>No transactions found</h3>
+                <p>There are no transaction records matching your criteria.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .transaction-history-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1.5rem;
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    /* Controls Section */
+    .controls-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .controls-form {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .filter-group {
+        flex-shrink: 0;
+    }
+
+    .filter-select {
+        padding: 0.625rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: white;
+        color: #374151;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-width: 160px;
+    }
+
+    .filter-select:hover {
+        border-color: #0d6efd;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 106, 253, 0.1);
+    }
+
+    .search-group {
+        flex: 1;
+        display: flex;
+        max-width: 400px;
+        position: relative;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.625rem 1rem;
+        padding-right: 2.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: white;
+        color: #374151;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+
+    .search-input::placeholder {
+        color: #9ca3af;
+    }
+
+    .search-input:hover {
+        border-color: #0d6efd;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 106, 253, 0.1);
+    }
+
+    .search-btn {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s;
+    }
+
+    .search-btn:hover {
+        color: #0d6efd;
+    }
+
+    /* Table Container */
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+    }
+
+    .transaction-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .transaction-table thead {
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .transaction-table th {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+    }
+
+    .transaction-table tbody tr {
+        border-bottom: 1px solid #f3f4f6;
+        transition: background-color 0.2s;
+    }
+
+    .transaction-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .transaction-table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+
+    .transaction-table tbody tr:nth-child(even) {
+        background-color: #fcfcfc;
+    }
+
+    .transaction-table tbody tr:nth-child(even):hover {
+        background-color: #f9fafb;
+    }
+
+    .transaction-table td {
+        padding: 1rem 1.5rem;
+        vertical-align: middle;
+    }
+
+    /* Book Title Cell */
+    .book-title-cell {
+        min-width: 250px;
+    }
+
+    .book-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .book-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        flex-shrink: 0;
+    }
+
+    .book-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        min-width: 0;
+    }
+
+    .book-info .title {
+        font-weight: 600;
+        color: #1a1a2e;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .book-info .author {
+        font-size: 0.8rem;
+        color: #9ca3af;
+    }
+
+    /* Date Cells */
+    .date-cell {
+        color: #4b5563;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+
+    /* Status Cell */
+    .status-cell {
+        white-space: nowrap;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .status-on-time {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-due-soon {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-overdue {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .status-returned {
+        background: #e5e7eb;
+        color: #4b5563;
+    }
+
+    /* Pagination */
+    .pagination-wrapper {
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .pagination-info {
+        font-size: 0.85rem;
+        color: #6b7280;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .empty-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: #9ca3af;
+    }
+
+    .empty-state h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .empty-state p {
+        font-size: 0.95rem;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .controls-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-group {
+            max-width: none;
+        }
+
+        .transaction-table {
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+            padding: 0.75rem 1rem;
+            white-space: nowrap;
+        }
+
+        .book-title-cell {
+            min-width: 200px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .transaction-history-container {
+            padding: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .filter-select,
+        .search-input {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+@functions {
+    // Returns "selected" if the value matches, otherwise null (attribute omitted)
+    string IsOptionSelected(string value)
+    {
+        if (string.IsNullOrEmpty(Model?.Filter) && value == "All")
+            return "selected";
+        return Model?.Filter == value ? "selected" : null;
+    }
+}
+

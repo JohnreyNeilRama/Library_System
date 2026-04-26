@@ -66,6 +66,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxCb3Jyb3dlZEJvb2tzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Johnrey Neil M. Rama/OneDrive/Desktop/PP324/LibrarySystem/LibrarySystem/Views/User/Categories.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxDYXRlZ29yaWVzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Johnrey Neil M. Rama/OneDrive/Desktop/PP324/LibrarySystem/LibrarySystem/Views/User/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -76,6 +80,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Johnrey Neil M. Rama/OneDrive/Desktop/PP324/LibrarySystem/LibrarySystem/Views/User/ReturnedBooks.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxSZXR1cm5lZEJvb2tzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Johnrey Neil M. Rama/OneDrive/Desktop/PP324/LibrarySystem/LibrarySystem/Views/User/TransactionHistory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxUcmFuc2FjdGlvbkhpc3RvcnkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Johnrey Neil M. Rama/OneDrive/Desktop/PP324/LibrarySystem/LibrarySystem/Views/_ViewImports.cshtml]

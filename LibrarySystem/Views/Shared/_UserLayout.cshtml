@@ -27,8 +27,8 @@
                 <a asp-controller="User" asp-action="Profile" class="nav-link">Profile</a>
                 <a asp-controller="User" asp-action="BorrowedBooks" class="nav-link">Borrowed Books</a>
                 <a asp-controller="User" asp-action="ReturnedBooks" class="nav-link">Returned Books</a>
-                <a href="#" class="nav-link">Transaction History</a>
-                <a href="#" class="nav-link">Categories</a>
+                <a asp-controller="User" asp-action="TransactionHistory" class="nav-link">Transaction History</a>
+                <a asp-controller="User" asp-action="Categories" class="nav-link">Categories</a>
             </div>
             
             <div class="nav-user">
@@ -49,4 +49,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-

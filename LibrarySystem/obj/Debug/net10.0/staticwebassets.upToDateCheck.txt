@@ -1,3 +1,4 @@
+wwwroot\css\categories.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\js\site.js
@@ -123,3 +124,4 @@ C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\wwwroot\lib\jquery\dist\jquery.slim.min.map
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\wwwroot\lib\jquery\LICENSE.txt
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\wwwroot\css\site.css
+C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\wwwroot\css\categories.css

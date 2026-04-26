@@ -87,7 +87,6 @@ C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\staticwebassets.development.json
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\swae.build.ex.cache
-C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\LibrarySystem.dll
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\refint\LibrarySystem.dll
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\LibrarySystem.pdb
@@ -302,3 +301,5 @@ C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\compressed\9334wbup40-{0}-mwj360by6m-mwj360by6m.gz
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\LibrarySystem.sourcelink.json
 C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\compressed\czotez6djq-{0}-8gb7woq7bu-8gb7woq7bu.gz
+C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\compressed\87ex0wvb47-{0}-2aw9e6nop9-2aw9e6nop9.gz
+C:\Users\Johnrey Neil M. Rama\OneDrive\Desktop\PP324\LibrarySystem\LibrarySystem\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

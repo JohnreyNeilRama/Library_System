@@ -1,5 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
+using LibrarySystem.Models;
 
 namespace LibrarySystem.Controllers
 {
@@ -71,6 +73,88 @@ namespace LibrarySystem.Controllers
             };
             return View(model);
         }
+
+        public IActionResult Categories()
+        {
+            return View(new UserCategoriesViewModel());
+        }
+
+        public IActionResult TransactionHistory(string filter = "All", string search = "")
+        {
+            // Get sample data - in real app, this would come from database
+            var borrowedBooks = new List<BorrowedBookItem> {
+                new BorrowedBookItem { Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", BorrowDate = DateTime.Now.AddDays(-10), DueDate = DateTime.Now.AddDays(4), Status = "On Time" },
+                new BorrowedBookItem { Title = "To Kill a Mockingbird", Author = "Harper Lee", BorrowDate = DateTime.Now.AddDays(-15), DueDate = DateTime.Now.AddDays(-2), Status = "Due Soon" },
+                new BorrowedBookItem { Title = "1984", Author = "George Orwell", BorrowDate = DateTime.Now.AddDays(-20), DueDate = DateTime.Now.AddDays(-5), Status = "Overdue" },
+                new BorrowedBookItem { Title = "Pride and Prejudice", Author = "Jane Austen", BorrowDate = DateTime.Now.AddDays(-5), DueDate = DateTime.Now.AddDays(10), Status = "On Time" },
+                new BorrowedBookItem { Title = "The Catcher in the Rye", Author = "J.D. Salinger", BorrowDate = DateTime.Now.AddDays(-8), DueDate = DateTime.Now.AddDays(2), Status = "Due Soon" },
+                new BorrowedBookItem { Title = "Brave New World", Author = "Aldous Huxley", BorrowDate = DateTime.Now.AddDays(-12), DueDate = DateTime.Now.AddDays(-1), Status = "Overdue" }
+            };
+
+            var returnedBooks = new List<ReturnedBookItem> {
+                new ReturnedBookItem { Title = "The Alchemist", Author = "Paulo Coelho", BorrowDate = DateTime.Now.AddDays(-30), ReturnDate = DateTime.Now.AddDays(-5), Status = "On Time" },
+                new ReturnedBookItem { Title = "The Hobbit", Author = "J.R.R. Tolkien", BorrowDate = DateTime.Now.AddDays(-25), ReturnDate = DateTime.Now.AddDays(-3), Status = "On Time" },
+                new ReturnedBookItem { Title = "Dune", Author = "Frank Herbert", BorrowDate = DateTime.Now.AddDays(-20), ReturnDate = DateTime.Now.AddDays(-1), Status = "Returned Late" },
+                new ReturnedBookItem { Title = "Foundation", Author = "Isaac Asimov", BorrowDate = DateTime.Now.AddDays(-40), ReturnDate = DateTime.Now.AddDays(-10), Status = "On Time" }
+            };
+
+            // Build transaction list
+            var transactions = new List<TransactionItem>();
+
+            // Add borrowed books (ReturnDate = null)
+            foreach (var book in borrowedBooks)
+            {
+                string status = book.Status;
+                transactions.Add(new TransactionItem {
+                    Title = book.Title,
+                    Author = book.Author,
+                    BorrowDate = book.BorrowDate,
+                    ReturnDate = null,
+                    Status = status
+                });
+            }
+
+            // Add returned books
+            foreach (var book in returnedBooks)
+            {
+                transactions.Add(new TransactionItem {
+                    Title = book.Title,
+                    Author = book.Author,
+                    BorrowDate = book.BorrowDate,
+                    ReturnDate = book.ReturnDate,
+                    Status = book.Status
+                });
+            }
+
+            // Sort by BorrowDate descending (most recent first)
+            transactions = transactions.OrderByDescending(t => t.BorrowDate).ToList();
+
+            // Apply filters
+            if (filter == "Borrowed")
+            {
+                transactions = transactions.Where(t => t.ReturnDate == null).ToList();
+            }
+            else if (filter == "Returned")
+            {
+                transactions = transactions.Where(t => t.ReturnDate != null).ToList();
+            }
+
+            // Apply search
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                string searchLower = search.ToLower();
+                transactions = transactions.Where(t => t.Title.ToLower().Contains(searchLower) ||
+                                                     t.Author.ToLower().Contains(searchLower)).ToList();
+            }
+
+            var model = new UserTransactionHistoryViewModel {
+                Transactions = transactions,
+                Filter = filter,
+                Search = search
+            };
+
+            return View(model);
+        }
     }
 
     public class ProfileViewModel {
@@ -115,6 +199,20 @@ namespace LibrarySystem.Controllers
         public string Author { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime ReturnDate { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class UserTransactionHistoryViewModel {
+        public List<TransactionItem> Transactions { get; set; }
+        public string Filter { get; set; }
+        public string Search { get; set; }
+    }
+
+    public class TransactionItem {
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public DateTime BorrowDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public string Status { get; set; }
     }
 }
