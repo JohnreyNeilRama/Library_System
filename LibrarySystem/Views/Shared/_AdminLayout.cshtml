@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,133 +9,42 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LibrarySystem.styles.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #f5f7fa;
-        }
-        .navbar {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .navbar-nav {
-            flex-direction: row;
-            align-items: center;
-        }
-        .nav-links {
-            flex-direction: row;
-        }
-        .card {
-            border: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
-        }
-        .badge {
-            font-weight: 500;
-            padding: 0.5em 0.75em;
-        }
-        .table th {
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #6c757d;
-            border-top: none;
-        }
-        .btn {
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .list-group-item {
-            border: none;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .list-group-item:last-child {
-            border-bottom: none;
-        }
-        .stat-card .display-6 {
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
-            <div class="container">
-                <a class="navbar-brand fw-bold fs-4 me-4" asp-controller="Admin" asp-action="Index">
-                    <span style="font-size:1.5rem">📚</span>
-                    <span class="ms-2">Library System</span>
-                </a>
+    <nav class="user-navbar">
+        <div class="nav-container">
+            <a class="nav-brand" asp-controller="Home" asp-action="Index">
+                <span class="brand-icon">&#128218;</span>
+                <span class="brand-text">Library System</span>
+            </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navMenu">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <div class="input-group ms-2" style="width:320px">
-                                <span class="input-group-text bg-white border-0 pe-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#6c757d" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                                    </svg>
-                                </span>
-                                <input type="text" class="form-control border-0 bg-white shadow-none" placeholder="Search books..." style="font-size:0.875rem" />
-                                <button class="btn btn-primary" type="button" style="white-space:nowrap">
-                                    Search
-                                </button>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" asp-controller="Admin" asp-action="ManageBooks">Borrowed Books</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" asp-controller="Admin" asp-action="ReturnedBooks">Returned Books</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" asp-controller="Admin" asp-action="TransactionHistory">Transaction History</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" asp-controller="Admin" asp-action="Categories">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 fw-medium" asp-controller="Reservation" asp-action="Index">Reservation</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <form asp-controller="Account" asp-action="Logout" method="post">
-                                <button type="submit" class="btn btn-outline-light btn-sm px-3" style="border-color:rgba(255,255,255,0.25)">
-                                    Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+            <div class="nav-search">
+                <input type="text" placeholder="Search books..." class="search-input">
+                <button class="search-btn">&#128269;</button>
             </div>
-        </nav>
-    </header>
-    <div class="container-fluid p-0">
-        <main role="main" class="py-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top bg-white py-4 mt-auto">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="mb-0 text-muted fs-sm">&copy; 2026 LibrarySystem. All rights reserved.</p>
-                <div class="d-flex gap-3">
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted small hover-underline">Privacy Policy</a>
-                    <a href="#" class="text-decoration-none text-muted small hover-underline">Terms of Service</a>
-                    <a href="#" class="text-decoration-none text-muted small hover-underline">Help Center</a>
-                </div>
+            <div class="nav-menu">
+                <a asp-controller="Admin" asp-action="Index" class="nav-link">Dashboard</a>
+                <a asp-controller="Admin" asp-action="ManageBooks" class="nav-link">Borrowed Books</a>
+                <a asp-controller="Admin" asp-action="ReturnedBooks" class="nav-link">Returned Books</a>
+                <a asp-controller="Admin" asp-action="TransactionHistory" class="nav-link">Transaction History</a>
+                <a asp-controller="Admin" asp-action="Categories" class="nav-link">Categories</a>
+                <a asp-controller="Reservation" asp-action="Index" class="nav-link">Reservation</a>
+            </div>
+
+            <div class="nav-user">
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    <button type="submit" class="btn btn-logout">
+                        Log Out
+                    </button>
+                </form>
             </div>
         </div>
-    </footer>
+    </nav>
+
+    <main class="user-main">
+        @RenderBody()
+    </main>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -143,3 +52,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+

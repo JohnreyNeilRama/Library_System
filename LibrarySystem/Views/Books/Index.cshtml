@@ -1,0 +1,188 @@
+@model LibrarySystem.Models.UserCategoryBooksViewModel
+
+@{
+    ViewData["Title"] = Model.CategoryName;
+    Layout = "_UserLayout";
+}
+
+<link rel="stylesheet" href="~/css/books.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
+
+<div class="books-under-category-container">
+    <div class="page-header">
+        <div class="breadcrumb-nav">
+            <a asp-controller="User" asp-action="Categories">Categories</a>
+            <span class="breadcrumb-separator">&#8250;</span>
+            <span>@Model.CategoryName</span>
+        </div>
+        <h1 class="page-title">@Model.CategoryName Books</h1>
+        <p class="page-subtitle">Browse and borrow books from this category</p>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="searchInput" placeholder="Search by title or author..." />
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All (@Model.TotalBooks)</button>
+            <button class="filter-btn" data-filter="available">Available (@Model.AvailableCount)</button>
+            <button class="filter-btn" data-filter="unavailable">Out of Stock (@Model.UnavailableCount)</button>
+        </div>
+    </div>
+
+    @if (Model?.Books != null && Model.Books.Any())
+    {
+        <div class="books-grid" id="booksGrid">
+            @foreach (var book in Model.Books)
+            {
+                var isAvailable = book.AvailableCopies > 0;
+                <div class="book-card"
+                     data-title="@book.Title.ToLower()"
+                     data-author="@book.Author.ToLower()"
+                     data-availability="@(isAvailable ? "available" : "unavailable")"
+                     data-book-id="@book.Id"
+                     data-book-title="@book.Title"
+                     data-book-author="@book.Author">
+                    <div class="book-cover">
+                        @if (!string.IsNullOrEmpty(book.CoverImageUrl))
+                        {
+                            <img src="@book.CoverImageUrl" alt="@book.Title" />
+                        }
+                        else
+                        {
+                            <span>&#128214;</span>
+                        }
+                    </div>
+                    <div class="book-content">
+                        <h3 class="book-title" title="@book.Title">@book.Title</h3>
+                        <p class="book-author">by @book.Author</p>
+                        <div class="book-meta">
+                            <div class="availability">
+                                <span class="availability-dot @(isAvailable ? "available" : "unavailable")"></span>
+                                <span class="availability-text">@(isAvailable ? $"{book.AvailableCopies} available" : "Out of stock")</span>
+                            </div>
+                            <span class="status-badge @(isAvailable ? "available" : "unavailable")">
+                                @(isAvailable ? "Available" : "Unavailable")
+                            </span>
+                        </div>
+                    </div>
+                    @if (isAvailable)
+                    {
+                        <button type="button" class="btn-borrow available" onclick="openBorrowModalFromCard(this)">
+                            Borrow Now
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn-borrow unavailable" disabled>
+                            Not Available
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon">&#128218;</div>
+            <h3>No books in this category</h3>
+            <p>There are currently no books available in @Model.CategoryName. Please check back later.</p>
+        </div>
+    }
+</div>
+
+<!-- Borrow Modal -->
+<div id="borrowModal" class="modal" role="dialog" aria-labelledby="borrowModalLabel" aria-hidden="true">
+    <div class="modal-overlay"></div>
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 id="borrowModalLabel" class="modal-title">Borrow Book</h2>
+            <button type="button" class="modal-close" aria-label="Close modal" onclick="closeBorrowModal()">
+                <span>&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div id="formLoading" class="loading-state" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+
+            <div id="formContent">
+                <div class="book-summary-card">
+                    <div class="book-summary-icon">&#128214;</div>
+                    <div class="book-summary-details">
+                        <h4 id="modalBookTitle"></h4>
+                        <p id="modalBookAuthor"></p>
+                    </div>
+                </div>
+
+                <form id="borrowForm" asp-controller="Books" asp-action="Borrow" method="post" novalidate>
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="form-label"><span class="input-icon">??</span> Full Name</label>
+                            <input type="text" name="FullName" class="form-control" placeholder="Enter your full name" required autocomplete="name" />
+                            <span class="validation-message" data-for="FullName"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"><span class="input-icon">??</span> ID Number</label>
+                            <input type="text" name="IdNumber" class="form-control" placeholder="Enter your student ID number" required autocomplete="off" />
+                            <span class="validation-message" data-for="IdNumber"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label"><span class="input-icon">??</span> Course</label>
+                                <input type="text" name="Course" class="form-control" placeholder="e.g., Computer Science" required autocomplete="organization" />
+                                <span class="validation-message" data-for="Course"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label"><span class="input-icon">??</span> Year Level</label>
+                                <select name="YearLevel" class="form-control" required>
+                                    <option value="">Select year level</option>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                    <option value="5th Year">5th Year</option>
+                                    <option value="Graduate">Graduate</option>
+                                </select>
+                                <span class="validation-message" data-for="YearLevel"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"><span class="input-icon">??</span> Email Address</label>
+                            <input type="email" name="Email" class="form-control" placeholder="Enter your email address" required autocomplete="email" />
+                            <span class="validation-message" data-for="Email"></span>
+                        </div>
+
+                        <input type="hidden" name="BookId" id="bookIdInput" />
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="closeBorrowModal()">Cancel</button>
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <span class="btn-text">Confirm Borrow</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="successMessage" class="success-state" style="display: none;">
+                <div class="success-icon">?</div>
+                <h3>Borrow Successful!</h3>
+                <p id="successText"></p>
+                <button type="button" class="btn-done" onclick="closeBorrowModal()">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/borrow-modal.js" asp-append-version="true"></script>
+}

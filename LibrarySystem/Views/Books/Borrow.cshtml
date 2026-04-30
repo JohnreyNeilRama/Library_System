@@ -1,0 +1,82 @@
+@model LibrarySystem.Models.BorrowBookViewModel
+
+@{
+    ViewData["Title"] = "Borrow Book";
+    Layout = "_UserLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/borrow.css" asp-append-version="true" />
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0 text-center">Borrow Book</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Borrow" method="post" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <input type="hidden" asp-for="BookId" />
+                        <input type="hidden" asp-for="BookTitle" />
+                        <input type="hidden" asp-for="Author" />
+
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label fw-bold"></label>
+                            <input asp-for="FullName" class="form-control @(ViewData.ModelState.IsValid ? "" : "is-invalid")" placeholder="Enter your full name">
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="IdNumber" class="form-label fw-bold"></label>
+                            <input asp-for="IdNumber" class="form-control @(ViewData.ModelState.IsValid ? "" : "is-invalid")" placeholder="Enter your ID number">
+                            <span asp-validation-for="IdNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Course" class="form-label fw-bold"></label>
+                            <input asp-for="Course" class="form-control @(ViewData.ModelState.IsValid ? "" : "is-invalid")" placeholder="Enter your course">
+                            <span asp-validation-for="Course" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="YearLevel" class="form-label fw-bold"></label>
+                            <select asp-for="YearLevel" class="form-select @(ViewData.ModelState.IsValid ? "" : "is-invalid")">
+                                <option value="">Select Year Level</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                                <option value="5th Year">5th Year</option>
+                                <option value="Graduate">Graduate</option>
+                            </select>
+                            <span asp-validation-for="YearLevel" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-bold"></label>
+                            <input asp-for="Email" class="form-control @(ViewData.ModelState.IsValid ? "" : "is-invalid")" type="email" placeholder="Enter your email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-book"></i> Borrow Book
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-action="Index" class="btn btn-link text-decoration-none">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
