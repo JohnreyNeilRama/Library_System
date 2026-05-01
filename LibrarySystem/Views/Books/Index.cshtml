@@ -1,4 +1,4 @@
-@model LibrarySystem.Models.UserCategoryBooksViewModel
+    @model LibrarySystem.Models.UserCategoryBooksViewModel
 
 @{
     ViewData["Title"] = Model.CategoryName;
@@ -98,16 +98,20 @@
     <div class="modal-overlay"></div>
     <div class="modal-container">
         <div class="modal-header">
-            <h2 id="borrowModalLabel" class="modal-title">Borrow Book</h2>
+            <div>
+                <h2 id="borrowModalLabel" class="modal-title">Confirm Borrow</h2>
+            </div>
             <button type="button" class="modal-close" aria-label="Close modal" onclick="closeBorrowModal()">
                 <span>&times;</span>
             </button>
         </div>
 
         <div class="modal-body">
+            <p class="modal-subtitle">Please review the details before confirming.</p>
+
             <div id="formLoading" class="loading-state" style="display: none;">
                 <div class="spinner"></div>
-                <p>Loading...</p>
+                <p>Processing...</p>
             </div>
 
             <div id="formContent">
@@ -119,49 +123,23 @@
                     </div>
                 </div>
 
-                <form id="borrowForm" asp-controller="Books" asp-action="Borrow" method="post" novalidate>
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label class="form-label"><span class="input-icon">??</span> Full Name</label>
-                            <input type="text" name="FullName" class="form-control" placeholder="Enter your full name" required autocomplete="name" />
-                            <span class="validation-message" data-for="FullName"></span>
-                        </div>
+                <div class="borrow-details-card">
+                    <div class="detail-row">
+                        <span class="detail-label">Due Date</span>
+                        <span class="detail-value text-primary fw-bold">Pending Admin Approval</span>
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <label class="form-label"><span class="input-icon">??</span> ID Number</label>
-                            <input type="text" name="IdNumber" class="form-control" placeholder="Enter your student ID number" required autocomplete="off" />
-                            <span class="validation-message" data-for="IdNumber"></span>
-                        </div>
+                <p class="return-note">
+                    <span class="note-icon">&#9432;</span> The admin will assign a due date upon approval.
+                </p>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label"><span class="input-icon">??</span> Course</label>
-                                <input type="text" name="Course" class="form-control" placeholder="e.g., Computer Science" required autocomplete="organization" />
-                                <span class="validation-message" data-for="Course"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label"><span class="input-icon">??</span> Year Level</label>
-                                <select name="YearLevel" class="form-control" required>
-                                    <option value="">Select year level</option>
-                                    <option value="1st Year">1st Year</option>
-                                    <option value="2nd Year">2nd Year</option>
-                                    <option value="3rd Year">3rd Year</option>
-                                    <option value="4th Year">4th Year</option>
-                                    <option value="5th Year">5th Year</option>
-                                    <option value="Graduate">Graduate</option>
-                                </select>
-                                <span class="validation-message" data-for="YearLevel"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label"><span class="input-icon">??</span> Email Address</label>
-                            <input type="email" name="Email" class="form-control" placeholder="Enter your email address" required autocomplete="email" />
-                            <span class="validation-message" data-for="Email"></span>
-                        </div>
-
-                        <input type="hidden" name="BookId" id="bookIdInput" />
+                <form id="borrowForm" asp-controller="Books" asp-action="Borrow" method="post">
+                    <input type="hidden" name="BookId" id="bookIdInput" />
+                    
+                    <div class="mb-3 text-start px-2">
+                        <label class="form-label detail-label fw-bold">Select Borrow Date</label>
+                        <input type="date" name="BorrowDate" id="borrowDateInput" class="form-control" required />
                     </div>
 
                     <div class="form-actions">
@@ -174,7 +152,7 @@
             </div>
 
             <div id="successMessage" class="success-state" style="display: none;">
-                <div class="success-icon">?</div>
+                <div class="success-icon">&#10004;</div>
                 <h3>Borrow Successful!</h3>
                 <p id="successText"></p>
                 <button type="button" class="btn-done" onclick="closeBorrowModal()">Done</button>

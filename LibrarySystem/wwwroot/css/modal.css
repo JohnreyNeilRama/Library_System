@@ -1,4 +1,13 @@
-﻿/* Modal Overlay */
+/* Modal Container Display Fix */
+#borrowModal {
+    display: none;
+}
+
+#borrowModal.active {
+    display: block !important;
+}
+
+/* Modal Overlay */
 #borrowModal .modal-overlay {
     display: none;
     position: fixed;
@@ -17,11 +26,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.9);
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    background-color: #f5f7fa;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     width: 90%;
-    max-width: 500px;
+    max-width: 450px;
     max-height: 90vh;
     overflow: hidden;
     z-index: 1001;
@@ -44,8 +53,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 24px;
-    background-color: #f8f9fa;
+    padding: 24px 28px 16px;
+    background-color: #ffffff;
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -53,7 +62,7 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #333;
+    color: #1a1a2e;
 }
 
 .modal-close {
@@ -74,7 +83,7 @@
 }
 
 .modal-close:hover {
-    color: #333;
+    color: #1a1a2e;
     background-color: #e9ecef;
 }
 
@@ -83,6 +92,12 @@
     padding: 24px;
     overflow-y: auto;
     max-height: calc(90vh - 140px);
+}
+
+.modal-subtitle {
+    margin: 0 0 16px 0;
+    color: #6c757d;
+    font-size: 0.95rem;
 }
 
 /* Loading State */
@@ -98,7 +113,7 @@
 .spinner {
     width: 32px;
     height: 32px;
-    border: 3px solid #f3f3f3;
+    border: 3px solid #e9ecef;
     border-top: 3px solid #007bff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -116,108 +131,87 @@
     align-items: center;
     gap: 16px;
     padding: 16px;
-    background-color: #f8f9fa;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    border: 1px solid #e9ecef;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .book-summary-icon {
-    font-size: 2rem;
+    font-size: 2.5rem;
     line-height: 1;
 }
 
 .book-summary-details h4 {
     margin: 0 0 4px 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a2e;
 }
 
 .book-summary-details p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #6c757d;
 }
 
-/* Form Layout */
-.form-body {
-    margin-bottom: 20px;
+/* Borrow Details Card */
+.borrow-details-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.form-row {
+.detail-row {
     display: flex;
-    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
 }
 
-.form-row .form-group {
-    flex: 1;
+.detail-row:not(:last-child) {
+    border-bottom: 1px solid #f1f3f5;
 }
 
-/* Form Groups */
-.form-group {
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.form-group .form-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #495057;
+.detail-label {
+    color: #6c757d;
     font-size: 0.95rem;
+    font-weight: 500;
 }
 
-.form-group .input-icon {
-    margin-right: 6px;
+.detail-value {
+    color: #1a1a2e;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
-.form-group .form-control {
-    width: 100%;
-    padding: 10px 14px;
+.text-primary {
+    color: #007bff;
+}
+
+/* Return Note */
+.return-note {
+    font-size: 0.85rem;
+    color: #856404;
+    background-color: #fff3cd;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #ffeeba;
+}
+
+.note-icon {
+    font-weight: bold;
     font-size: 1rem;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
 }
 
-.form-group .form-control:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-.form-group .form-control.is-invalid {
-    border-color: #dc3545;
-}
-
-/* Validation Messages */
-.validation-message {
-    display: none;
-    margin-top: 6px;
-    font-size: 0.875rem;
-    color: #dc3545;
-}
-
-.validation-message.visible {
-    display: block;
-}
-
-.form-group.has-error .validation-message {
-    display: block;
-}
-
-.form-group.has-error .form-control {
-    border-color: #dc3545;
-}
-
-.form-group.has-error .form-control:focus {
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
-}
+/* Form fields removed for minimal confirmation design */
 
 /* Success State */
 #successMessage {
@@ -264,9 +258,9 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 16px 24px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
+    padding: 0;
+    background-color: transparent;
+    border-top: none;
     gap: 12px;
 }
 
@@ -305,7 +299,7 @@
 }
 
 .btn-submit:hover:not(:disabled) {
-    background-color: #0069d9;
+    background-color: #0056b3;
     border-color: #0062cc;
 }
 
@@ -382,11 +376,6 @@
         min-width: 100px;
     }
 
-    .form-group .form-control {
-        padding: 12px 14px;
-        font-size: 1rem;
-    }
-
     .book-summary-card {
         padding: 12px;
         gap: 12px;
@@ -398,11 +387,6 @@
 
     .book-summary-details h4 {
         font-size: 1rem;
-    }
-
-    .form-row {
-        flex-direction: column;
-        gap: 0;
     }
 }
 
@@ -425,10 +409,6 @@
 
     .form-actions .btn {
         flex: 1;
-    }
-
-    .form-group {
-        margin-bottom: 16px;
     }
 
     .book-summary-card {

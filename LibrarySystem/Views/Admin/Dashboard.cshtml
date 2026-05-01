@@ -1,292 +1,154 @@
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="px-3 px-lg-4">
-    <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 fw-bold mb-1">Dashboard</h1>
-            <p class="text-muted mb-0">Overview of library statistics and recent activity</p>
-        </div>
-        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
-            <span class="me-1"></span> 4 Active Today
-        </span>
-    </div>
+<link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
 
-    <!-- Stats Cards -->
-    <div class="row g-4 mb-5">
-        <div class="col-6 col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-primary bg-opacity-10 p-2 rounded-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
-                                <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255l6.344-1.548a4.5 4.5 0 0 0-.906-7.35A3.012 3.012 0 0 0 13.5.5H3z"/>
-                            </svg>
-                        </div>
-                        <span class="badge bg-success fs-xs">+12%</span>
-                    </div>
-                    <h2 class="fw-bolder display-6 mb-1">12,847</h2>
-                    <p class="text-muted fs-sm mb-0">Total Books</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-success bg-opacity-10 p-2 rounded-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-success" viewBox="0 0 16 16">
-                                <path d="M1 18.5A1.5 1.5 0 0 0 2.5 20h11a1.5 1.5 0 0 0 1.5-1.5V9a.5.5 0 0 0-1 0v9a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H3.5a1.5 1.5 0 0 1-1.5-1.5V3.5A1.5 1.5 0 0 1 3.5 2h6.086a1.5 1.5 0 0 1 1.06.44l1.915 1.915c.2.2.2.51.016.716L13.04 6.5a1.5 1.5 0 0 1-.262.17l-1.915 1.915A1.5 1.5 0 0 1 8 11H5a.5.5 0 0 0 0 1h3a.5.5 0 0 1 .5.5V16a.5.5 0 0 1-.5.5H3.5a.5.5 0 0 1-.5-.5v-1H2a.5.5 0 0 0-.5.5z"/>
-                            </svg>
-                        </div>
-                        <span class="badge bg-success fs-xs">+8%</span>
-                    </div>
-                    <h2 class="fw-bolder display-6 mb-1">5,234</h2>
-                    <p class="text-muted fs-sm mb-0">Active Members</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-info bg-opacity-10 p-2 rounded-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-info" viewBox="0 0 16 16">
-                                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-                                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319z"/>
-                            </svg>
-                        </div>
-                        <span class="badge bg-primary fs-xs">+18%</span>
-                    </div>
-                    <h2 class="fw-bolder display-6 mb-1">18,293</h2>
-                    <p class="text-muted fs-sm mb-0">Total Borrows</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card stat-card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="bg-warning bg-opacity-10 p-2 rounded-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-warning" viewBox="0 0 16 16">
-                                <path d="M5.5 2.691V4.5h5V2.691l-2.5-1.5-2.5 1.5zM12.94 5H14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-1.06l-1.29 2.247A.5.5 0 0 1 11 14H5a.5.5 0 0 1-.45-.724L5.06 13H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.06l1.29-2.247A.5.5 0 0 1 5 2h6a.5.5 0 0 1 .44.724L9.94 5h2.11l-.452 1.5h-7.36L5.5 5h7.44z"/>
-                                <path d="M3 6v6h1v-1h1v1h1v-1h1v1h1v-1h1v1h1V6H3z"/>
-                            </svg>
-                        </div>
-                        <span class="badge bg-success fs-xs">+5%</span>
-                    </div>
-                    <h2 class="fw-bolder display-6 mb-1">58</h2>
-                    <p class="text-muted fs-sm mb-0">Categories</p>
-                </div>
-            </div>
+<div class="dashboard-header">
+    <h2>Welcome, Admin</h2>
+    <p>Here’s an overview of your system activity</p>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon books"><i class="bi bi-book"></i></div>
+            <h3>1,245</h3>
+            <p>Total Books</p>
         </div>
     </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon users"><i class="bi bi-people"></i></div>
+            <h3>850</h3>
+            <p>Total Users</p>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon borrowed"><i class="bi bi-journal-arrow-up"></i></div>
+            <h3>312</h3>
+            <p>Borrowed Books</p>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon returned"><i class="bi bi-journal-check"></i></div>
+            <h3>145</h3>
+            <p>Returned Books</p>
+        </div>
+    </div>
+</div>
 
-    <!-- Quick Actions -->
-    <div class="row g-4 mb-5">
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <h5 class="card-title fw-bold mb-4">Quick Actions</h5>
-                    <div class="d-grid gap-2">
-                        <a href="/Admin/ManageBooks" class="btn btn-outline-primary text-start py-3">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V2zM2 1a1 1 0 0 0-1 1v2h14V2a1 1 0 0 0-1-1H2zM1 6v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6H1z"/>
-                                    </svg>
-                                </div>
-                                <span class="fw-medium">Manage Borrowed Books</span>
-                            </div>
-                        </a>
-                        <a href="/Admin/ReturnedBooks" class="btn btn-outline-primary text-start py-3">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-success bg-opacity-10 p-2 rounded me-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M8.5 5.5a.5.5 0 0 0-1 0v2.5H6a.5.5 0 0 0 0 1h2a.5.5 0 0 0 .5-.5V5.5z"/>
-                                        <path d="M5.5.5A.5.5 0 0 1 6 0h4a2 2 0 0 1 2 2v1H6V2a1 1 0 0 0-1-1H5.5zM4 2a2 2 0 0 0-2 2v11h2a2 2 0 0 0 2-2V4H4z"/>
-                                    </svg>
-                                </div>
-                                <span class="fw-medium">View Returned Books</span>
-                            </div>
-                        </a>
-                        <a href="/Admin/TransactionHistory" class="btn btn-outline-primary text-start py-3">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-info bg-opacity-10 p-2 rounded me-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4 8a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/>
-                                    </svg>
-                                </div>
-                                <span class="fw-medium">Transaction History</span>
-                            </div>
-                        </a>
-                        <a href="/Admin/Categories" class="btn btn-outline-primary text-start py-3">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-warning bg-opacity-10 p-2 rounded me-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                                        <path d="M2 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2zm0 5a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H2zm0 5a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H2z"/>
-                                    </svg>
-                                </div>
-                                <span class="fw-medium">Manage Categories</span>
-                            </div>
-                        </a>
+<div class="row g-4">
+    <!-- Left Column: Alerts & Recent Activity -->
+    <div class="col-12 col-xl-8 d-flex flex-column gap-4">
+        
+        <!-- Alerts -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+                <span>System Alerts</span>
+                <span class="badge bg-danger rounded-pill">2 New</span>
+            </div>
+            <div class="dashboard-card-body">
+                <div class="custom-alert alert-danger-soft">
+                    <i class="bi bi-exclamation-octagon-fill"></i>
+                    <div>
+                        <strong>Overdue Books</strong> 
+                        15 students have significantly overdue books. Please check the transaction history.
+                    </div>
+                </div>
+                <div class="custom-alert alert-warning-soft mb-0">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <div>
+                        <strong>Low Stock Warning</strong> 
+                        'C# Basics' and 4 other titles are currently running low on available copies.
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center px-4 py-3">
-                    <h5 class="mb-0 fw-bold">Today's Activity</h5>
-                    <span class="badge bg-primary">12 Pending</span>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th scope="col" class="ps-4">Title</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light p-2 rounded me-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#6c757d" viewBox="0 0 16 16">
-                                                    <path d="M3.5.5A.5.5 0 0 1 4 1h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H4a.5.5 0 0 1-.5-.5v-2zM4 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0">The Great Gatsby</h6>
-                                                <small class="text-muted">F. Scott Fitzgerald</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge bg-primary">Borrow</span></td>
-                                    <td><span class="badge bg-success">Pending</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary">Review</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light p-2 rounded me-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#6c757d" viewBox="0 0 16 16">
-                                                    <path d="M3.5.5A.5.5 0 0 1 4 1h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H4a.5.5 0 0 1-.5-.5v-2zM4 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0">1984</h6>
-                                                <small class="text-muted">George Orwell</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge bg-primary">Borrow</span></td>
-                                    <td><span class="badge bg-warning">Due Soon</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary">Review</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light p-2 rounded me-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#6c757d" viewBox="0 0 16 16">
-                                                    <path d="M3.5.5A.5.5 0 0 1 4 1h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H4a.5.5 0 0 1-.5-.5v-2zM4 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0">The Catcher in the Rye</h6>
-                                                <small class="text-muted">J.D. Salinger</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge bg-secondary">Return</span></td>
-                                    <td><span class="badge bg-success">Returned</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary">View</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <!-- Recent Activity -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+                <span>Recent Activity</span>
+                <a href="/Admin/TransactionHistory" class="text-decoration-none text-primary fs-6 fw-normal">View All</a>
+            </div>
+            <div class="dashboard-card-body">
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon borrow">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>John Doe</strong> borrowed 'C# Basics'</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon return">
+                            <i class="bi bi-box-arrow-in-down-left"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Anna Smith</strong> returned 'Database Systems'</p>
+                            <span class="activity-time">4 hours ago</span>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon borrow">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Mark Johnson</strong> borrowed 'Clean Architecture'</p>
+                            <span class="activity-time">5 hours ago</span>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon return">
+                            <i class="bi bi-box-arrow-in-down-left"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Emily Davis</strong> returned 'The Pragmatic Programmer'</p>
+                            <span class="activity-time">Yesterday</span>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <!-- Recent Borrowed Books -->
-    <div class="card border-0 shadow-sm mb-5">
-        <div class="card-header bg-white border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">Recent Borrowed Books</h5>
-            <a href="/Admin/ManageBooks" class="btn btn-sm btn-outline-primary">View All</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">Book</th>
-                        <th scope="col">Author</th>
-                        <th scope="col">Borrower</th>
-                        <th scope="col">Due Date</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>The Great Gatsby</strong></td>
-                        <td>F. Scott Fitzgerald</td>
-                        <td>John Doe</td>
-                        <td>May 4, 2026</td>
-                        <td><span class="badge bg-success">On Time</span></td>
-                        <td><button class="btn btn-sm btn-outline-primary">Review</button></td>
-                    </tr>
-                    <tr>
-                        <td><strong>To Kill a Mockingbird</strong></td>
-                        <td>Harper Lee</td>
-                        <td>Jane Smith</td>
-                        <td>Apr 28, 2026</td>
-                        <td><span class="badge bg-warning text-dark">Due Soon</span></td>
-                        <td><button class="btn btn-sm btn-outline-primary">Review</button></td>
-                    </tr>
-                    <tr>
-                        <td><strong>1984</strong></td>
-                        <td>George Orwell</td>
-                        <td>Bob Wilson</td>
-                        <td>Apr 23, 2026</td>
-                        <td><span class="badge bg-danger">Overdue</span></td>
-                        <td><button class="btn btn-sm btn-outline-primary">Review</button></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Pride and Prejudice</strong></td>
-                        <td>Jane Austen</td>
-                        <td>Alice Brown</td>
-                        <td>May 10, 2026</td>
-                        <td><span class="badge bg-success">On Time</span></td>
-                        <td><button class="btn btn-sm btn-outline-primary">Review</button></td>
-                    </tr>
-                    <tr>
-                        <td><strong>The Catcher in the Rye</strong></td>
-                        <td>J.D. Salinger</td>
-                        <td>Charlie Green</td>
-                        <td>Apr 29, 2026</td>
-                        <td><span class="badge bg-warning text-dark">Due Soon</span></td>
-                        <td><button class="btn btn-sm btn-outline-primary">Review</button></td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- Right Column: Quick Actions -->
+    <div class="col-12 col-xl-4">
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Quick Actions
+            </div>
+            <div class="dashboard-card-body">
+                <div class="quick-actions-grid">
+                    <a href="#" class="quick-action-btn">
+                        <i class="bi bi-journal-plus text-primary"></i>
+                        Add New Book
+                    </a>
+                    <a href="/Admin/TransactionHistory" class="quick-action-btn">
+                        <i class="bi bi-clock-history text-info"></i>
+                        View Transactions
+                    </a>
+                    <a href="/Admin/ManageUsers" class="quick-action-btn">
+                        <i class="bi bi-people text-success"></i>
+                        Manage Users
+                    </a>
+                    <a href="/Admin/ManageBooks" class="quick-action-btn">
+                        <i class="bi bi-bookmark-dash text-warning"></i>
+                        Manage Borrowed Books
+                    </a>
+                    <a href="/Admin/Categories" class="quick-action-btn">
+                        <i class="bi bi-tags text-secondary"></i>
+                        Edit Categories
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

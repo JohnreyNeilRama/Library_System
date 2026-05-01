@@ -7,7 +7,7 @@ namespace LibrarySystem.Controllers
         // GET: Admin
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Dashboard");
         }
 
         // GET: Admin/Dashboard
