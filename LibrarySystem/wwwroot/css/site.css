@@ -215,7 +215,7 @@ body.account-page main {
     overflow-y: auto;
 }
 
-.login-container::before {
+.login-container::before, .register-container::before {
     content: "";
     position: absolute;
     top: 0;
@@ -278,9 +278,6 @@ body.account-page main {
     margin-bottom: 2px;
     font-size: 12px;
 }
-    margin-bottom: 4px;
-    font-size: 13px;
-}
 
 .footer {
     background-color: #1a1a2e;
@@ -297,12 +294,14 @@ body.account-page main {
     text-decoration: none;
 }
 
+/* User Navbar Redesign */
 .user-navbar {
     background: #1a1a2e;
-    padding: 0.75rem 0;
+    padding: 0.6rem 0;
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .user-navbar .nav-container {
@@ -311,121 +310,229 @@ body.account-page main {
     padding: 0 1.5rem;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
 }
 
+/* Brand Styling */
 .nav-brand {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 12px;
     text-decoration: none;
+    color: white;
+    transition: transform 0.2s;
+}
+
+.nav-brand:hover {
+    transform: scale(1.02);
     color: white;
 }
 
-.brand-icon {
-    font-size: 1.5rem;
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
 }
 
 .brand-text {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-.nav-search {
-    display: flex;
-    flex: 1;
-    max-width: 400px;
+.brand-text span {
+    color: #0d6efd;
 }
 
-.search-input {
-    flex: 1;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 8px 0 0 8px;
-    background: rgba(255,255,255,0.1);
-    color: white;
-}
-
-.search-input::placeholder {
-    color: rgba(255,255,255,0.6);
-}
-
-.search-btn {
-    padding: 0.5rem 0.75rem;
-    border: none;
-    border-radius: 0 8px 8px 0;
-    background: #0d6efd;
-    cursor: pointer;
-}
-
+/* Nav Menu & Links */
 .nav-menu {
     display: flex;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .nav-link {
-    color: rgba(255,255,255,0.8);
-    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7) !important;
     font-weight: 500;
-    position: relative;
-    padding: 0.5rem 0;
-    transition: all 0.3s ease;
-}
-
-.nav-link::after {
-    content: "";
-    position: absolute;
-    width: 0%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #0d6efd;
-    transition: width 0.3s;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
-
-.nav-link:hover {
-    color: #0d6efd;
-    transform: translateY(-2px);
-}
-
-.nav-user {
-    margin-left: auto;
-}
-
-.nav-user form {
-    margin: 0;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
 }
 
-.nav-user .btn-logout {
-    margin: 0;
-    padding: 0.5rem 1rem;
-    background: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
+.nav-link:hover {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.nav-user .btn-logout:hover {
-    background: #bb2d3b;
+.nav-link.active {
+    color: white !important;
+    background: rgba(13, 110, 253, 0.15);
+    font-weight: 600;
+}
+
+/* Activity Dropdown */
+.dropdown-menu-dark {
+    background-color: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 0.5rem;
+    margin-top: 10px !important;
+}
+
+.dropdown-item {
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #0d6efd !important;
+    color: white !important;
+    transform: translateX(3px);
+}
+
+/* Search Bar Redesign */
+.nav-search-wrapper {
+    flex: 1;
+    max-width: 350px;
+}
+
+.nav-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+}
+
+.nav-search-container .search-input {
+    width: 100%;
+    padding: 0.6rem 1rem 0.6rem 2.4rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: white;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.nav-search-container .search-input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+    outline: none;
+}
+
+.nav-search-container .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* User Actions & Notifications */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 16px;
+    height: 16px;
+    background: #dc3545;
+    border: 2px solid #1a1a2e;
+    border-radius: 50%;
+    font-size: 0.6rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-link {
+    width: 40px;
+    height: 40px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 10px;
+    color: #dc3545;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.logout-link:hover {
+    background: #dc3545;
     color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-    text-decoration: none;
+}
 
+/* Notification Dropdown Enhancements */
+.notification-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 320px;
+    background: white;
+    z-index: 1050;
+    margin-top: 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.notif-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.x-small {
+    font-size: 0.7rem;
 }
 
 .user-btn {
@@ -439,12 +546,6 @@ body.account-page main {
     color: white;
     cursor: pointer;
 }
-    cursor: pointer;
-    margin-top: 0.5rem;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 .user-main {
     min-height: calc(100vh - 60px);
     background: #f5f5f5;
@@ -594,7 +695,6 @@ body.account-page main {
 .activity-card {
     padding: 1.25rem;
     margin-top: 0;
-}
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 

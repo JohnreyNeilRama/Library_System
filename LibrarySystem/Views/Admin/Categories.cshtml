@@ -3,8 +3,40 @@
     ViewData["Title"] = "Categories";
 }
 
+<style>
+    /* Force visibility of danger items in dropdowns */
+    .dropdown-menu .text-danger {
+        color: #dc3545 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Ensure dropdowns are not covered by cards below */
+    .category-item {
+        position: relative;
+        z-index: 1;
+        /* Delay dropping z-index when focus is lost to allow dropdown to close */
+        transition: z-index 0.3s step-end;
+    }
+
+    .category-item:focus-within {
+        z-index: 10;
+        transition: none;
+    }
+
+    .card {
+        overflow: visible !important;
+    }
+
+    /* Prevent staggered closing animation */
+    .dropdown-menu, .dropdown-item {
+        transition: none !important;
+        animation: none !important;
+    }
+</style>
+
 <div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-3 py-3">
         <h5 class="mb-0 fw-bold">Book Categories</h5>
         <button class="btn btn-primary btn-sm">
             <i class="bi bi-plus-lg"></i> Add Category
@@ -13,171 +45,191 @@
 </div>
 
 <div class="row g-4">
-    <div class="col-md-6 col-lg-4">
+    <!-- Fiction -->
+    <div class="col-md-6 col-xl-4 category-item">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-primary" viewBox="0 0 16 16">
-                            <path d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v2h2V4H4zm1 13V2h8v2h-1v10a1 1 0 0 0 1 1H6a1 1 0 0 0-1-1zm7-13a1 1 0 0 0-1 1v2h2V4a1 1 0 0 0-1-1z"/>
-                        </svg>
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+                        <i class="bi bi-journal-text fs-4"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-1">Fiction</h5>
+                        <h5 class="mb-1 category-name fw-bold">Fiction</h5>
                         <small class="text-muted">1,234 books</small>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-light border-0" type="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                            </svg>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Fiction">
+                            View Books
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Fiction" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-4">
+    
+    <!-- Science -->
+    <div class="col-md-6 col-xl-4 category-item">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-success bg-opacity-10 p-3 rounded-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-success" viewBox="0 0 16 16">
-                            <path d="M1 18.5A1.5 1.5 0 0 0 2.5 20h11a1.5 1.5 0 0 0 1.5-1.5V9a.5.5 0 0 0-1 0v9a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H3.5a1.5 1.5 0 0 1-1.5-1.5V3.5A1.5 1.5 0 0 1 3.5 2h6.086a1.5 1.5 0 0 1 1.06.44l1.915 1.915c.2.2.2.51.016.716L13.04 6.5a1.5 1.5 0 0 1-.262.17l-1.915 1.915A1.5 1.5 0 0 1 8 11H5a.5.5 0 0 0 0 1h3a.5.5 0 0 1 .5.5V16a.5.5 0 0 1-.5.5H3.5a.5.5 0 0 1-.5-.5v-1H2a.5.5 0 0 0-.5.5z"/>
-                        </svg>
+                    <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+                        <i class="bi bi-globe fs-4"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-1">Science</h5>
+                        <h5 class="mb-1 category-name fw-bold">Science</h5>
                         <small class="text-muted">856 books</small>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-light border-0" type="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                            </svg>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Science">
+                            View Books
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Science" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-4">
+
+    <!-- History -->
+    <div class="col-md-6 col-xl-4 category-item">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-info bg-opacity-10 p-3 rounded-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-info" viewBox="0 0 16 16">
-                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-                        </svg>
+                    <div class="bg-info bg-opacity-10 p-3 rounded-circle text-info">
+                        <i class="bi bi-bank fs-4"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-1">History</h5>
+                        <h5 class="mb-1 category-name fw-bold">History</h5>
                         <small class="text-muted">623 books</small>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-light border-0" type="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                            </svg>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="History">
+                            View Books
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="History" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-4">
+
+    <!-- Biography -->
+    <div class="col-md-6 col-xl-4 category-item">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-warning" viewBox="0 0 16 16">
-                            <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5zM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46z"/>
-                            <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032z"/>
-                        </svg>
+                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning">
+                        <i class="bi bi-person-lines-fill fs-4"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-1">Biography</h5>
+                        <h5 class="mb-1 category-name fw-bold">Biography</h5>
                         <small class="text-muted">567 books</small>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-light border-0" type="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                            </svg>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Biography">
+                            View Books
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Biography" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-4">
+
+    <!-- Technology -->
+    <div class="col-md-6 col-xl-4 category-item">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-danger" viewBox="0 0 16 16">
-                            <path d="M5.5 2.691V4.5h5V2.691l-2.5-1.5-2.5 1.5zM12.94 5H14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-1.06l-1.29 2.247A.5.5 0 0 1 11 14H5a.5.5 0 0 1-.45-.724L5.06 13H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.06l1.29-2.247A.5.5 0 0 1 5 2h6a.5.5 0 0 1 .44.724L9.94 5h2.11l-.452 1.5h-7.36L5.5 5h7.44z"/>
-                            <path d="M3 6v6h1v-1h1v1h1v-1h1v1h1v-1h1v1h1V6H3z"/>
-                        </svg>
+                    <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger">
+                        <i class="bi bi-laptop fs-4"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-1">Technology</h5>
+                        <h5 class="mb-1 category-name fw-bold">Technology</h5>
                         <small class="text-muted">445 books</small>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-light border-0" type="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                            </svg>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Technology">
+                            View Books
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Technology" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-4">
+
+    <!-- Children -->
+    <div class="col-md-6 col-xl-4 category-item">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-secondary bg-opacity-10 p-3 rounded-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="text-secondary" viewBox="0 0 16 16">
-                            <path d="M7 2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zm4.225-1.002a2.5 2.5 0 0 1 3.24 3.24l-2.5 2.5a2.5 2.5 0 0 1-3.536-3.536l2.5-2.5zm2.27 5.73a2.5 2.5 0 0 1-3.24-3.24l2.5-2.5a2.5 2.5 0 0 1 3.536 3.536l-2.5 2.5zm-10.655 0a2.5 2.5 0 0 1 0 3.536L1.793 14.35a2.5 2.5 0 0 1-3.536-3.536l2.5-2.5a2.5 2.5 0 0 1 3.536 0z"/>
-                        </svg>
+                    <div class="bg-secondary bg-opacity-10 p-3 rounded-circle text-secondary">
+                        <i class="bi bi-balloon fs-4"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="mb-1">Children</h5>
+                        <h5 class="mb-1 category-name fw-bold">Children</h5>
                         <small class="text-muted">892 books</small>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-light border-0" type="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                            </svg>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Children">
+                            View Books
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Children" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
                         </ul>
                     </div>
                 </div>
@@ -185,3 +237,288 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="editCategoryModalLabel">Edit Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm">
+                    <div class="mb-3">
+                        <label for="categoryNameInput" class="form-label text-muted small fw-bold text-uppercase">Category Name</label>
+                        <input type="text" class="form-control form-control-lg bg-light" id="categoryNameInput" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4" id="saveCategoryBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Books Modal -->
+<div class="modal fade" id="viewBooksModal" tabindex="-1" aria-labelledby="viewBooksModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light border-bottom-0">
+                <h5 class="modal-title fw-bold" id="viewBooksModalLabel">
+                    <span id="viewBooksCategoryName" class="text-primary"></span> Books
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <!-- Search Bar -->
+                <div class="p-3 border-bottom bg-white">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" id="searchBooksInput" class="form-control bg-light border-start-0 ps-0" placeholder="Search books by title or author...">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="ps-4">Book Title</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 bg-light">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Book Details Modal -->
+<div class="modal fade" id="bookDetailsModal" tabindex="-1" aria-labelledby="bookDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-sm btn-light me-2 rounded-circle px-2" id="backToBooksBtn" title="Back to list">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <h5 class="modal-title fw-bold" id="bookDetailsModalLabel">Book Details</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <!-- Book Cover Upload -->
+                    <div class="position-relative d-inline-block">
+                        <img src="https://via.placeholder.com/150x200?text=Cover" id="bookDetailsCover" class="img-fluid rounded shadow-sm" alt="Book Cover" style="width: 150px; height: 200px; object-fit: cover;">
+                        <label for="uploadCoverInput" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2 shadow" style="transform: translate(25%, 25%); cursor: pointer;" title="Upload Picture">
+                            <i class="bi bi-camera-fill"></i>
+                        </label>
+                        <input type="file" id="uploadCoverInput" class="d-none" accept="image/*">
+                    </div>
+                    <div class="mt-2 small text-muted">Click the camera icon to upload/edit picture</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Title</label>
+                    <input type="text" class="form-control bg-light border-0" id="bookDetailsTitle" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Author</label>
+                    <input type="text" class="form-control bg-light border-0" id="bookDetailsAuthor" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Status</label>
+                    <div id="bookDetailsStatus" class="mt-1"></div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-primary px-4" id="saveBookDetailsBtn" data-bs-dismiss="modal">Save Picture</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // --- Edit Category Logic ---
+            let currentCategoryCard = null;
+            const editModal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+            const categoryNameInput = document.getElementById('categoryNameInput');
+            const saveCategoryBtn = document.getElementById('saveCategoryBtn');
+
+            document.querySelectorAll('.edit-category-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const categoryName = this.getAttribute('data-category');
+                    currentCategoryCard = this.closest('.category-item'); 
+                    categoryNameInput.value = categoryName;
+                    editModal.show();
+                });
+            });
+
+            saveCategoryBtn.addEventListener('click', function () {
+                const newName = categoryNameInput.value.trim();
+                if (newName && currentCategoryCard) {
+                    currentCategoryCard.querySelector('.category-name').textContent = newName;
+                    currentCategoryCard.querySelector('.view-books-btn').setAttribute('data-category', newName);
+                    currentCategoryCard.querySelector('.edit-category-btn').setAttribute('data-category', newName);
+                    editModal.hide();
+                }
+            });
+
+            // --- View Books Logic ---
+            const viewBooksModal = new bootstrap.Modal(document.getElementById('viewBooksModal'));
+            const viewBooksCategoryName = document.getElementById('viewBooksCategoryName');
+            const booksTableBody = document.getElementById('booksTableBody');
+            const searchBooksInput = document.getElementById('searchBooksInput');
+
+            // Mock Data Generator for Books
+            const categoryBooksCache = {};
+            
+            function generateMockBooks(category) {
+                if (categoryBooksCache[category]) {
+                    return categoryBooksCache[category];
+                }
+
+                const mockTitles = [
+                    "The Great Setup", "Understanding " + category, "Advanced " + category + " Concepts",
+                    "Introduction to " + category, category + " for Beginners", "The Encyclopedia of " + category
+                ];
+                
+                let html = '';
+                const numBooks = Math.floor(Math.random() * 3) + 3; 
+                
+                for(let i = 0; i < numBooks; i++) {
+                    const title = mockTitles[i];
+                    const author = "Author Name " + (i + 1);
+                    const isAvailable = Math.random() > 0.3; // 70% chance available
+                    
+                    const statusBadge = isAvailable 
+                        ? '<span class="badge bg-success bg-opacity-10 text-success px-2 py-1">Available</span>'
+                        : '<span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1">Borrowed</span>';
+                        
+                    html += `
+                        <tr>
+                            <td class="ps-4 fw-medium text-dark">${title}</td>
+                            <td class="text-muted">${author}</td>
+                            <td>${statusBadge}</td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light text-primary view-book-detail-btn" 
+                                        data-title="${title}" 
+                                        data-author="${author}" 
+                                        data-status='${statusBadge}'>
+                                    <i class="bi bi-eye"></i> View
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                categoryBooksCache[category] = html;
+                return html;
+            }
+
+            document.querySelectorAll('.view-books-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const categoryName = this.getAttribute('data-category');
+                    viewBooksCategoryName.textContent = categoryName;
+                    booksTableBody.innerHTML = generateMockBooks(categoryName);
+                    searchBooksInput.value = ''; // Reset search
+                    viewBooksModal.show();
+                });
+            });
+
+            // Search functionality in View Books Modal
+            searchBooksInput.addEventListener('keyup', function() {
+                const term = this.value.toLowerCase();
+                const rows = booksTableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(term) ? '' : 'none';
+                });
+            });
+
+            // --- Book Details & Image Upload Logic ---
+            let detailsModalInstance = null;
+            const backToBooksBtn = document.getElementById('backToBooksBtn');
+            const bookImagesCache = {}; // Cache to store uploaded images by book title
+            
+            booksTableBody.addEventListener('click', function (e) {
+                const btn = e.target.closest('.view-book-detail-btn');
+                if (btn) {
+                    const title = btn.getAttribute('data-title');
+                    const author = btn.getAttribute('data-author');
+                    const statusHtml = btn.getAttribute('data-status');
+                    
+                    document.getElementById('bookDetailsTitle').value = title;
+                    document.getElementById('bookDetailsAuthor').value = author;
+                    document.getElementById('bookDetailsStatus').innerHTML = statusHtml;
+                    
+                    // Check if we have an uploaded image cached for this book
+                    if (bookImagesCache[title]) {
+                        document.getElementById('bookDetailsCover').src = bookImagesCache[title];
+                    } else {
+                        // Generate a placeholder image based on the title
+                        const encodedTitle = encodeURIComponent(title.substring(0, 12));
+                        document.getElementById('bookDetailsCover').src = "https://via.placeholder.com/150x200?text=" + encodedTitle;
+                    }
+                    
+                    // Clear the file input
+                    document.getElementById('uploadCoverInput').value = "";
+                    
+                    // Hide the first modal before showing the second
+                    viewBooksModal.hide();
+                    
+                    if (!detailsModalInstance) {
+                        detailsModalInstance = new bootstrap.Modal(document.getElementById('bookDetailsModal'));
+                    }
+                    
+                    // Show details modal after a tiny delay to allow the first one to transition out smoothly
+                    setTimeout(() => {
+                        detailsModalInstance.show();
+                    }, 300);
+                }
+            });
+
+            // Handle Back Button inside Details Modal
+            backToBooksBtn.addEventListener('click', function() {
+                if (detailsModalInstance) {
+                    detailsModalInstance.hide();
+                }
+                setTimeout(() => {
+                    viewBooksModal.show();
+                }, 300);
+            });
+
+            // Image Preview on Upload
+            document.getElementById('uploadCoverInput').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const base64Image = evt.target.result;
+                        document.getElementById('bookDetailsCover').src = base64Image;
+                        
+                        // Save the uploaded image to our cache so it doesn't disappear when we close the modal
+                        const currentTitle = document.getElementById('bookDetailsTitle').value;
+                        if (currentTitle) {
+                            bookImagesCache[currentTitle] = base64Image;
+                        }
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        });
+    </script>
+}

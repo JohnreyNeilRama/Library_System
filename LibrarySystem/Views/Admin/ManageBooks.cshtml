@@ -3,111 +3,206 @@
     ViewData["Title"] = "Borrowed Books";
 }
 
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h4 class="fw-bold mb-1">Borrowed Books</h4>
+        <p class="text-muted mb-0 small">Monitor and manage currently borrowed library assets.</p>
+    </div>
+
+</div>
+
 <div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-3">
-        <h5 class="mb-0 fw-bold">Borrowed Books Management</h5>
-        <div class="d-flex gap-2 flex-wrap">
-            <input type="text" class="form-control form-control-sm" placeholder="Search books..." style="min-width:280px" />
-            <select class="form-select form-select-sm" style="width:auto">
-                <option>All Status</option>
-                <option>On Time</option>
-                <option>Due Soon</option>
-                <option>Overdue</option>
-            </select>
+    <div class="card-body p-4">
+        <div class="row g-4 text-center">
+            <div class="col-4 border-end">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Total Borrowed</div>
+                <h3 class="fw-bold text-dark mb-0">124</h3>
+            </div>
+            <div class="col-4 border-end">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Due Soon</div>
+                <h3 class="fw-bold text-warning mb-0">18</h3>
+            </div>
+            <div class="col-4">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Overdue</div>
+                <h3 class="fw-bold text-danger mb-0">5</h3>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
-        <thead class="table-light">
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Borrower</th>
-                <th>Borrow Date</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td><strong>The Great Gatsby</strong></td>
-                <td>F. Scott Fitzgerald</td>
-                <td>John Doe</td>
-                <td>2026-04-16</td>
-                <td>2026-05-04</td>
-                <td><span class="badge bg-success rounded-pill">On Time</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger">Return</button>
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td><strong>To Kill a Mockingbird</strong></td>
-                <td>Harper Lee</td>
-                <td>Jane Smith</td>
-                <td>2026-04-11</td>
-                <td>2026-04-28</td>
-                <td><span class="badge bg-warning rounded-pill text-dark">Due Soon</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger">Return</button>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td><strong>1984</strong></td>
-                <td>George Orwell</td>
-                <td>Bob Wilson</td>
-                <td>2026-04-06</td>
-                <td>2026-04-23</td>
-                <td><span class="badge bg-danger rounded-pill">Overdue</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger">Return</button>
-                </td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td><strong>Pride and Prejudice</strong></td>
-                <td>Jane Austen</td>
-                <td>Alice Brown</td>
-                <td>2026-04-21</td>
-                <td>2026-05-10</td>
-                <td><span class="badge bg-success rounded-pill">On Time</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger">Return</button>
-                </td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td><strong>The Catcher in the Rye</strong></td>
-                <td>J.D. Salinger</td>
-                <td>Charlie Green</td>
-                <td>2026-04-18</td>
-                <td>2026-04-29</td>
-                <td><span class="badge bg-warning rounded-pill text-dark">Due Soon</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary">Edit</button>
-                    <button class="btn btn-sm btn-outline-danger">Return</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <!-- Search Bar -->
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+            <div class="input-group" style="max-width: 350px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-start-0 ps-0" placeholder="Search title or borrower...">
+            </div>
+            <div>
+                <select class="form-select form-select-sm" style="min-width: 140px;">
+                    <option>All Status</option>
+                    <option>On Time</option>
+                    <option>Due Soon</option>
+                    <option>Overdue</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Borrower</th>
+                        <th>Borrow Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-4">1</td>
+                        <td><div class="fw-bold text-dark">The Great Gatsby</div></td>
+                        <td class="text-muted small">F. Scott Fitzgerald</td>
+                        <td>John Doe</td>
+                        <td class="text-muted small">2026-04-16</td>
+                        <td class="text-muted small">2026-05-04</td>
+                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="John Doe" data-book="The Great Gatsby">
+                                <i class="bi bi-bell"></i>
+                            </button>
+                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ps-4">2</td>
+                        <td><div class="fw-bold text-dark">To Kill a Mockingbird</div></td>
+                        <td class="text-muted small">Harper Lee</td>
+                        <td>Jane Smith</td>
+                        <td class="text-muted small">2026-04-11</td>
+                        <td class="text-muted small">2026-04-28</td>
+                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1"><i class="bi bi-clock me-1"></i>Due Soon</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="Jane Smith" data-book="To Kill a Mockingbird">
+                                <i class="bi bi-bell"></i>
+                            </button>
+                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ps-4">3</td>
+                        <td><div class="fw-bold text-dark">1984</div></td>
+                        <td class="text-muted small">George Orwell</td>
+                        <td>Bob Wilson</td>
+                        <td class="text-muted small">2026-04-06</td>
+                        <td class="text-muted small">2026-04-23</td>
+                        <td><span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1"><i class="bi bi-exclamation-circle me-1"></i>Overdue</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="Bob Wilson" data-book="1984">
+                                <i class="bi bi-bell"></i>
+                            </button>
+                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ps-4">4</td>
+                        <td><div class="fw-bold text-dark">Pride and Prejudice</div></td>
+                        <td class="text-muted small">Jane Austen</td>
+                        <td>Alice Brown</td>
+                        <td class="text-muted small">2026-04-21</td>
+                        <td class="text-muted small">2026-05-10</td>
+                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="Alice Brown" data-book="Pride and Prejudice">
+                                <i class="bi bi-bell"></i>
+                            </button>
+                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="p-3 border-top d-flex justify-content-between align-items-center text-muted small bg-white rounded-bottom">
+            <div>Showing <span class="fw-medium text-dark">1</span> to <span class="fw-medium text-dark">4</span> entries</div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 </div>
 
-<nav class="mt-4">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</nav>
+<!-- Notify Borrower Modal -->
+<div class="modal fade" id="notifyBorrowerModal" tabindex="-1" aria-labelledby="notifyBorrowerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light border-bottom-0">
+                <h5 class="modal-title fw-bold" id="notifyBorrowerModalLabel"><i class="bi bi-bell-fill me-2 text-warning"></i>Send Return Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Borrower</label>
+                    <input type="text" class="form-control bg-light fw-bold" id="notifyBorrowerName" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Book Title</label>
+                    <input type="text" class="form-control bg-light" id="notifyBookTitle" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Message (Optional)</label>
+                    <textarea class="form-control" id="notifyMessage" rows="3" placeholder="e.g. Please remember to return the book by tomorrow."></textarea>
+                </div>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-warning fw-bold text-dark" id="confirmNotifyBtn">
+                        <i class="bi bi-send me-1"></i> Send Notification
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifyBtns = document.querySelectorAll('.notify-btn');
+            const borrowerInput = document.getElementById('notifyBorrowerName');
+            const bookInput = document.getElementById('notifyBookTitle');
+            const messageInput = document.getElementById('notifyMessage');
+
+            notifyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const borrower = this.getAttribute('data-borrower');
+                    const book = this.getAttribute('data-book');
+                    
+                    borrowerInput.value = borrower;
+                    bookInput.value = book;
+                    messageInput.value = ''; // Clear previous message
+                });
+            });
+
+            document.getElementById('confirmNotifyBtn').addEventListener('click', function() {
+                const borrower = borrowerInput.value;
+                const message = messageInput.value;
+                
+                // In a real app, you'd send an AJAX request here
+                alert(`Notification sent to ${borrower}! ${message ? '\nMessage: ' + message : ''}`);
+                
+                // Close modal
+                const modalElement = document.getElementById('notifyBorrowerModal');
+                const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                modal.hide();
+            });
+        });
+    </script>
+}

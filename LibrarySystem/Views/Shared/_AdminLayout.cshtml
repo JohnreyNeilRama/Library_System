@@ -22,8 +22,10 @@
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="admin-sidebar-header">
-                <i class="bi bi-book-half admin-sidebar-icon"></i>
-                <h4>Admin Panel</h4>
+                <div class="brand-logo me-2" style="width: 35px; height: 35px; font-size: 1.1rem; min-width: 35px;">
+                    <i class="bi bi-book-half"></i>
+                </div>
+                <h4 class="brand-text text-white mb-0" style="font-size: 1.1rem;">Library<span style="color: #0d6efd;">System</span></h4>
             </div>
 
             <div class="admin-sidebar-nav">
@@ -41,12 +43,12 @@
                 <p class="nav-section-label">Book Management</p>
                 <ul class="p-0 m-0">
                     <li class="admin-nav-item">
-                        <a href="#" class="admin-nav-link">
+                        <a asp-controller="Admin" asp-action="AllBooks" class="admin-nav-link @(currentAction == "AllBooks" ? "active" : "")">
                             <i class="bi bi-journals"></i> All Books
                         </a>
                     </li>
                     <li class="admin-nav-item">
-                        <a href="#" class="admin-nav-link">
+                        <a href="#" class="admin-nav-link" data-bs-toggle="modal" data-bs-target="#globalAddBookModal">
                             <i class="bi bi-plus-circle"></i> Add Book
                         </a>
                     </li>
@@ -61,7 +63,7 @@
                 <p class="nav-section-label">User Management</p>
                 <ul class="p-0 m-0">
                     <li class="admin-nav-item">
-                        <a href="#" class="admin-nav-link">
+                        <a asp-controller="Admin" asp-action="ManageUsers" class="admin-nav-link @(currentAction == "ManageUsers" ? "active" : "")">
                             <i class="bi bi-people"></i> Users / Students
                         </a>
                     </li>
@@ -86,21 +88,13 @@
                         </a>
                     </li>
                     <li class="admin-nav-item">
-                        <a asp-controller="Reservation" asp-action="Index" class="admin-nav-link @(currentController == "Reservation" ? "active" : "")">
+                        <a asp-controller="Admin" asp-action="Reservations" class="admin-nav-link @(currentAction == "Reservations" ? "active" : "")">
                             <i class="bi bi-calendar-check"></i> Reservations
                         </a>
                     </li>
                 </ul>
 
-                <!-- Settings -->
-                <p class="nav-section-label">Settings</p>
-                <ul class="p-0 m-0 pb-4">
-                    <li class="admin-nav-item">
-                        <a href="#" class="admin-nav-link">
-                            <i class="bi bi-gear"></i> Settings
-                        </a>
-                    </li>
-                </ul>
+
             </div>
         </aside>
 
@@ -120,11 +114,9 @@
                 </div>
 
                 <div class="top-navbar-right">
-                    <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                        <button type="submit" class="btn btn-danger btn-sm px-3 rounded-pill fw-medium shadow-sm">
-                            <i class="bi bi-box-arrow-right me-1"></i> Log Out
-                        </button>
-                    </form>
+                    <a asp-controller="Account" asp-action="Logout" class="btn btn-danger btn-sm px-3 rounded-pill fw-medium shadow-sm">
+                        <i class="bi bi-box-arrow-right me-1"></i> Log Out
+                    </a>
                 </div>
             </header>
 
@@ -138,6 +130,79 @@
     <!-- Mobile Overlay -->
     <div class="modal-overlay" id="sidebarOverlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1025;"></div>
 
+    <!-- Global Add Book Modal -->
+    <div class="modal fade" id="globalAddBookModal" tabindex="-1" aria-labelledby="globalAddBookModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light border-bottom-0">
+                    <h5 class="modal-title fw-bold" id="globalAddBookModalLabel"><i class="bi bi-book me-2 text-primary"></i>Add New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="globalAddBookForm">
+                        <div class="row">
+                            <div class="col-md-4 mb-4 text-center">
+                                <div class="position-relative d-inline-block">
+                                    <img src="https://via.placeholder.com/150x200?text=Upload+Cover" id="addBookCoverPreview" class="img-fluid rounded shadow-sm" alt="Book Cover" style="width: 150px; height: 200px; object-fit: cover;">
+                                    <label for="addBookCoverInput" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2 shadow" style="transform: translate(25%, 25%); cursor: pointer;" title="Upload Picture">
+                                        <i class="bi bi-camera-fill"></i>
+                                    </label>
+                                    <input type="file" id="addBookCoverInput" class="d-none" accept="image/*">
+                                </div>
+                                <div class="mt-2 small text-muted">Book Cover</div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold text-uppercase">Book Title <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control bg-light" required placeholder="Enter book title">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold text-uppercase">Author <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control bg-light" required placeholder="Enter author name">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Category</label>
+                                        <select class="form-select bg-light">
+                                            <option value="Fiction">Fiction</option>
+                                            <option value="Science">Science</option>
+                                            <option value="History">History</option>
+                                            <option value="Biography">Biography</option>
+                                            <option value="Technology">Technology</option>
+                                            <option value="Children">Children</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">ISBN</label>
+                                        <input type="text" class="form-control bg-light" placeholder="Optional">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Quantity</label>
+                                        <input type="number" class="form-control bg-light" value="1" min="1">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Published Year</label>
+                                        <input type="number" class="form-control bg-light" placeholder="e.g. 2024">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-bold text-uppercase">Description</label>
+                                    <textarea class="form-control bg-light" rows="3" placeholder="Brief description of the book..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top-0 bg-light">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary px-4" id="saveNewBookBtn" data-bs-dismiss="modal">Add Book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -150,6 +215,24 @@
         document.getElementById('sidebarOverlay')?.addEventListener('click', function() {
             document.getElementById('adminSidebar').classList.remove('show');
             this.style.display = 'none';
+        });
+
+        // Global Add Book Modal Logic
+        document.getElementById('addBookCoverInput')?.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('addBookCoverPreview').src = evt.target.result;
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        document.getElementById('saveNewBookBtn')?.addEventListener('click', function() {
+            // Optional: Mock saving action
+            document.getElementById('globalAddBookForm').reset();
+            document.getElementById('addBookCoverPreview').src = "https://via.placeholder.com/150x200?text=Upload+Cover";
+            // Could display a bootstrap toast here in real app
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

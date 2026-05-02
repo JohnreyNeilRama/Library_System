@@ -3,90 +3,106 @@
     ViewData["Title"] = "Returned Books";
 }
 
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h4 class="fw-bold mb-1">Returned Books</h4>
+        <p class="text-muted mb-0 small">View the history of all successfully returned books.</p>
+    </div>
+
+</div>
+
 <div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-3">
-        <h5 class="mb-0 fw-bold">Returned Books</h5>
-        <div class="d-flex gap-2 flex-wrap">
-            <input type="text" class="form-control form-control-sm" placeholder="Search books..." style="min-width:280px" />
-            <select class="form-select form-select-sm" style="width:auto">
-                <option>All Status</option>
-                <option>On Time</option>
-                <option>Returned Late</option>
-            </select>
-            <input type="date" class="form-control form-control-sm" style="width:auto" />
+    <div class="card-body p-4">
+        <div class="row g-4 text-center">
+            <div class="col-4 border-end">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Total Returns</div>
+                <h3 class="fw-bold text-dark mb-0">8,402</h3>
+            </div>
+            <div class="col-4 border-end">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Returned On Time</div>
+                <h3 class="fw-bold text-success mb-0">7,920</h3>
+            </div>
+            <div class="col-4">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Returned Late</div>
+                <h3 class="fw-bold text-warning mb-0">482</h3>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
-        <thead class="table-light">
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Borrower</th>
-                <th>Borrow Date</th>
-                <th>Return Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td><strong>The Alchemist</strong></td>
-                <td>Paulo Coelho</td>
-                <td>John Doe</td>
-                <td>2026-03-26</td>
-                <td>2026-04-21</td>
-                <td><span class="badge bg-success rounded-pill">On Time</span></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td><strong>The Hobbit</strong></td>
-                <td>J.R.R. Tolkien</td>
-                <td>Jane Smith</td>
-                <td>2026-04-01</td>
-                <td>2026-04-23</td>
-                <td><span class="badge bg-success rounded-pill">On Time</span></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td><strong>Dune</strong></td>
-                <td>Frank Herbert</td>
-                <td>Bob Wilson</td>
-                <td>2026-03-31</td>
-                <td>2026-04-25</td>
-                <td><span class="badge bg-warning rounded-pill text-dark">Returned Late</span></td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td><strong>Foundation</strong></td>
-                <td>Isaac Asimov</td>
-                <td>Alice Brown</td>
-                <td>2026-03-18</td>
-                <td>2026-04-16</td>
-                <td><span class="badge bg-success rounded-pill">On Time</span></td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td><strong>Brave New World</strong></td>
-                <td>Aldous Huxley</td>
-                <td>Charlie Green</td>
-                <td>2026-03-20</td>
-                <td>2026-04-18</td>
-                <td><span class="badge bg-success rounded-pill">On Time</span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <!-- Search Bar -->
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+            <div class="input-group" style="max-width: 350px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-start-0 ps-0" placeholder="Search title or borrower...">
+            </div>
+            <div class="d-flex gap-2">
+                <input type="date" class="form-control form-control-sm text-muted" style="min-width: 140px;">
+                <select class="form-select form-select-sm" style="min-width: 140px;">
+                    <option>All Status</option>
+                    <option>On Time</option>
+                    <option>Returned Late</option>
+                </select>
+            </div>
+        </div>
 
-<nav class="mt-4">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</nav>
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Borrower</th>
+                        <th>Borrow Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-4">1</td>
+                        <td><div class="fw-bold text-dark">The Alchemist</div></td>
+                        <td class="text-muted small">Paulo Coelho</td>
+                        <td>John Doe</td>
+                        <td class="text-muted small">2026-03-26</td>
+                        <td class="text-muted small">2026-04-21</td>
+                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-4">2</td>
+                        <td><div class="fw-bold text-dark">The Hobbit</div></td>
+                        <td class="text-muted small">J.R.R. Tolkien</td>
+                        <td>Jane Smith</td>
+                        <td class="text-muted small">2026-04-01</td>
+                        <td class="text-muted small">2026-04-23</td>
+                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-4">3</td>
+                        <td><div class="fw-bold text-dark">Dune</div></td>
+                        <td class="text-muted small">Frank Herbert</td>
+                        <td>Bob Wilson</td>
+                        <td class="text-muted small">2026-03-31</td>
+                        <td class="text-muted small">2026-04-25</td>
+                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1"><i class="bi bi-exclamation-triangle me-1"></i>Returned Late</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="p-3 border-top d-flex justify-content-between align-items-center text-muted small bg-white rounded-bottom">
+            <div>Showing <span class="fw-medium text-dark">1</span> to <span class="fw-medium text-dark">3</span> entries</div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

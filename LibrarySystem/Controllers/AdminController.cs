@@ -16,6 +16,12 @@ namespace LibrarySystem.Controllers
             return View();
         }
 
+        // GET: Admin/AllBooks
+        public IActionResult AllBooks()
+        {
+            return View();
+        }
+
         // GET: Admin/ManageBooks
         public IActionResult ManageBooks()
         {
@@ -48,6 +54,12 @@ namespace LibrarySystem.Controllers
 
         // GET: Admin/Reports
         public IActionResult Reports()
+        {
+            return View();
+        }
+
+        // GET: Admin/Reservations
+        public IActionResult Reservations()
         {
             return View();
         }

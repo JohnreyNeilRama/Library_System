@@ -1,4 +1,4 @@
-﻿@model LibrarySystem.Models.UserCategoriesViewModel
+@model LibrarySystem.Models.UserCategoriesViewModel
 @{
     ViewData["Title"] = "Categories";
     Layout = "_UserLayout";
@@ -18,7 +18,7 @@
                 <h3 class="category-name">Programming</h3>
                 <p class="category-count">24 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="programming" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="programming" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">🗄️</div>
@@ -26,7 +26,7 @@
                 <h3 class="category-name">Database</h3>
                 <p class="category-count">18 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="database" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="database" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">🌐</div>
@@ -34,7 +34,7 @@
                 <h3 class="category-name">Networking</h3>
                 <p class="category-count">12 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="networking" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="networking" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">🌍</div>
@@ -42,7 +42,7 @@
                 <h3 class="category-name">Web Development</h3>
                 <p class="category-count">28 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="web-development" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="web-development" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">📱</div>
@@ -50,7 +50,7 @@
                 <h3 class="category-name">Mobile Development</h3>
                 <p class="category-count">15 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="mobile-development" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="mobile-development" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">⚙️</div>
@@ -58,7 +58,7 @@
                 <h3 class="category-name">DevOps</h3>
                 <p class="category-count">10 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="devops" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="devops" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">📊</div>
@@ -66,7 +66,7 @@
                 <h3 class="category-name">Data Science</h3>
                 <p class="category-count">14 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="data-science" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="data-science" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">🔒</div>
@@ -74,7 +74,7 @@
                 <h3 class="category-name">Security</h3>
                 <p class="category-count">9 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="security" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="security" class="btn-view-books">View Books</a>
         </div>
         <div class="category-card">
             <div class="category-icon">📐</div>
@@ -82,7 +82,7 @@
                 <h3 class="category-name">Software Engineering</h3>
                 <p class="category-count">20 books</p>
             </div>
-            <a asp-controller="Books" asp-action="Index" asp-route-category="software-engineering" class="btn-view-books">View Books</a>
+            <a asp-controller="User" asp-action="Books" asp-route-category="software-engineering" class="btn-view-books">View Books</a>
         </div>
     </div>
 </div>

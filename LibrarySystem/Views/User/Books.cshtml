@@ -1,4 +1,4 @@
-    @model LibrarySystem.Models.UserCategoryBooksViewModel
+@model LibrarySystem.Models.UserCategoryBooksViewModel
 
 @{
     ViewData["Title"] = Model.CategoryName;
@@ -134,7 +134,7 @@
                     <span class="note-icon">&#9432;</span> The admin will assign a due date upon approval.
                 </p>
 
-                <form id="borrowForm" asp-controller="Books" asp-action="Borrow" method="post">
+                <form id="borrowForm" asp-controller="User" asp-action="Borrow" method="post">
                     <input type="hidden" name="BookId" id="bookIdInput" />
                     
                     <div class="mb-3 text-start px-2">
