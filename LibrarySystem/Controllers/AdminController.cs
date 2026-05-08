@@ -1,11 +1,3 @@
-/**
- * AdminController.cs
- * 
- * Provides administrative functionality including dashboard overview,
- * book management, user management, and transaction tracking.
- * Restricted to users with the "Admin" role.
- */
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using LibrarySystem.Services;
@@ -27,10 +19,6 @@ namespace LibrarySystem.Controllers
             return RedirectToAction("Dashboard");
         }
 
-        /**
-         * GET: /Admin/Dashboard
-         * Displays the administrative dashboard with key statistics and recent activity.
-         */
         public IActionResult Dashboard()
         {
             var allBooks = _libraryService.GetAllBooks();
@@ -49,10 +37,6 @@ namespace LibrarySystem.Controllers
             return View(model);
         }
 
-        /**
-         * GET: /Admin/AllBooks
-         * Displays a searchable and filterable list of all books in the library.
-         */
         public IActionResult AllBooks(string? search = null, string? category = null)
         {
             var books = _libraryService.GetAllBooks();

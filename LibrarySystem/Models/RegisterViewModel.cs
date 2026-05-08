@@ -1,3 +1,10 @@
+/**
+ * RegisterViewModel.cs
+ * 
+ * View model for the user registration page.
+ * 
+ * This is the updated version of the file.
+ */
 
 namespace LibrarySystem.Models
 {

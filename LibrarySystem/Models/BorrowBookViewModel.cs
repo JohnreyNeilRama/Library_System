@@ -1,3 +1,12 @@
+/**
+ * BorrowBookViewModel.cs
+ * 
+ * View model for the book borrowing process.
+ * Contains book details and user information for the borrow form.
+ * 
+ * This is the updated version of the file.
+ */
+
 using System.ComponentModel.DataAnnotations;
 
 namespace LibrarySystem.Models

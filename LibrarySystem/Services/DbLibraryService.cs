@@ -1,3 +1,12 @@
+/**
+ * DbLibraryService.cs
+ * 
+ * Implementation of ILibraryService using Entity Framework Core and SQL Server.
+ * This class handles all database interactions for the application.
+ * 
+ * This is the updated version of the file.
+ */
+
 using Microsoft.EntityFrameworkCore;
 using LibrarySystem.Data;
 using LibrarySystem.Models;
@@ -8,6 +17,9 @@ using LibrarySystem.Models;
 
 namespace LibrarySystem.Services
 {
+    /**
+     * Service class for handling database-backed library operations.
+     */
     public class DbLibraryService : ILibraryService
     {
         private readonly AppDbContext _db;

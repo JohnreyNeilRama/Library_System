@@ -1,8 +1,19 @@
+/**
+ * Models.cs
+ * 
+ * This file contains the core entity models for the Library System.
+ * These classes represent the data structure for Users, Books, Categories, 
+ * Transactions, and Reservations as stored in the database.
+ * 
+ * This is the updated version of the file.
+ */
+
 using System.ComponentModel.DataAnnotations;
 
 namespace LibrarySystem.Models
 {
-    // ─── USER ────────────────────────────────────────────────────────────────
+    // ─── USER ENTITY ─────────────────────────────────────────────────────────
+    // Represents a library member or administrator.
     public class User
     {
         [Key]
@@ -40,12 +51,13 @@ namespace LibrarySystem.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // Navigation
+        // Navigation Properties
         public ICollection<BorrowTransaction> BorrowTransactions { get; set; } = new List<BorrowTransaction>();
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 
-    // ─── CATEGORY ────────────────────────────────────────────────────────────
+    // ─── CATEGORY ENTITY ─────────────────────────────────────────────────────
+    // Represents a classification for books (e.g., Programming, Science).
     public class Category
     {
         [Key, MaxLength(60)]
@@ -56,11 +68,12 @@ namespace LibrarySystem.Models
 
         public string Description { get; set; } = string.Empty;
 
-        // Navigation
+        // Navigation Properties
         public ICollection<Book> Books { get; set; } = new List<Book>();
     }
 
-    // ─── BOOK ─────────────────────────────────────────────────────────────────
+    // ─── BOOK ENTITY ─────────────────────────────────────────────────────────
+    // Represents an individual book entry in the library catalog.
     public class Book
     {
         public int Id { get; set; }
@@ -83,26 +96,27 @@ namespace LibrarySystem.Models
         public int AvailableCopies { get; set; }
         public int TotalCopies { get; set; }
 
-        // FK → Category
+        // Foreign Key to Category
         [MaxLength(60)]
         public string CategoryId { get; set; } = string.Empty;
         public Category? Category { get; set; }
 
-        // Navigation
+        // Navigation Properties
         public ICollection<BorrowTransaction> BorrowTransactions { get; set; } = new List<BorrowTransaction>();
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 
-    // ─── BORROW TRANSACTION ───────────────────────────────────────────────────
+    // ─── BORROW TRANSACTION ENTITY ──────────────────────────────────────────
+    // Tracks when a user borrows and returns a book.
     public class BorrowTransaction
     {
         public int Id { get; set; }
 
-        // FK → User
+        // Foreign Key to User
         public string UserId { get; set; } = string.Empty;
         public User? User { get; set; }
 
-        // FK → Book
+        // Foreign Key to Book
         public int BookId { get; set; }
         public Book? Book { get; set; }
 
@@ -111,19 +125,20 @@ namespace LibrarySystem.Models
         public DateTime? ReturnDate { get; set; }
 
         [MaxLength(30)]
-        public string Status { get; set; } = "On Time"; // "On Time" | "Returned Late"
+        public string Status { get; set; } = "On Time"; // "On Time" | "Returned Late" | "Pending"
     }
 
-    // ─── RESERVATION ─────────────────────────────────────────────────────────
+    // ─── RESERVATION ENTITY ──────────────────────────────────────────────────
+    // Tracks book reservations made by users.
     public class Reservation
     {
         public int Id { get; set; }
 
-        // FK → User
+        // Foreign Key to User
         public string UserId { get; set; } = string.Empty;
         public User? User { get; set; }
 
-        // FK → Book
+        // Foreign Key to Book
         public int BookId { get; set; }
         public Book? Book { get; set; }
 
