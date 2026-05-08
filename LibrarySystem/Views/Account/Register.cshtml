@@ -1,0 +1,99 @@
+@model RegisterViewModel
+@{
+    Layout = "_AccountLayout";
+    ViewData["Title"] = "Register";
+}
+
+<div class="register-container">
+    <div class="register-card bg-white shadow-lg mx-auto">
+
+        <div class="text-center mb-3">
+            <h2 class="fw-bold">Create Account</h2>
+            <p class="text-muted small">Join the library system</p>
+        </div>
+
+        <form asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <div class="auth-form">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" asp-for="FullName" class="form-control" placeholder="Full name">
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">ID Number</label>
+                        <input type="text" asp-for="IdNumber" class="form-control" placeholder="ID number">
+                        <span asp-validation-for="IdNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Course</label>
+                        <select asp-for="Course" class="form-select">
+                            <option value="" selected>Select course</option>
+                            <option>BS Computer Science</option>
+                            <option>BS Information Technology</option>
+                            <option>BS Information Systems</option>
+                            <option>BS Business Administration</option>
+                            <option>BS Accountancy</option>
+                            <option>BS Hospitality Management</option>
+                            <option>BS Criminology</option>
+                            <option>BS Civil Engineering</option>
+                            <option>BS Electrical Engineering</option>
+                            <option>BS Mechanical Engineering</option>
+                        </select>
+                        <span asp-validation-for="Course" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Year Level</label>
+                        <select asp-for="YearLevel" class="form-select">
+                            <option value="" selected>Select year</option>
+                            <option>1st Year</option>
+                            <option>2nd Year</option>
+                            <option>3rd Year</option>
+                            <option>4th Year</option>
+                        </select>
+                        <span asp-validation-for="YearLevel" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Username</label>
+                    <input type="text" asp-for="UserName" class="form-control" placeholder="Username">
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" asp-for="Email" class="form-control" placeholder="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Password">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Confirm">
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Register
+                </button>
+
+                <div class="text-center mt-3 mb-0">
+                    <span class="text-muted small">Already have an account?</span>
+                    <a asp-controller="Account" asp-action="Login" class="small fw-semibold text-decoration-none"> Login</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

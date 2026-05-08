@@ -1,0 +1,154 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" />
+
+<div class="dashboard-header">
+    <h2>Welcome, Admin</h2>
+    <p>Here’s an overview of your system activity</p>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon books"><i class="bi bi-book"></i></div>
+            <h3>1,245</h3>
+            <p>Total Books</p>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon users"><i class="bi bi-people"></i></div>
+            <h3>850</h3>
+            <p>Total Users</p>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon borrowed"><i class="bi bi-journal-arrow-up"></i></div>
+            <h3>312</h3>
+            <p>Borrowed Books</p>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon returned"><i class="bi bi-journal-check"></i></div>
+            <h3>145</h3>
+            <p>Returned Books</p>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Left Column: Alerts & Recent Activity -->
+    <div class="col-12 col-xl-8 d-flex flex-column gap-4">
+        
+        <!-- Alerts -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+                <span>System Alerts</span>
+                <span class="badge bg-danger rounded-pill">2 New</span>
+            </div>
+            <div class="dashboard-card-body">
+                <div class="custom-alert alert-danger-soft">
+                    <i class="bi bi-exclamation-octagon-fill"></i>
+                    <div>
+                        <strong>Overdue Books</strong> 
+                        15 students have significantly overdue books. Please check the transaction history.
+                    </div>
+                </div>
+                <div class="custom-alert alert-warning-soft mb-0">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <div>
+                        <strong>Low Stock Warning</strong> 
+                        'C# Basics' and 4 other titles are currently running low on available copies.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-header d-flex justify-content-between align-items-center">
+                <span>Recent Activity</span>
+                <a href="/Admin/TransactionHistory" class="text-decoration-none text-primary fs-6 fw-normal">View All</a>
+            </div>
+            <div class="dashboard-card-body">
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-icon borrow">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>John Doe</strong> borrowed 'C# Basics'</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon return">
+                            <i class="bi bi-box-arrow-in-down-left"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Anna Smith</strong> returned 'Database Systems'</p>
+                            <span class="activity-time">4 hours ago</span>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon borrow">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Mark Johnson</strong> borrowed 'Clean Architecture'</p>
+                            <span class="activity-time">5 hours ago</span>
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-icon return">
+                            <i class="bi bi-box-arrow-in-down-left"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Emily Davis</strong> returned 'The Pragmatic Programmer'</p>
+                            <span class="activity-time">Yesterday</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Quick Actions -->
+    <div class="col-12 col-xl-4">
+        <div class="dashboard-card">
+            <div class="dashboard-card-header">
+                Quick Actions
+            </div>
+            <div class="dashboard-card-body">
+                <div class="quick-actions-grid">
+                    <a href="#" class="quick-action-btn" data-bs-toggle="modal" data-bs-target="#globalAddBookModal">
+                        <i class="bi bi-journal-plus text-primary"></i>
+                        Add New Book
+                    </a>
+                    <a href="/Admin/TransactionHistory" class="quick-action-btn">
+                        <i class="bi bi-clock-history text-info"></i>
+                        View Transactions
+                    </a>
+                    <a href="/Admin/ManageUsers" class="quick-action-btn">
+                        <i class="bi bi-people text-success"></i>
+                        Manage Users
+                    </a>
+                    <a href="/Admin/ManageBooks" class="quick-action-btn">
+                        <i class="bi bi-bookmark-dash text-warning"></i>
+                        Manage Borrowed Books
+                    </a>
+                    <a href="/Admin/Categories" class="quick-action-btn">
+                        <i class="bi bi-tags text-secondary"></i>
+                        Edit Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

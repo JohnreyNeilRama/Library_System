@@ -1,0 +1,173 @@
+@model LibrarySystem.Controllers.UserInfoViewModel
+
+@{
+    ViewData["Title"] = "User Dashboard";
+    Layout = "_UserLayout";
+}
+
+<div class="dashboard-container">
+    <div class="welcome-banner">
+        <div>
+            <h4 class="fw-bold mb-1">Welcome back, @Model.FullName!</h4>
+            <p class="mb-0 opacity-75">Here is your library overview</p>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-num">@Model.BorrowedBooksCount</span>
+            <span class="stat-lbl">Borrowed</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">@Model.ReturnedBooksCount</span>
+            <span class="stat-lbl">Returned</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">@Model.PendingCount</span>
+            <span class="stat-lbl">Pending</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">@Model.ReservedCount</span>
+            <span class="stat-lbl">Reserved</span>
+        </div>
+    </div>
+
+    <div class="content-sections">
+        <!-- LEFT SIDE: User Info Card -->
+        <div class="main-section">
+            <div class="profile-card user-info-card">
+                <div class="section-title">
+                    <h5 class="fw-bold mb-0">Personal Information</h5>
+                    <a asp-controller="User" asp-action="Profile" class="btn btn-sm btn-primary">Edit</a>
+                </div>
+
+                <!-- Profile Picture Only (no name) -->
+                <div class="profile-preview">
+                    <div class="profile-preview-avatar">
+                        @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+                        {
+                            <img src="@Model.ProfilePictureUrl" alt="Profile" class="profile-avatar-img">
+                        }
+                        else
+                        {
+                            <div class="profile-avatar-placeholder">
+                                @(Model.FullName?.Split(' ')[0].Substring(0, 1) ?? "U")
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- User Details (including Full Name) -->
+                <div class="user-info-list">
+                    <div class="info-item">
+                        <span class="info-label">Full Name</span>
+                        <span class="info-value">@Model.FullName</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">ID Number</span>
+                        <span class="info-value">@Model.IdNumber</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Course</span>
+                        <span class="info-value">@Model.Course</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Year Level</span>
+                        <span class="info-value">@Model.YearLevel</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">@Model.Email</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: Activity + Borrowed + Reserved -->
+        <div class="side-section">
+            <div class="activity-card">
+                <h6 class="fw-bold mb-2">Recent Activity</h6>
+                <div class="activity-items">
+                    @if (Model.RecentActivity != null && Model.RecentActivity.Any())
+                    {
+                        @foreach (var activity in Model.RecentActivity)
+                        {
+                            <div class="activity-item">
+                                <span class="activity-icon">@activity.Icon</span>
+                                <div>
+                                    <span>@activity.Text</span>
+                                    <small class="text-muted">@activity.Date.ToString("MMM dd, yyyy")</small>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-3 text-muted">
+                            <i class="bi bi-clock-history d-block fs-2 mb-2"></i>
+                            <p class="small mb-0">No recent activity found.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="section-card mt-3">
+                <div class="section-title">
+                    <h5 class="fw-bold">Currently Borrowed</h5>
+                    <a asp-controller="User" asp-action="BorrowedBooks" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="books-list">
+                    @if (Model.CurrentBorrowedBooks != null && Model.CurrentBorrowedBooks.Any())
+                    {
+                        @foreach (var book in Model.CurrentBorrowedBooks)
+                        {
+                            <div class="book-row">
+                                <div class="book-cover" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+                                <div class="book-info">
+                                    <h6 class="mb-0">@book.Title</h6>
+                                    <small class="text-muted">Due: @book.DueDate.ToString("MMM dd, yyyy")</small>
+                                </div>
+                                <span class="badge-status @(book.Status.ToLower().Replace(" ", ""))">@book.Status</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-3 text-muted">
+                            <p class="small mb-0">You have no books borrowed.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="section-card mt-3">
+                <div class="section-title">
+                    <h5 class="fw-bold">Reserved Books</h5>
+                    <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="reserved-list">
+                    @if (Model.CurrentReservedBooks != null && Model.CurrentReservedBooks.Any())
+                    {
+                        @foreach (var book in Model.CurrentReservedBooks)
+                        {
+                            <div class="reserved-row">
+                                <div class="book-cover" style="background: linear-gradient(135deg, #fa709a, #fee140);"></div>
+                                <div class="book-info">
+                                    <h6 class="mb-0">@book.Title</h6>
+                                    <small class="text-muted">@book.Status</small>
+                                </div>
+                                <button class="btn btn-sm btn-success">Pick Up</button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-3 text-muted">
+                            <p class="small mb-0">No reserved books.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,270 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "All Books";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h4 class="fw-bold mb-1">All Books</h4>
+        <p class="text-muted mb-0 small">Manage all books in the library system.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#globalAddBookModal">
+            <i class="bi bi-plus-lg"></i> Add New Book
+        </button>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <!-- Search and Actions Bar -->
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+            <div class="input-group" style="max-width: 300px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="searchBooksInput" class="form-control border-start-0 ps-0" placeholder="Search by title, author...">
+            </div>
+            <div>
+                <select class="form-select form-select-sm" style="min-width: 160px;" id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Science">Science</option>
+                    <option value="History">History</option>
+                    <option value="Biography">Biography</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Children">Children</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table -->  
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4" style="width: 40px;">#</th>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="allBooksTableBody">
+                    <!-- Populated by JS -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="p-3 border-top d-flex justify-content-between align-items-center text-muted small">
+            <div>Showing <span class="fw-medium text-dark">1</span> to <span class="fw-medium text-dark">10</span> of <span class="fw-medium text-dark">24</span> entries</div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Book Details/Edit Modal -->
+<div class="modal fade" id="bookDetailsModal" tabindex="-1" aria-labelledby="bookDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="bookDetailsModalLabel">Book Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div class="position-relative d-inline-block">
+                        <img src="https://via.placeholder.com/150x200?text=Cover" id="bookDetailsCover" class="img-fluid rounded shadow-sm" alt="Book Cover" style="width: 150px; height: 200px; object-fit: cover;">
+                        <label for="uploadCoverInput" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2 shadow" style="transform: translate(25%, 25%); cursor: pointer;" title="Upload Picture">
+                            <i class="bi bi-camera-fill"></i>
+                        </label>
+                        <input type="file" id="uploadCoverInput" class="d-none" accept="image/*">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Title</label>
+                    <input type="text" class="form-control bg-light" id="bookDetailsTitle">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small fw-bold text-uppercase">Author</label>
+                        <input type="text" class="form-control bg-light" id="bookDetailsAuthor">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small fw-bold text-uppercase">Category</label>
+                        <select class="form-select bg-light" id="bookDetailsCategory">
+                            <option value="Fiction">Fiction</option>
+                            <option value="Science">Science</option>
+                            <option value="History">History</option>
+                            <option value="Biography">Biography</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Children">Children</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small fw-bold text-uppercase">Quantity</label>
+                        <input type="number" class="form-control bg-light" id="bookDetailsQuantity">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted small fw-bold text-uppercase">Status</label>
+                        <select class="form-select bg-light" id="bookDetailsStatus">
+                            <option value="Available">Available</option>
+                            <option value="Low Stock">Low Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary px-4" id="saveBookDetailsBtn" data-bs-dismiss="modal">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const tableBody = document.getElementById('allBooksTableBody');
+            const searchInput = document.getElementById('searchBooksInput');
+            const detailsModal = new bootstrap.Modal(document.getElementById('bookDetailsModal'));
+            
+            // Centralized Book Image Cache for the prototype
+            const bookImagesCache = {}; 
+            
+            // Mock Data
+            const categories = ["Fiction", "Science", "History", "Biography", "Technology", "Children"];
+            let booksData = [];
+            
+            // Generate robust set of books
+            for(let i = 1; i <= 24; i++) {
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const quantity = Math.floor(Math.random() * 10);
+                let status = 'Available';
+                if (quantity === 0) status = 'Out of Stock';
+                else if (quantity < 3) status = 'Low Stock';
+                
+                booksData.push({
+                    id: i,
+                    title: `Library Book Vol ${i}`,
+                    author: `Author ${Math.floor(Math.random() * 10) + 1}`,
+                    category: category,
+                    quantity: quantity,
+                    status: status
+                });
+            }
+
+            function renderTable(books) {
+                tableBody.innerHTML = '';
+                books.forEach((book, index) => {
+                    let statusClass = 'bg-success';
+                    if (book.status === 'Low Stock') statusClass = 'bg-warning';
+                    else if (book.status === 'Out of Stock') statusClass = 'bg-danger';
+
+                    const statusBadge = `<span class="badge ${statusClass} bg-opacity-10 text-${statusClass.replace('bg-', '')} px-2 py-1">${book.status}</span>`;
+
+                    const row = `
+                        <tr>
+                            <td class="ps-4 text-muted">${index + 1}</td>
+                            <td class="fw-medium text-dark">${book.title}</td>
+                            <td class="text-muted">${book.author}</td>
+                            <td><span class="badge bg-light text-secondary border">${book.category}</span></td>
+                            <td class="fw-bold">${book.quantity}</td>
+                            <td>${statusBadge}</td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light text-primary view-btn" 
+                                    data-id="${book.id}">
+                                    <i class="bi bi-eye"></i> View
+                                </button>
+                                <button class="btn btn-sm btn-light text-danger delete-btn" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            }
+
+            // Initial render
+            renderTable(booksData.slice(0, 10)); // Display first 10 for prototype
+            
+            // Search functionality
+            searchInput.addEventListener('keyup', function() {
+                const term = this.value.toLowerCase();
+                const filtered = booksData.filter(b => 
+                    b.title.toLowerCase().includes(term) || 
+                    b.author.toLowerCase().includes(term) ||
+                    b.category.toLowerCase().includes(term)
+                );
+                renderTable(filtered.slice(0, 10));
+            });
+            
+            // Details Modal Logic
+            tableBody.addEventListener('click', function(e) {
+                const viewBtn = e.target.closest('.view-btn');
+                if (viewBtn) {
+                    const bookId = parseInt(viewBtn.getAttribute('data-id'));
+                    const book = booksData.find(b => b.id === bookId);
+                    if (book) {
+                        document.getElementById('bookDetailsTitle').value = book.title;
+                        document.getElementById('bookDetailsAuthor').value = book.author;
+                        document.getElementById('bookDetailsCategory').value = book.category;
+                        document.getElementById('bookDetailsQuantity').value = book.quantity;
+                        document.getElementById('bookDetailsStatus').value = book.status;
+                        
+                        // Handle Image Cache
+                        if (bookImagesCache[book.title]) {
+                            document.getElementById('bookDetailsCover').src = bookImagesCache[book.title];
+                        } else {
+                            const encodedTitle = encodeURIComponent(book.title.substring(0, 12));
+                            document.getElementById('bookDetailsCover').src = "https://via.placeholder.com/150x200?text=" + encodedTitle;
+                        }
+                        
+                        document.getElementById('uploadCoverInput').value = ""; // clear
+                        detailsModal.show();
+                    }
+                }
+                
+                const deleteBtn = e.target.closest('.delete-btn');
+                if (deleteBtn) {
+                    if(confirm('Are you sure you want to delete this book?')) {
+                        deleteBtn.closest('tr').remove();
+                    }
+                }
+            });
+
+            // Image Preview & Save
+            document.getElementById('uploadCoverInput').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const base64Image = evt.target.result;
+                        document.getElementById('bookDetailsCover').src = base64Image;
+                        
+                        const title = document.getElementById('bookDetailsTitle').value;
+                        if (title) {
+                            bookImagesCache[title] = base64Image;
+                        }
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+
+        });
+    </script>
+}

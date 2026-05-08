@@ -1,0 +1,524 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Categories";
+}
+
+<style>
+    /* Force visibility of danger items in dropdowns */
+    .dropdown-menu .text-danger {
+        color: #dc3545 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Ensure dropdowns are not covered by cards below */
+    .category-item {
+        position: relative;
+        z-index: 1;
+        /* Delay dropping z-index when focus is lost to allow dropdown to close */
+        transition: z-index 0.3s step-end;
+    }
+
+    .category-item:focus-within {
+        z-index: 10;
+        transition: none;
+    }
+
+    .card {
+        overflow: visible !important;
+    }
+
+    /* Prevent staggered closing animation */
+    .dropdown-menu, .dropdown-item {
+        transition: none !important;
+        animation: none !important;
+    }
+</style>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-3 py-3">
+        <h5 class="mb-0 fw-bold">Book Categories</h5>
+        <button class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i> Add Category
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Fiction -->
+    <div class="col-md-6 col-xl-4 category-item">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+                        <i class="bi bi-journal-text fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-1 category-name fw-bold">Fiction</h5>
+                        <small class="text-muted">1,234 books</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Fiction">
+                            View Books
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Fiction" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Science -->
+    <div class="col-md-6 col-xl-4 category-item">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+                        <i class="bi bi-globe fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-1 category-name fw-bold">Science</h5>
+                        <small class="text-muted">856 books</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Science">
+                            View Books
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Science" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History -->
+    <div class="col-md-6 col-xl-4 category-item">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-info bg-opacity-10 p-3 rounded-circle text-info">
+                        <i class="bi bi-bank fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-1 category-name fw-bold">History</h5>
+                        <small class="text-muted">623 books</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="History">
+                            View Books
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="History" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biography -->
+    <div class="col-md-6 col-xl-4 category-item">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning">
+                        <i class="bi bi-person-lines-fill fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-1 category-name fw-bold">Biography</h5>
+                        <small class="text-muted">567 books</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Biography">
+                            View Books
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Biography" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technology -->
+    <div class="col-md-6 col-xl-4 category-item">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger">
+                        <i class="bi bi-laptop fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-1 category-name fw-bold">Technology</h5>
+                        <small class="text-muted">445 books</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Technology">
+                            View Books
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Technology" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Children -->
+    <div class="col-md-6 col-xl-4 category-item">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-secondary bg-opacity-10 p-3 rounded-circle text-secondary">
+                        <i class="bi bi-balloon fs-4"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="mb-1 category-name fw-bold">Children</h5>
+                        <small class="text-muted">892 books</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary view-books-btn" data-category="Children">
+                            View Books
+                        </button>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><button class="dropdown-item edit-category-btn" data-category="Children" type="button"><i class="bi bi-pencil me-2 text-muted"></i>Edit Name</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item text-danger" type="button"><i class="bi bi-trash me-2"></i>Delete</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" id="editCategoryModalLabel">Edit Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm">
+                    <div class="mb-3">
+                        <label for="categoryNameInput" class="form-label text-muted small fw-bold text-uppercase">Category Name</label>
+                        <input type="text" class="form-control form-control-lg bg-light" id="categoryNameInput" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4" id="saveCategoryBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Books Modal -->
+<div class="modal fade" id="viewBooksModal" tabindex="-1" aria-labelledby="viewBooksModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light border-bottom-0">
+                <h5 class="modal-title fw-bold" id="viewBooksModalLabel">
+                    <span id="viewBooksCategoryName" class="text-primary"></span> Books
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <!-- Search Bar -->
+                <div class="p-3 border-bottom bg-white">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" id="searchBooksInput" class="form-control bg-light border-start-0 ps-0" placeholder="Search books by title or author...">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="ps-4">Book Title</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 bg-light">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Book Details Modal -->
+<div class="modal fade" id="bookDetailsModal" tabindex="-1" aria-labelledby="bookDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-sm btn-light me-2 rounded-circle px-2" id="backToBooksBtn" title="Back to list">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    <h5 class="modal-title fw-bold" id="bookDetailsModalLabel">Book Details</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <!-- Book Cover Upload -->
+                    <div class="position-relative d-inline-block">
+                        <img src="https://via.placeholder.com/150x200?text=Cover" id="bookDetailsCover" class="img-fluid rounded shadow-sm" alt="Book Cover" style="width: 150px; height: 200px; object-fit: cover;">
+                        <label for="uploadCoverInput" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2 shadow" style="transform: translate(25%, 25%); cursor: pointer;" title="Upload Picture">
+                            <i class="bi bi-camera-fill"></i>
+                        </label>
+                        <input type="file" id="uploadCoverInput" class="d-none" accept="image/*">
+                    </div>
+                    <div class="mt-2 small text-muted">Click the camera icon to upload/edit picture</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Title</label>
+                    <input type="text" class="form-control bg-light border-0" id="bookDetailsTitle" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Author</label>
+                    <input type="text" class="form-control bg-light border-0" id="bookDetailsAuthor" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Status</label>
+                    <div id="bookDetailsStatus" class="mt-1"></div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-primary px-4" id="saveBookDetailsBtn" data-bs-dismiss="modal">Save Picture</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // --- Edit Category Logic ---
+            let currentCategoryCard = null;
+            const editModal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+            const categoryNameInput = document.getElementById('categoryNameInput');
+            const saveCategoryBtn = document.getElementById('saveCategoryBtn');
+
+            document.querySelectorAll('.edit-category-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const categoryName = this.getAttribute('data-category');
+                    currentCategoryCard = this.closest('.category-item'); 
+                    categoryNameInput.value = categoryName;
+                    editModal.show();
+                });
+            });
+
+            saveCategoryBtn.addEventListener('click', function () {
+                const newName = categoryNameInput.value.trim();
+                if (newName && currentCategoryCard) {
+                    currentCategoryCard.querySelector('.category-name').textContent = newName;
+                    currentCategoryCard.querySelector('.view-books-btn').setAttribute('data-category', newName);
+                    currentCategoryCard.querySelector('.edit-category-btn').setAttribute('data-category', newName);
+                    editModal.hide();
+                }
+            });
+
+            // --- View Books Logic ---
+            const viewBooksModal = new bootstrap.Modal(document.getElementById('viewBooksModal'));
+            const viewBooksCategoryName = document.getElementById('viewBooksCategoryName');
+            const booksTableBody = document.getElementById('booksTableBody');
+            const searchBooksInput = document.getElementById('searchBooksInput');
+
+            // Mock Data Generator for Books
+            const categoryBooksCache = {};
+            
+            function generateMockBooks(category) {
+                if (categoryBooksCache[category]) {
+                    return categoryBooksCache[category];
+                }
+
+                const mockTitles = [
+                    "The Great Setup", "Understanding " + category, "Advanced " + category + " Concepts",
+                    "Introduction to " + category, category + " for Beginners", "The Encyclopedia of " + category
+                ];
+                
+                let html = '';
+                const numBooks = Math.floor(Math.random() * 3) + 3; 
+                
+                for(let i = 0; i < numBooks; i++) {
+                    const title = mockTitles[i];
+                    const author = "Author Name " + (i + 1);
+                    const isAvailable = Math.random() > 0.3; // 70% chance available
+                    
+                    const statusBadge = isAvailable 
+                        ? '<span class="badge bg-success bg-opacity-10 text-success px-2 py-1">Available</span>'
+                        : '<span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1">Borrowed</span>';
+                        
+                    html += `
+                        <tr>
+                            <td class="ps-4 fw-medium text-dark">${title}</td>
+                            <td class="text-muted">${author}</td>
+                            <td>${statusBadge}</td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light text-primary view-book-detail-btn" 
+                                        data-title="${title}" 
+                                        data-author="${author}" 
+                                        data-status='${statusBadge}'>
+                                    <i class="bi bi-eye"></i> View
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                categoryBooksCache[category] = html;
+                return html;
+            }
+
+            document.querySelectorAll('.view-books-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const categoryName = this.getAttribute('data-category');
+                    viewBooksCategoryName.textContent = categoryName;
+                    booksTableBody.innerHTML = generateMockBooks(categoryName);
+                    searchBooksInput.value = ''; // Reset search
+                    viewBooksModal.show();
+                });
+            });
+
+            // Search functionality in View Books Modal
+            searchBooksInput.addEventListener('keyup', function() {
+                const term = this.value.toLowerCase();
+                const rows = booksTableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(term) ? '' : 'none';
+                });
+            });
+
+            // --- Book Details & Image Upload Logic ---
+            let detailsModalInstance = null;
+            const backToBooksBtn = document.getElementById('backToBooksBtn');
+            const bookImagesCache = {}; // Cache to store uploaded images by book title
+            
+            booksTableBody.addEventListener('click', function (e) {
+                const btn = e.target.closest('.view-book-detail-btn');
+                if (btn) {
+                    const title = btn.getAttribute('data-title');
+                    const author = btn.getAttribute('data-author');
+                    const statusHtml = btn.getAttribute('data-status');
+                    
+                    document.getElementById('bookDetailsTitle').value = title;
+                    document.getElementById('bookDetailsAuthor').value = author;
+                    document.getElementById('bookDetailsStatus').innerHTML = statusHtml;
+                    
+                    // Check if we have an uploaded image cached for this book
+                    if (bookImagesCache[title]) {
+                        document.getElementById('bookDetailsCover').src = bookImagesCache[title];
+                    } else {
+                        // Generate a placeholder image based on the title
+                        const encodedTitle = encodeURIComponent(title.substring(0, 12));
+                        document.getElementById('bookDetailsCover').src = "https://via.placeholder.com/150x200?text=" + encodedTitle;
+                    }
+                    
+                    // Clear the file input
+                    document.getElementById('uploadCoverInput').value = "";
+                    
+                    // Hide the first modal before showing the second
+                    viewBooksModal.hide();
+                    
+                    if (!detailsModalInstance) {
+                        detailsModalInstance = new bootstrap.Modal(document.getElementById('bookDetailsModal'));
+                    }
+                    
+                    // Show details modal after a tiny delay to allow the first one to transition out smoothly
+                    setTimeout(() => {
+                        detailsModalInstance.show();
+                    }, 300);
+                }
+            });
+
+            // Handle Back Button inside Details Modal
+            backToBooksBtn.addEventListener('click', function() {
+                if (detailsModalInstance) {
+                    detailsModalInstance.hide();
+                }
+                setTimeout(() => {
+                    viewBooksModal.show();
+                }, 300);
+            });
+
+            // Image Preview on Upload
+            document.getElementById('uploadCoverInput').addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const base64Image = evt.target.result;
+                        document.getElementById('bookDetailsCover').src = base64Image;
+                        
+                        // Save the uploaded image to our cache so it doesn't disappear when we close the modal
+                        const currentTitle = document.getElementById('bookDetailsTitle').value;
+                        if (currentTitle) {
+                            bookImagesCache[currentTitle] = base64Image;
+                        }
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        });
+    </script>
+}
