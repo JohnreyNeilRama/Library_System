@@ -1,3 +1,10 @@
+/**
+ * UserController.cs
+ * 
+ * Provides user-facing functionality including dashboard,
+ * profile management, book borrowing, and transaction history.
+ */
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -30,6 +37,10 @@ namespace LibrarySystem.Controllers
             return _libraryService.GetUserById(GetCurrentUserId());
         }
 
+        /**
+         * GET: /User/Dashboard
+         * Displays the user's dashboard with their stats, recent activity, and currently borrowed books.
+         */
         public IActionResult Dashboard()
         {
             var user = GetCurrentUser();

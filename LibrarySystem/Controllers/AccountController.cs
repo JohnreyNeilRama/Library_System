@@ -1,3 +1,9 @@
+/**
+ * AccountController.cs
+ * 
+ * Handles user authentication including Login, Logout, and Registration.
+ */
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
@@ -15,6 +21,10 @@ namespace LibrarySystem.Controllers
             _libraryService = libraryService;
         }
 
+        /**
+         * GET: /Account/Login
+         * Displays the login page. Redirects authenticated users to their respective dashboards.
+         */
         public IActionResult Login(string? returnUrl = null)
         {
             // Redirect already-authenticated users to their dashboard
@@ -29,17 +39,23 @@ namespace LibrarySystem.Controllers
             return View();
         }
 
+        /**
+         * POST: /Account/Login
+         * Processes login credentials and creates an authentication cookie if successful.
+         */
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                // Validate credentials against the library service
                 if (_libraryService.ValidateUser(model.UserNameOrEmail, model.Password))
                 {
                     var user = _libraryService.GetUserByUserName(model.UserNameOrEmail) ??
                                _libraryService.GetUserByEmail(model.UserNameOrEmail);
 
+                    // Create claims for the authenticated user
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, user!.Id),
@@ -55,9 +71,11 @@ namespace LibrarySystem.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
                     await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(claimsIdentity));
 
+                    // Redirect back to returnUrl if it exists and is local
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         return LocalRedirect(returnUrl);
 
+                    // Otherwise redirect based on role
                     if (user.IsAdmin)
                         return RedirectToAction("Dashboard", "Admin");
 
@@ -69,6 +87,10 @@ namespace LibrarySystem.Controllers
             return View(model);
         }
 
+        /**
+         * GET: /Account/Register
+         * Displays the user registration page.
+         */
         public IActionResult Register()
         {
             // Redirect already-authenticated users to their dashboard

@@ -1,3 +1,10 @@
+/**
+ * AppDbContext.cs
+ * 
+ * This class represents the Entity Framework Core database context.
+ * It defines the database tables (DbSets), relationships, and seed data.
+ */
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using LibrarySystem.Models;
@@ -8,6 +15,7 @@ namespace LibrarySystem.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+        // Database Tables
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -16,6 +24,7 @@ namespace LibrarySystem.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // Ignore warnings about pending model changes during runtime
             optionsBuilder.ConfigureWarnings(warnings =>
                 warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
@@ -23,36 +32,43 @@ namespace LibrarySystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // ── Unique indexes ──────────────────────────────────────────────
+            // Ensure UserName and Email are unique in the database
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.UserName).IsUnique();
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email).IsUnique();
 
             // ── Relationships ───────────────────────────────────────────────
+            
+            // Book -> Category (Many-to-One)
             modelBuilder.Entity<Book>()
                 .HasOne(b => b.Category)
                 .WithMany(c => c.Books)
                 .HasForeignKey(b => b.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // BorrowTransaction -> User (Many-to-One)
             modelBuilder.Entity<BorrowTransaction>()
                 .HasOne(t => t.User)
                 .WithMany(u => u.BorrowTransactions)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // BorrowTransaction -> Book (Many-to-One)
             modelBuilder.Entity<BorrowTransaction>()
                 .HasOne(t => t.Book)
                 .WithMany(b => b.BorrowTransactions)
                 .HasForeignKey(t => t.BookId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Reservation -> User (Many-to-One)
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.User)
                 .WithMany(u => u.Reservations)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Reservation -> Book (Many-to-One)
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Book)
                 .WithMany(b => b.Reservations)
@@ -60,11 +76,15 @@ namespace LibrarySystem.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // ── Seed Data ───────────────────────────────────────────────────
+            // Populate the database with initial data
             SeedCategories(modelBuilder);
             SeedBooks(modelBuilder);
             SeedUsers(modelBuilder);
         }
 
+        /**
+         * Seeds initial book categories into the database.
+         */
         private static void SeedCategories(ModelBuilder m)
         {
             m.Entity<Category>().HasData(
