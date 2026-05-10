@@ -77,6 +77,15 @@ main {
         transform: translateY(-2px);
     }
 
+    .nav-links .nav-link.active {
+        color: white !important;
+        background: transparent;
+    }
+
+    .nav-links .nav-link.active::after {
+        width: 100%;
+    }
+
 .auth-links .nav-link {
     color: white;
     font-weight: 500;
@@ -1375,6 +1384,156 @@ body.account-page main {
     font-size: 1.25rem;
     font-weight: 600;
     color: #1a1a2e;
+}
+
+/* About Page */
+.about-hero-section,
+.about-section,
+.about-cta-section {
+    background: #0b1628;
+}
+
+.about-hero-section {
+    min-height: 440px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.about-hero-content h1 {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    letter-spacing: 0;
+}
+
+.about-hero-content p {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-section {
+    padding: 5.5rem 0;
+}
+
+.about-section-alt {
+    background: #172337;
+}
+
+.about-info-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 3rem;
+}
+
+.about-info-card p,
+.about-story p,
+.about-value p,
+.about-team-member p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+.about-icon {
+    width: 68px;
+    height: 68px;
+    border-radius: 16px;
+    background: rgba(13, 110, 253, 0.18);
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.9rem;
+}
+
+.about-story {
+    max-width: 980px;
+}
+
+.about-value {
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.about-stat-number {
+    color: #0d6efd;
+    font-size: clamp(3.25rem, 6vw, 4.5rem);
+    line-height: 1;
+    font-weight: 400;
+}
+
+.about-team-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2rem;
+    align-items: start;
+    text-align: center;
+}
+
+.about-avatar {
+    width: 154px;
+    height: 154px;
+    margin: 0 auto 1.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0d6efd, #0755c7);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.25rem;
+}
+
+.about-team-member h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+}
+
+.about-team-member p {
+    color: #0d6efd;
+}
+
+.about-cta-section {
+    padding: 6rem 0 7rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.about-cta-section h2 {
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+}
+
+@media (max-width: 1200px) {
+    .about-team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .about-hero-section {
+        min-height: 360px;
+    }
+
+    .about-section,
+    .about-cta-section {
+        padding: 4rem 0;
+    }
+
+    .about-info-card {
+        padding: 2rem;
+    }
+
+    .about-team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .about-avatar {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-team-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 
