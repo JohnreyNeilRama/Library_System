@@ -89,7 +89,7 @@ main {
 
 .hero-section {
     min-height: 85vh;
-    padding-bottom: 4rem;
+    padding: 5rem 0 4rem;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     background-size: cover;
     background-position: center;
@@ -106,6 +106,36 @@ main {
     bottom: 0;
     background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: clamp(3.25rem, 5.4vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: 0;
+    max-width: 1050px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-title span {
+    display: block;
+}
+
+.hero-title span:first-child {
+    white-space: nowrap;
+}
+
+.hero-subtitle {
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.55;
 }
 
 @keyframes fadeInUp {
@@ -125,7 +155,7 @@ main {
 
 .search-box {
     max-width: 600px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 .search-box .input-group {
@@ -144,6 +174,17 @@ main {
 .hero-section .badge {
     font-weight: 500;
     border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: clamp(2.5rem, 12vw, 3.6rem);
+        line-height: 1.05;
+    }
+
+    .hero-title span:first-child {
+        white-space: normal;
+    }
 }
 
 .cta-section {
