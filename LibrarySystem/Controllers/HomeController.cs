@@ -6,6 +6,13 @@ namespace LibrarySystem.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly Services.ILibraryService _libraryService;
+
+        public HomeController(Services.ILibraryService libraryService)
+        {
+            _libraryService = libraryService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -18,6 +25,10 @@ namespace LibrarySystem.Controllers
 
         public IActionResult About()
         {
+            ViewBag.BookCount = _libraryService.GetAllBooks().Count;
+            ViewBag.UserCount = _libraryService.GetAllUsers().Count;
+            ViewBag.TransactionCount = _libraryService.GetAllTransactions().Count;
+            ViewBag.CategoryCount = _libraryService.GetAllCategories().Count;
             return View();
         }
 

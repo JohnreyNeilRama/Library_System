@@ -11,6 +11,36 @@
     </div>
 </section>
 
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stats = document.querySelectorAll('.about-stat-number');
+            
+            stats.forEach(stat => {
+                const text = stat.innerText;
+                const target = parseInt(text);
+                if (isNaN(target)) return;
+                
+                let current = 0;
+                const duration = 1000; // 1 second
+                const steps = 50;
+                const increment = target / steps;
+                const interval = duration / steps;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.innerText = target;
+                        clearInterval(timer);
+                    } else {
+                        stat.innerText = Math.floor(current);
+                    }
+                }, interval);
+            });
+        });
+    </script>
+}
+
 <section class="about-section about-section-alt">
     <div class="container">
         <div class="row g-4">
@@ -87,25 +117,25 @@
         <div class="row g-4 text-center">
             <div class="col-6 col-lg-3">
                 <div class="about-stat">
-                    <div class="about-stat-number">10K+</div>
+                    <div class="about-stat-number">@(ViewBag.BookCount ?? 0)</div>
                     <p class="text-white-50 mb-0">Books</p>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <div class="about-stat">
-                    <div class="about-stat-number">5K+</div>
+                    <div class="about-stat-number">@(ViewBag.UserCount ?? 0)</div>
                     <p class="text-white-50 mb-0">Members</p>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <div class="about-stat">
-                    <div class="about-stat-number">15K+</div>
+                    <div class="about-stat-number">@(ViewBag.TransactionCount ?? 0)</div>
                     <p class="text-white-50 mb-0">Borrows</p>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
                 <div class="about-stat">
-                    <div class="about-stat-number">50+</div>
+                    <div class="about-stat-number">@(ViewBag.CategoryCount ?? 0)</div>
                     <p class="text-white-50 mb-0">Categories</p>
                 </div>
             </div>
@@ -116,34 +146,130 @@
 <section class="about-section about-section-alt">
     <div class="container">
         <div class="text-center mb-5">
+            <h2 class="fw-bold text-white mb-3">Frequently Asked Questions</h2>
+            <p class="text-white-50 mb-0">Common questions about using our library system</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion accordion-flush custom-accordion" id="faqAccordion">
+                    <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-25">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent text-white py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How do I borrow a book?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-white-50 px-0 pb-4">
+                                Once you're registered and logged in, simply browse our collection, select a book, and click the 'Borrow' button. You'll receive a notification about the due date.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item bg-transparent border-bottom border-secondary border-opacity-25">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent text-white py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Can I reserve a book that is currently borrowed?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-white-50 px-0 pb-4">
+                                Yes! If a book is currently unavailable, you can use the 'Reserve' feature to be notified when it's returned and available for borrowing.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item bg-transparent">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent text-white py-4 px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                What is the standard borrowing period?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-white-50 px-0 pb-4">
+                                Our standard borrowing period is 14 days. You can check your dashboard to see specific due dates and manage your current borrows.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="container">
+        <div class="text-center mb-5">
             <h2 class="fw-bold text-white mb-3">Meet Our Team</h2>
             <p class="text-white-50 mb-0">The dedicated team behind LibrarySystem</p>
         </div>
         <div class="about-team-grid">
             <div class="about-team-member">
-                <div class="about-avatar">JR</div>
-                <h3 class="fw-bold text-white">Johnrey Rama</h3>
-                <p class="mb-0">Developer</p>
+                <a href="https://www.facebook.com/jrey.rama" target="_blank" class="text-decoration-none">
+                    <div class="about-avatar">
+                        <img src="~/images/team/rama.jpg" alt="Johnrey Rama" onerror="this.style.display='none'">
+                        <span>JR</span>
+                    </div>
+                    <h3 class="fw-bold text-white mb-1">Johnrey Rama</h3>
+                </a>
+                <p class="mb-2 text-primary">Web Designer/Developer</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="#" class="text-white-50"><i class="bi bi-github"></i></a>
+                    <a href="#" class="text-white-50"><i class="bi bi-linkedin"></i></a>
+                </div>
             </div>
             <div class="about-team-member">
-                <div class="about-avatar">JS</div>
-                <h3 class="fw-bold text-white">John Silva</h3>
-                <p class="mb-0">Developer</p>
+                <a href="https://www.facebook.com/mjsilva098" target="_blank" class="text-decoration-none">
+                    <div class="about-avatar">
+                        <img src="~/images/team/silva.jpg" alt="John Silva" onerror="this.style.display='none'">
+                        <span>JS</span>
+                    </div>
+                    <h3 class="fw-bold text-white mb-1">John Silva</h3>
+                </a>
+                <p class="mb-2 text-primary">UI/UX Designer</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="#" class="text-white-50"><i class="bi bi-github"></i></a>
+                    <a href="#" class="text-white-50"><i class="bi bi-behance"></i></a>
+                </div>
             </div>
             <div class="about-team-member">
-                <div class="about-avatar">JA</div>
-                <h3 class="fw-bold text-white">June Arnel Aranda</h3>
-                <p class="mb-0">Developer</p>
+                <a href="https://www.facebook.com/arnel.acc" target="_blank" class="text-decoration-none">
+                    <div class="about-avatar">
+                        <img src="~/images/team/aranda.jpg" alt="June Arnel Aranda" onerror="this.style.display='none'">
+                        <span>JA</span>
+                    </div>
+                    <h3 class="fw-bold text-white mb-1">June Arnel Aranda</h3>
+                </a>
+                <p class="mb-2 text-primary">Project Manager / Developer</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="#" class="text-white-50"><i class="bi bi-github"></i></a>
+                    <a href="#" class="text-white-50"><i class="bi bi-globe"></i></a>
+                </div>
             </div>
             <div class="about-team-member">
-                <div class="about-avatar">GF</div>
-                <h3 class="fw-bold text-white">Gabriel Fernandez</h3>
-                <p class="mb-0">Developer</p>
+                <a href="https://www.facebook.com/iduckinfhatwu" target="_blank" class="text-decoration-none">
+                    <div class="about-avatar">
+                        <img src="~/images/team/fernandez.jpg" alt="Gabriel Fernandez" onerror="this.style.display='none'">
+                        <span>GF</span>
+                    </div>
+                    <h3 class="fw-bold text-white mb-1">Gabriel Fernandez</h3>
+                </a>
+                <p class="mb-2 text-primary">Database Admin</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="#" class="text-white-50"><i class="bi bi-github"></i></a>
+                    <a href="#" class="text-white-50"><i class="bi bi-database"></i></a>
+                </div>
             </div>
             <div class="about-team-member">
-                <div class="about-avatar">MV</div>
-                <h3 class="fw-bold text-white">Mark Virgil Villarin</h3>
-                <p class="mb-0">Developer</p>
+                <a href="https://www.facebook.com/markvv7" target="_blank" class="text-decoration-none">
+                    <div class="about-avatar">
+                        <img src="~/images/team/villarin.jpg" alt="Mark Virgil Villarin" onerror="this.style.display='none'">
+                        <span>MV</span>
+                    </div>
+                    <h3 class="fw-bold text-white mb-1">Mark Virgil Villarin</h3>
+                </a>
+                <p class="mb-2 text-primary">Lead Developer</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="#" class="text-white-50"><i class="bi bi-github"></i></a>
+                    <a href="#" class="text-white-50"><i class="bi bi-shield-check"></i></a>
+                </div>
             </div>
         </div>
     </div>
