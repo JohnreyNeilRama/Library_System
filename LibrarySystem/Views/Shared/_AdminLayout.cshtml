@@ -75,8 +75,8 @@
                 <p class="nav-section-label">Transactions</p>
                 <ul class="p-0 m-0">
                     <li class="admin-nav-item">
-                        <a asp-controller="Admin" asp-action="ManageBooks" class="admin-nav-link @(currentAction == "ManageBooks" ? "active" : "")">
-                            <i class="bi bi-bookmark-dash"></i> Borrowed Books
+                        <a asp-controller="Admin" asp-action="Requests" class="admin-nav-link @(currentAction == "Requests" || currentAction == "ManageBooks" || currentAction == "Reservations" ? "active" : "")">
+                            <i class="bi bi-bookmark-dash"></i> Requests
                         </a>
                     </li>
                     <li class="admin-nav-item">
@@ -87,11 +87,6 @@
                     <li class="admin-nav-item">
                         <a asp-controller="Admin" asp-action="TransactionHistory" class="admin-nav-link @(currentAction == "TransactionHistory" ? "active" : "")">
                             <i class="bi bi-clock-history"></i> Transaction History
-                        </a>
-                    </li>
-                    <li class="admin-nav-item">
-                        <a asp-controller="Admin" asp-action="Reservations" class="admin-nav-link @(currentAction == "Reservations" ? "active" : "")">
-                            <i class="bi bi-calendar-check"></i> Reservations
                         </a>
                     </li>
                 </ul>
@@ -109,10 +104,6 @@
                         <i class="bi bi-list"></i>
                     </button>
                     
-                    <div class="admin-search-form">
-                        <i class="bi bi-search"></i>
-                        <input type="text" placeholder="Search anything...">
-                    </div>
                 </div>
 
                 <div class="top-navbar-right">

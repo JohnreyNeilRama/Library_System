@@ -1,3 +1,4 @@
+@model LibrarySystem.Controllers.AdminTransactionHistoryViewModel
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Transaction History";
@@ -8,34 +9,28 @@
         <h4 class="fw-bold mb-1">Transaction History</h4>
         <p class="text-muted mb-0 small">View and manage all borrow and return transactions.</p>
     </div>
-
 </div>
 
 <div class="card border-0 shadow-sm">
     <div class="card-body p-0">
-        <!-- Search Bar -->
         <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
-            <div class="input-group" style="max-width: 350px;">
-                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search title or author...">
-            </div>
-            <div class="d-flex gap-2">
-                <select class="form-select form-select-sm" id="typeFilter" style="min-width: 140px;">
-                    <option value="all">All Types</option>
-                    <option value="Borrowed">Borrowed</option>
-                    <option value="Returned">Returned</option>
-                </select>
-                <select class="form-select form-select-sm" id="statusFilter" style="min-width: 140px;">
-                    <option value="all">All Status</option>
-                    <option value="On Time">On Time</option>
-                    <option value="Due Soon">Due Soon</option>
-                    <option value="Overdue">Overdue</option>
-                    <option value="Returned Late">Returned Late</option>
-                </select>
-            </div>
+            <form asp-controller="Admin" asp-action="TransactionHistory" method="get" class="d-flex gap-2 flex-wrap w-100 justify-content-between">
+                <div class="input-group" style="max-width: 350px;">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" name="search" value="@Model.Search" class="form-control border-start-0 ps-0" placeholder="Search title, author, or borrower...">
+                </div>
+                <div class="d-flex gap-2">
+                    <select class="form-select form-select-sm" name="filter" style="min-width: 140px;">
+                        <option value="">All Types</option>
+                        <option value="Borrowed" selected="@(Model.Filter == "Borrowed")">Borrowed</option>
+                        <option value="Returned" selected="@(Model.Filter == "Returned")">Returned</option>
+                        <option value="Overdue" selected="@(Model.Filter == "Overdue")">Overdue</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                </div>
+            </form>
         </div>
 
-        <!-- Transactions Table -->
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light text-muted small text-uppercase">
@@ -49,98 +44,74 @@
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="transactionTableBody">
-                    <tr data-type="Borrowed" data-status="On Time">
-                        <td class="ps-4">1</td>
-                        <td><div class="fw-bold text-dark">The Great Gatsby</div></td>
-                        <td><span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1">Borrowed</span></td>
-                        <td>John Doe</td>
-                        <td class="text-muted small">2026-04-16</td>
-                        <td class="text-muted small">-</td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
-                    </tr>
-                    <tr data-type="Borrowed" data-status="Due Soon">
-                        <td class="ps-4">2</td>
-                        <td><div class="fw-bold text-dark">To Kill a Mockingbird</div></td>
-                        <td><span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1">Borrowed</span></td>
-                        <td>Jane Smith</td>
-                        <td class="text-muted small">2026-04-11</td>
-                        <td class="text-muted small">-</td>
-                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1"><i class="bi bi-clock me-1"></i>Due Soon</span></td>
-                    </tr>
-                    <tr data-type="Borrowed" data-status="Overdue">
-                        <td class="ps-4">3</td>
-                        <td><div class="fw-bold text-dark">1984</div></td>
-                        <td><span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1">Borrowed</span></td>
-                        <td>Bob Wilson</td>
-                        <td class="text-muted small">2026-04-06</td>
-                        <td class="text-muted small">-</td>
-                        <td><span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1"><i class="bi bi-exclamation-circle me-1"></i>Overdue</span></td>
-                    </tr>
-                    <tr data-type="Returned" data-status="On Time">
-                        <td class="ps-4">4</td>
-                        <td><div class="fw-bold text-dark">The Alchemist</div></td>
-                        <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1">Returned</span></td>
-                        <td>John Doe</td>
-                        <td class="text-muted small">2026-03-26</td>
-                        <td class="text-muted small">2026-04-21</td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
-                    </tr>
-                    <tr data-type="Returned" data-status="Returned Late">
-                        <td class="ps-4">5</td>
-                        <td><div class="fw-bold text-dark">Dune</div></td>
-                        <td><span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1">Returned</span></td>
-                        <td>Bob Wilson</td>
-                        <td class="text-muted small">2026-03-31</td>
-                        <td class="text-muted small">2026-04-25</td>
-                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1"><i class="bi bi-exclamation-triangle me-1"></i>Returned Late</span></td>
-                    </tr>
+                <tbody>
+                    @if (Model.Transactions.Any())
+                    {
+                        var rowNumber = 1;
+                        foreach (var transaction in Model.Transactions.OrderByDescending(t => t.ReturnDate ?? t.BorrowDate))
+                        {
+                            var book = Model.Books.FirstOrDefault(b => b.Id == transaction.BookId);
+                            var user = Model.Users.FirstOrDefault(u => u.Id == transaction.UserId);
+                            var type = transaction.ReturnDate.HasValue ? "Returned" : "Borrowed";
+                            var status = GetTransactionStatus(transaction);
+                            <tr>
+                                <td class="ps-4">@rowNumber</td>
+                                <td><div class="fw-bold text-dark">@(book?.Title ?? "Unknown book")</div></td>
+                                <td>@Html.Raw(TypeBadge(type))</td>
+                                <td>@(user?.FullName ?? "Unknown user")</td>
+                                <td class="text-muted small">@transaction.BorrowDate.ToString("yyyy-MM-dd")</td>
+                                <td class="text-muted small">@(transaction.ReturnDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                                <td>@Html.Raw(StatusBadge(status))</td>
+                            </tr>
+                            rowNumber++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">No transactions found.</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
         <div class="p-3 border-top d-flex justify-content-between align-items-center text-muted small bg-white rounded-bottom">
-            <div>Showing <span class="fw-medium text-dark">1</span> to <span class="fw-medium text-dark">5</span> entries</div>
-            <nav aria-label="Page navigation">
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+            <div>Showing <span class="fw-medium text-dark">@Model.Transactions.Count</span> entries</div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const typeFilter = document.getElementById('typeFilter');
-            const statusFilter = document.getElementById('statusFilter');
-            const rows = document.querySelectorAll('#transactionTableBody tr');
+@functions {
+    private static string GetTransactionStatus(LibrarySystem.Services.InMemoryBorrowTransaction transaction)
+    {
+        if (transaction.ReturnDate.HasValue)
+            return transaction.Status;
 
-            function filterTable() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const typeValue = typeFilter.value;
-                const statusValue = statusFilter.value;
+        if (transaction.DueDate < DateTime.Now)
+            return "Overdue";
 
-                rows.forEach(row => {
-                    const title = row.cells[1].textContent.toLowerCase();
-                    const type = row.getAttribute('data-type');
-                    const status = row.getAttribute('data-status');
+        if (transaction.DueDate <= DateTime.Now.AddDays(3))
+            return "Due Soon";
 
-                    const matchSearch = title.includes(searchTerm);
-                    const matchType = typeValue === 'all' || type === typeValue;
-                    const matchStatus = statusValue === 'all' || status === statusValue;
+        return "On Time";
+    }
 
-                    row.style.display = (matchSearch && matchType && matchStatus) ? '' : 'none';
-                });
-            }
+    private static string TypeBadge(string type)
+    {
+        return type == "Returned"
+            ? "<span class=\"badge bg-secondary bg-opacity-10 text-secondary px-2 py-1\">Returned</span>"
+            : "<span class=\"badge bg-primary bg-opacity-10 text-primary px-2 py-1\">Borrowed</span>";
+    }
 
-            searchInput.addEventListener('input', filterTable);
-            typeFilter.addEventListener('change', filterTable);
-            statusFilter.addEventListener('change', filterTable);
-        });
-    </script>
+    private static string StatusBadge(string status)
+    {
+        return status switch
+        {
+            "Overdue" => "<span class=\"badge bg-danger bg-opacity-10 text-danger px-2 py-1\"><i class=\"bi bi-exclamation-circle me-1\"></i>Overdue</span>",
+            "Due Soon" => "<span class=\"badge bg-warning bg-opacity-10 text-warning px-2 py-1\"><i class=\"bi bi-clock me-1\"></i>Due Soon</span>",
+            "Returned Late" => "<span class=\"badge bg-warning bg-opacity-10 text-warning px-2 py-1\"><i class=\"bi bi-exclamation-triangle me-1\"></i>Returned Late</span>",
+            _ => "<span class=\"badge bg-success bg-opacity-10 text-success px-2 py-1\"><i class=\"bi bi-check-circle me-1\"></i>On Time</span>"
+        };
+    }
 }

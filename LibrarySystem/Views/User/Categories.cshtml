@@ -11,78 +11,33 @@
         <h1 class="page-title">Categories</h1>
         <p class="page-subtitle">Browse books by category</p>
     </div>
-    <div class="category-grid">
-        <div class="category-card">
-            <div class="category-icon">💻</div>
-            <div class="category-content">
-                <h3 class="category-name">Programming</h3>
-                <p class="category-count">24 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="programming" class="btn-view-books">View Books</a>
+
+    @if (Model.Categories.Any())
+    {
+        <div class="category-grid">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="category-card">
+                    <div class="category-icon" aria-hidden="true">@category.Initials</div>
+                    <div class="category-content">
+                        <h3 class="category-name">@category.Name</h3>
+                        <p class="category-count">@category.BookCount @(category.BookCount == 1 ? "book" : "books")</p>
+                        @if (!string.IsNullOrWhiteSpace(category.Description))
+                        {
+                            <p class="category-description">@category.Description</p>
+                        }
+                    </div>
+                    <a asp-controller="User" asp-action="Books" asp-route-category="@category.Id" class="btn-view-books">View Books</a>
+                </div>
+            }
         </div>
-        <div class="category-card">
-            <div class="category-icon">🗄️</div>
-            <div class="category-content">
-                <h3 class="category-name">Database</h3>
-                <p class="category-count">18 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="database" class="btn-view-books">View Books</a>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-icon" aria-hidden="true">&#128218;</div>
+            <h3>No categories found</h3>
+            <p>Categories will appear here once they have been added.</p>
         </div>
-        <div class="category-card">
-            <div class="category-icon">🌐</div>
-            <div class="category-content">
-                <h3 class="category-name">Networking</h3>
-                <p class="category-count">12 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="networking" class="btn-view-books">View Books</a>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">🌍</div>
-            <div class="category-content">
-                <h3 class="category-name">Web Development</h3>
-                <p class="category-count">28 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="web-development" class="btn-view-books">View Books</a>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">📱</div>
-            <div class="category-content">
-                <h3 class="category-name">Mobile Development</h3>
-                <p class="category-count">15 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="mobile-development" class="btn-view-books">View Books</a>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">⚙️</div>
-            <div class="category-content">
-                <h3 class="category-name">DevOps</h3>
-                <p class="category-count">10 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="devops" class="btn-view-books">View Books</a>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">📊</div>
-            <div class="category-content">
-                <h3 class="category-name">Data Science</h3>
-                <p class="category-count">14 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="data-science" class="btn-view-books">View Books</a>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">🔒</div>
-            <div class="category-content">
-                <h3 class="category-name">Security</h3>
-                <p class="category-count">9 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="security" class="btn-view-books">View Books</a>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">📐</div>
-            <div class="category-content">
-                <h3 class="category-name">Software Engineering</h3>
-                <p class="category-count">20 books</p>
-            </div>
-            <a asp-controller="User" asp-action="Books" asp-route-category="software-engineering" class="btn-view-books">View Books</a>
-        </div>
-    </div>
+    }
 </div>

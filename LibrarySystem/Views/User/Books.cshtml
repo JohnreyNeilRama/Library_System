@@ -57,27 +57,58 @@
                     <div class="book-content">
                         <h3 class="book-title" title="@book.Title">@book.Title</h3>
                         <p class="book-author">by @book.Author</p>
+                        @if (!string.IsNullOrWhiteSpace(book.ISBN))
+                        {
+                            <p class="book-isbn">ISBN: @book.ISBN</p>
+                        }
                         <div class="book-meta">
                             <div class="availability">
                                 <span class="availability-dot @(isAvailable ? "available" : "unavailable")"></span>
-                                <span class="availability-text">@(isAvailable ? $"{book.AvailableCopies} available" : "Out of stock")</span>
+                                <span class="availability-text">@(isAvailable ? $"{book.AvailableCopies} available" : "All copies borrowed")</span>
                             </div>
                             <span class="status-badge @(isAvailable ? "available" : "unavailable")">
-                                @(isAvailable ? "Available" : "Unavailable")
+                                @(isAvailable ? "Available" : "All copies borrowed")
                             </span>
                         </div>
                     </div>
                     @if (isAvailable)
                     {
                         <button type="button" class="btn-borrow available" onclick="openBorrowModalFromCard(this)">
-                            Borrow Now
+                            Request Borrow
                         </button>
                     }
                     else
                     {
-                        <button type="button" class="btn-borrow unavailable" disabled>
-                            Not Available
-                        </button>
+                        if (book.ReservationStatus == "Pending")
+                        {
+                            <div class="reservation-notice pending">
+                                <span>&#9202;</span>
+                                <span>Reservation pending approval</span>
+                            </div>
+                            <button type="button" class="btn-borrow awaiting" disabled>
+                                Awaiting Approval
+                            </button>
+                        }
+                        else if (book.ReservationStatus == "Approved")
+                        {
+                            <div class="reservation-notice approved">
+                                <span>&#10003;</span>
+                                <span>Reservation approved for claiming</span>
+                            </div>
+                            <button type="button" class="btn-borrow awaiting" disabled>
+                                Awaiting Claim
+                            </button>
+                        }
+                        else
+                        {
+                            <form asp-controller="User" asp-action="Reserve" method="post" class="reserve-form">
+                                <input type="hidden" name="bookId" value="@book.Id" />
+                                <input type="hidden" name="category" value="@Model.CategoryId" />
+                                <button type="submit" class="btn-borrow reserve">
+                                    Reserve Book
+                                </button>
+                            </form>
+                        }
                     }
                 </div>
             }
@@ -99,7 +130,7 @@
     <div class="modal-container">
         <div class="modal-header">
             <div>
-                <h2 id="borrowModalLabel" class="modal-title">Confirm Borrow</h2>
+                <h2 id="borrowModalLabel" class="modal-title">Confirm Borrow Request</h2>
             </div>
             <button type="button" class="modal-close" aria-label="Close modal" onclick="closeBorrowModal()">
                 <span>&times;</span>
@@ -125,27 +156,27 @@
 
                 <div class="borrow-details-card">
                     <div class="detail-row">
-                        <span class="detail-label">Due Date</span>
-                        <span class="detail-value text-primary fw-bold">Pending Admin Approval</span>
+                        <span class="detail-label">Borrow Date</span>
+                        <span class="detail-value fw-bold" id="borrowDateDisplay"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">End Date</span>
+                        <input type="date" name="EndDate" id="endDateInput" class="form-control form-control-sm" required />
                     </div>
                 </div>
 
                 <p class="return-note">
-                    <span class="note-icon">&#9432;</span> The admin will assign a due date upon approval.
+                    <span class="note-icon">&#9432;</span> You can choose an end date up to 14 days from today.
                 </p>
 
                 <form id="borrowForm" asp-controller="User" asp-action="Borrow" method="post">
                     <input type="hidden" name="BookId" id="bookIdInput" />
-                    
-                    <div class="mb-3 text-start px-2">
-                        <label class="form-label detail-label fw-bold">Select Borrow Date</label>
-                        <input type="date" name="BorrowDate" id="borrowDateInput" class="form-control" required />
-                    </div>
+                    <input type="hidden" name="BorrowDate" id="borrowDateInput" />
 
                     <div class="form-actions">
                         <button type="button" class="btn-cancel" onclick="closeBorrowModal()">Cancel</button>
                         <button type="submit" class="btn-submit" id="submitBtn">
-                            <span class="btn-text">Confirm Borrow</span>
+                            <span class="btn-text">Submit Request</span>
                         </button>
                     </div>
                 </form>
@@ -153,7 +184,7 @@
 
             <div id="successMessage" class="success-state" style="display: none;">
                 <div class="success-icon">&#10004;</div>
-                <h3>Borrow Successful!</h3>
+                <h3>Borrow Request Submitted</h3>
                 <p id="successText"></p>
                 <button type="button" class="btn-done" onclick="closeBorrowModal()">Done</button>
             </div>

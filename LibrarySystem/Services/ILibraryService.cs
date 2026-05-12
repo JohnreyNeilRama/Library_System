@@ -37,7 +37,10 @@ namespace LibrarySystem.Services
         bool DeleteCategory(string categoryId);
 
         // Transaction Operations
-        InMemoryBorrowTransaction? BorrowBook(string userId, int bookId, int borrowDays = 14);
+        InMemoryBorrowTransaction? BorrowBook(string userId, int bookId, DateTime? requestedEndDate = null, int borrowDays = 14);
+        bool ApproveBorrowRequest(int transactionId, int borrowDays = 14);
+        bool DeclineBorrowRequest(int transactionId);
+        bool ClaimBorrowRequest(int transactionId, int borrowDays = 14);
         bool ReturnBook(int transactionId);
         List<InMemoryBorrowTransaction> GetUserBorrowedBooks(string userId);
         List<InMemoryBorrowTransaction> GetUserReturnedBooks(string userId);
@@ -47,6 +50,9 @@ namespace LibrarySystem.Services
 
         // Reservation Operations
         InMemoryReservation? ReserveBook(string userId, int bookId, int reserveDays = 7);
+        bool ApproveReservation(int reservationId, int claimHours = 24);
+        bool DeclineReservation(int reservationId);
+        bool ClaimReservation(int reservationId);
         bool CancelReservation(int reservationId);
         List<InMemoryReservation> GetUserReservations(string userId);
         List<InMemoryReservation> GetAllReservations();

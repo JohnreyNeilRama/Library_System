@@ -59,11 +59,13 @@
     width: 56px;
     height: 56px;
     border-radius: 14px;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: linear-gradient(135deg, #eef4ff, #e8f7f1);
+    color: #1f3a5f;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.75rem;
+    font-size: 1.1rem;
+    font-weight: 800;
 }
 
 .category-content {
@@ -85,6 +87,13 @@
     font-size: 0.875rem;
     color: #6b7280;
     margin: 0;
+}
+
+.category-description {
+    font-size: 0.875rem;
+    color: #4b5563;
+    line-height: 1.5;
+    margin: 0.5rem 0 0;
 }
 
 .btn-view-books {
@@ -113,6 +122,30 @@
 
 .btn-view-books:active {
     transform: translateY(0);
+}
+
+.empty-state {
+    background: white;
+    border-radius: 12px;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: #6b7280;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: #1a1a2e;
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+}
+
+.empty-state p {
+    margin: 0;
 }
 
 /* Responsive breakpoints */

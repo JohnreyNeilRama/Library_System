@@ -127,7 +127,17 @@
                                     <h6 class="mb-0">@book.Title</h6>
                                     <small class="text-muted">Due: @book.DueDate.ToString("MMM dd, yyyy")</small>
                                 </div>
-                                <span class="badge-status @(book.Status.ToLower().Replace(" ", ""))">@book.Status</span>
+                                @if (book.CanClaim)
+                                {
+                                    <form asp-controller="User" asp-action="ClaimBorrowRequest" method="post" class="m-0">
+                                        <input type="hidden" name="transactionId" value="@book.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">Claim</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="badge-status @(book.Status.ToLower().Replace(" ", ""))">@book.Status</span>
+                                }
                             </div>
                         }
                     }
@@ -156,7 +166,17 @@
                                     <h6 class="mb-0">@book.Title</h6>
                                     <small class="text-muted">@book.Status</small>
                                 </div>
-                                <button class="btn btn-sm btn-success">Pick Up</button>
+                                @if (book.CanClaim)
+                                {
+                                    <form asp-controller="User" asp-action="ClaimReservation" method="post" class="m-0">
+                                        <input type="hidden" name="reservationId" value="@book.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">Claim</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-secondary" disabled>Claim</button>
+                                }
                             </div>
                         }
                     }

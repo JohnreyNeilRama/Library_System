@@ -61,6 +61,10 @@ namespace LibrarySystem.Services
         public int BookId { get; set; }
         public DateTime ReservationDate { get; set; }
         public DateTime ExpiryDate { get; set; }
+        public string Status { get; set; } = "Pending";
+        public DateTime? ApprovedAt { get; set; }
+        public DateTime? ClaimDeadline { get; set; }
+        public DateTime? ClaimedAt { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

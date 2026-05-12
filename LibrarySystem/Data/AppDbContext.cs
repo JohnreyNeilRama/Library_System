@@ -37,6 +37,9 @@ namespace LibrarySystem.Data
                 .HasIndex(u => u.UserName).IsUnique();
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.Status)
+                .HasMaxLength(30);
 
             // ── Relationships ───────────────────────────────────────────────
             

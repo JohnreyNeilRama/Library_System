@@ -37,7 +37,17 @@
                             </div>
                         </div>
                     </div>
-                    <span class="status-badge">@book.Status</span>
+                    @if (book.CanClaim)
+                    {
+                        <form asp-controller="User" asp-action="ClaimBorrowRequest" method="post">
+                            <input type="hidden" name="transactionId" value="@book.Id" />
+                            <button type="submit" class="btn btn-sm btn-success">Claim</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="status-badge">@book.Status</span>
+                    }
                 </div>
             }
         </div>

@@ -1,0 +1,89 @@
+@model LibrarySystem.Controllers.AdminBookViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Book";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h4 class="fw-bold mb-1">Edit Book</h4>
+        <p class="text-muted mb-0 small">Update the selected book's details and inventory.</p>
+    </div>
+    <a asp-controller="Admin" asp-action="AllBooks" class="btn btn-light btn-sm">
+        <i class="bi bi-arrow-left"></i> Back to All Books
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <form asp-controller="Admin" asp-action="EditBook" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-4">
+                <div class="col-12 col-lg-8">
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label text-muted small fw-bold text-uppercase">Book Title</label>
+                        <input asp-for="Title" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Author" class="form-label text-muted small fw-bold text-uppercase">Author</label>
+                        <input asp-for="Author" class="form-control" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ISBN" class="form-label text-muted small fw-bold text-uppercase">ISBN</label>
+                            <input asp-for="ISBN" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PublishedYear" class="form-label text-muted small fw-bold text-uppercase">Published Year</label>
+                            <input asp-for="PublishedYear" type="number" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label text-muted small fw-bold text-uppercase">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <div class="mb-3">
+                        <label asp-for="CategoryId" class="form-label text-muted small fw-bold text-uppercase">Category</label>
+                        <select asp-for="CategoryId" class="form-select" required>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label asp-for="AvailableCopies" class="form-label text-muted small fw-bold text-uppercase">Available</label>
+                            <input asp-for="AvailableCopies" type="number" min="0" class="form-control" required />
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label asp-for="TotalCopies" class="form-label text-muted small fw-bold text-uppercase">Total</label>
+                            <input asp-for="TotalCopies" type="number" min="0" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CoverImageUrl" class="form-label text-muted small fw-bold text-uppercase">Cover Image URL</label>
+                        <input asp-for="CoverImageUrl" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 border-top pt-4 mt-2">
+                <a asp-controller="Admin" asp-action="AllBooks" class="btn btn-light">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save me-1"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

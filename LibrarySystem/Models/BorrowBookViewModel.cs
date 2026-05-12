@@ -20,6 +20,9 @@ namespace LibrarySystem.Models
         [Required(ErrorMessage = "Borrow date is required")]
         public DateTime BorrowDate { get; set; } = DateTime.Now;
 
+        [Required(ErrorMessage = "End date is required")]
+        public DateTime EndDate { get; set; } = DateTime.Now.AddDays(14);
+
         public string FullName { get; set; } = string.Empty;
         public string IdNumber { get; set; } = string.Empty;
         public string Course { get; set; } = string.Empty;

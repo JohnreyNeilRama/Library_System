@@ -61,9 +61,9 @@ namespace LibrarySystem.Controllers
                 MembershipTier = user.MembershipTier,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 IsVerified = user.IsVerified,
-                BorrowedBooksCount = borrowedBooks.Count,
+                BorrowedBooksCount = borrowedBooks.Count(t => t.Status != "Pending" && t.Status != "Approved"),
                 ReturnedBooksCount = returnedBooks.Count,
-                OverdueBooksCount = borrowedBooks.Count(t => t.DueDate < DateTime.Now),
+                OverdueBooksCount = borrowedBooks.Count(t => t.Status != "Pending" && t.Status != "Approved" && t.DueDate < DateTime.Now),
                 PendingCount = borrowedBooks.Count(t => t.Status == "Pending"),
                 ReservedCount = reservations.Count,
 
@@ -73,13 +73,15 @@ namespace LibrarySystem.Controllers
                     Id = t.Id,
                     Title = allBooks.FirstOrDefault(b => b.Id == t.BookId)?.Title ?? "Unknown",
                     DueDate = t.DueDate,
-                    Status = GetStatus(t.DueDate)
+                    Status = t.Status == "Pending" ? "Pending Approval" : t.Status == "Approved" ? "Awaiting Claim" : GetStatus(t.DueDate),
+                    CanClaim = t.Status == "Approved"
                 }).ToList(),
                 CurrentReservedBooks = reservations.Take(3).Select(r => new ReservedBookItem
                 {
                     Id = r.Id,
                     Title = allBooks.FirstOrDefault(b => b.Id == r.BookId)?.Title ?? "Unknown",
-                    Status = "Ready for Pickup"
+                    Status = r.Status == "Approved" ? "Awaiting Claim" : "Pending Approval",
+                    CanClaim = r.Status == "Approved"
                 }).ToList()
             };
 
@@ -240,10 +242,10 @@ namespace LibrarySystem.Controllers
             var borrowedBooks = transactions.Select(t =>
             {
                 var book = books.FirstOrDefault(b => b.Id == t.BookId);
-                string status = "On Time";
-                if (t.DueDate < DateTime.Now)
+                string status = t.Status == "Pending" ? "Pending Approval" : t.Status == "Approved" ? "Awaiting Claim" : "On Time";
+                if (t.Status != "Pending" && t.Status != "Approved" && t.DueDate < DateTime.Now)
                     status = "Overdue";
-                else if (t.DueDate <= DateTime.Now.AddDays(3))
+                else if (t.Status != "Pending" && t.Status != "Approved" && t.DueDate <= DateTime.Now.AddDays(3))
                     status = "Due Soon";
 
                 return new BorrowedBookItem
@@ -254,7 +256,8 @@ namespace LibrarySystem.Controllers
                     Author = book?.Author ?? "Unknown",
                     BorrowDate = t.BorrowDate,
                     DueDate = t.DueDate,
-                    Status = status
+                    Status = status,
+                    CanClaim = t.Status == "Approved"
                 };
             }).ToList();
 
@@ -290,9 +293,9 @@ namespace LibrarySystem.Controllers
             var categories = _libraryService.GetAllCategories();
             var books = _libraryService.GetAllBooks();
 
-            var viewModel = new UserCategoriesViewModel
+            var viewModel = new LibrarySystem.Models.UserCategoriesViewModel
             {
-                Categories = categories.Select(c => new UserCategoryItem
+                Categories = categories.Select(c => new LibrarySystem.Models.UserCategoryItem
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -358,26 +361,134 @@ namespace LibrarySystem.Controllers
             if (string.IsNullOrEmpty(category))
                 return RedirectToAction("Categories");
 
-            var categoryKey = category.ToLower();
+            var categoryKey = category.Trim();
             var cat = _libraryService.GetCategoryById(categoryKey);
             if (cat == null)
                 return NotFound();
 
+            var user = GetCurrentUser();
+            var reservations = user == null
+                ? new List<InMemoryReservation>()
+                : _libraryService.GetUserReservations(user.Id);
+
             var books = _libraryService.GetBooksByCategory(categoryKey)
-                .Select(b => new CategoryBookItem
+                .Select(b =>
                 {
-                    Id = b.Id,
-                    Title = b.Title,
-                    Author = b.Author,
-                    AvailableCopies = b.AvailableCopies,
-                    CoverImageUrl = b.CoverImageUrl
+                    var reservation = reservations.FirstOrDefault(r => r.BookId == b.Id);
+                    return new CategoryBookItem
+                    {
+                        Id = b.Id,
+                        Title = b.Title,
+                        Author = b.Author,
+                        ISBN = b.ISBN,
+                        AvailableCopies = b.AvailableCopies,
+                        CoverImageUrl = b.CoverImageUrl,
+                        ReservationId = reservation?.Id,
+                        ReservationStatus = reservation?.Status
+                    };
                 }).ToList();
 
             return View(new UserCategoryBooksViewModel
             {
+                CategoryId = cat.Id,
                 CategoryName = cat.Name,
                 Books = books
             });
+        }
+
+        [HttpPost]
+        public IActionResult Reserve(int bookId, string? category)
+        {
+            var user = GetCurrentUser();
+            if (user == null) return NotFound();
+
+            var book = _libraryService.GetBookById(bookId);
+            if (book == null)
+            {
+                TempData["ErrorMessage"] = "Book not found.";
+                return RedirectToAction("Categories");
+            }
+
+            var existingReservation = _libraryService.GetUserReservations(user.Id)
+                .FirstOrDefault(r => r.BookId == bookId);
+
+            if (existingReservation != null)
+            {
+                TempData["ErrorMessage"] = $"You already reserved '{book.Title}'.";
+            }
+            else if (_libraryService.ReserveBook(user.Id, bookId) != null)
+            {
+                TempData["SuccessMessage"] = $"Successfully reserved '{book.Title}'.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Failed to reserve '{book.Title}'.";
+            }
+
+            var categoryId = !string.IsNullOrWhiteSpace(category)
+                ? category
+                : _libraryService.GetAllCategories()
+                    .FirstOrDefault(c => _libraryService.GetBooksByCategory(c.Id).Any(b => b.Id == bookId))?.Id;
+
+            return RedirectToAction("Books", new { category = categoryId });
+        }
+
+        [HttpPost]
+        public IActionResult ClaimReservation(int reservationId)
+        {
+            var user = GetCurrentUser();
+            if (user == null) return NotFound();
+
+            var reservation = _libraryService.GetUserReservations(user.Id)
+                .FirstOrDefault(r => r.Id == reservationId);
+
+            if (reservation == null)
+            {
+                TempData["ErrorMessage"] = "Reservation not found.";
+                return RedirectToAction("Dashboard");
+            }
+
+            if (reservation.Status != "Approved")
+            {
+                TempData["ErrorMessage"] = "This reservation is not ready to claim yet.";
+                return RedirectToAction("Dashboard");
+            }
+
+            if (_libraryService.ClaimReservation(reservationId))
+                TempData["SuccessMessage"] = "Reservation claimed successfully.";
+            else
+                TempData["ErrorMessage"] = "Failed to claim reservation. The claim window may have expired.";
+
+            return RedirectToAction("Dashboard");
+        }
+
+        [HttpPost]
+        public IActionResult ClaimBorrowRequest(int transactionId)
+        {
+            var user = GetCurrentUser();
+            if (user == null) return NotFound();
+
+            var transaction = _libraryService.GetUserBorrowedBooks(user.Id)
+                .FirstOrDefault(t => t.Id == transactionId);
+
+            if (transaction == null)
+            {
+                TempData["ErrorMessage"] = "Borrow request not found.";
+                return RedirectToAction("Dashboard");
+            }
+
+            if (transaction.Status != "Approved")
+            {
+                TempData["ErrorMessage"] = "This borrow request is not ready to claim yet.";
+                return RedirectToAction("Dashboard");
+            }
+
+            if (_libraryService.ClaimBorrowRequest(transactionId))
+                TempData["SuccessMessage"] = "Borrow request claimed successfully.";
+            else
+                TempData["ErrorMessage"] = "Failed to claim borrow request. The claim window may have expired.";
+
+            return RedirectToAction("Dashboard");
         }
 
         [HttpGet]
@@ -402,6 +513,16 @@ namespace LibrarySystem.Controllers
             if (user == null) return NotFound();
 
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            var today = DateTime.Now.Date;
+            var maxEndDate = today.AddDays(14);
+
+            model.BorrowDate = today;
+
+            if (model.EndDate.Date < today)
+                ModelState.AddModelError(nameof(model.EndDate), "End date cannot be before the borrow date.");
+
+            if (model.EndDate.Date > maxEndDate)
+                ModelState.AddModelError(nameof(model.EndDate), "End date cannot be more than 14 days from today.");
 
             if (!ModelState.IsValid)
             {
@@ -416,20 +537,20 @@ namespace LibrarySystem.Controllers
                 return View(model);
             }
 
-            var transaction = _libraryService.BorrowBook(user.Id, model.BookId);
+            var transaction = _libraryService.BorrowBook(user.Id, model.BookId, model.EndDate);
             var book = _libraryService.GetBookById(model.BookId);
 
             if (transaction != null)
             {
                 if (isAjax)
-                    return Json(new { success = true, message = $"Successfully borrowed '{book?.Title}'!" });
+                    return Json(new { success = true, message = $"Borrow request submitted for '{book?.Title}'. Please wait for admin approval." });
 
-                TempData["SuccessMessage"] = $"Successfully borrowed '{book?.Title}'!";
+                TempData["SuccessMessage"] = $"Borrow request submitted for '{book?.Title}'. Please wait for admin approval.";
                 return RedirectToAction("BorrowedBooks");
             }
             else
             {
-                var errorMsg = book?.AvailableCopies <= 0 ? "This book is currently out of stock." : "Book not found.";
+                var errorMsg = book?.AvailableCopies <= 0 ? "This book is currently out of stock. Please reserve it instead." : "Book not found or already requested.";
 
                 if (isAjax)
                     return Json(new { success = false, message = errorMsg });
@@ -487,6 +608,7 @@ namespace LibrarySystem.Controllers
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
+        public bool CanClaim { get; set; }
     }
 
     public class UserBorrowedBooksViewModel
@@ -503,6 +625,7 @@ namespace LibrarySystem.Controllers
         public DateTime BorrowDate { get; set; }
         public DateTime DueDate { get; set; }
         public string Status { get; set; } = string.Empty;
+        public bool CanClaim { get; set; }
     }
 
     public class UserReturnedBooksViewModel

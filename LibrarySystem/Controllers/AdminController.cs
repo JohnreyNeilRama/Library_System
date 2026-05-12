@@ -22,16 +22,23 @@ namespace LibrarySystem.Controllers
         public IActionResult Dashboard()
         {
             var allBooks = _libraryService.GetAllBooks();
+            var allUsers = _libraryService.GetAllUsers();
+            var allTransactions = _libraryService.GetAllTransactions()
+                .OrderByDescending(t => t.ReturnDate ?? t.BorrowDate)
+                .ToList();
             var model = new AdminDashboardViewModel
             {
                 TotalBooks = allBooks.Count,
                 AvailableBooks = allBooks.Sum(b => b.AvailableCopies),
-                TotalUsers = _libraryService.GetAllUsers().Count(u => !u.IsAdmin),
+                TotalUsers = allUsers.Count(u => !u.IsAdmin),
                 ActiveBorrows = _libraryService.GetActiveBorrows().Count,
+                ReturnedBooks = allTransactions.Count(t => t.ReturnDate.HasValue),
                 OverdueBooks = _libraryService.GetOverdueBooks().Count,
                 TotalCategories = _libraryService.GetAllCategories().Count,
-                RecentTransactions = _libraryService.GetAllTransactions().Take(5).ToList(),
-                RecentUsers = _libraryService.GetAllUsers().Where(u => !u.IsAdmin).Take(5).ToList()
+                RecentTransactions = allTransactions.Take(5).ToList(),
+                RecentUsers = allUsers.Where(u => !u.IsAdmin).OrderByDescending(u => u.CreatedAt).Take(5).ToList(),
+                Books = allBooks,
+                Users = allUsers
             };
 
             return View(model);
@@ -66,13 +73,31 @@ namespace LibrarySystem.Controllers
 
         public IActionResult ManageBooks()
         {
+            return RedirectToAction("Requests");
+        }
+
+        public IActionResult Requests()
+        {
             var model = new AdminManageBooksViewModel
             {
                 Books = _libraryService.GetAllBooks(),
-                Categories = _libraryService.GetAllCategories()
+                Categories = _libraryService.GetAllCategories(),
+                Transactions = _libraryService.GetActiveBorrows()
+                    .OrderBy(t => t.DueDate)
+                    .ToList(),
+                Users = _libraryService.GetAllUsers(),
+                Reservations = _libraryService.GetAllReservations(),
+                BorrowRequests = _libraryService.GetAllTransactions()
+                    .Where(t => t.Status == "Pending")
+                    .OrderByDescending(t => t.BorrowDate)
+                    .ToList(),
+                ApprovedBorrowRequests = _libraryService.GetAllTransactions()
+                    .Where(t => t.Status == "Approved")
+                    .OrderByDescending(t => t.BorrowDate)
+                    .ToList()
             };
 
-            return View(model);
+            return View("ManageBooks", model);
         }
 
         public IActionResult AddBook()
@@ -158,9 +183,13 @@ namespace LibrarySystem.Controllers
                     CategoryId = model.CategoryId
                 };
 
-                _libraryService.UpdateBook(book);
-                TempData["SuccessMessage"] = "Book updated successfully!";
-                return RedirectToAction("ManageBooks");
+                if (_libraryService.UpdateBook(book))
+                {
+                    TempData["SuccessMessage"] = "Book updated successfully!";
+                    return RedirectToAction("AllBooks");
+                }
+
+                TempData["ErrorMessage"] = "Failed to update book.";
             }
 
             return View(model);
@@ -169,9 +198,12 @@ namespace LibrarySystem.Controllers
         [HttpPost]
         public IActionResult DeleteBook(int id)
         {
-            _libraryService.DeleteBook(id);
-            TempData["SuccessMessage"] = "Book deleted successfully!";
-            return RedirectToAction("ManageBooks");
+            if (_libraryService.DeleteBook(id))
+                TempData["SuccessMessage"] = "Book deleted successfully!";
+            else
+                TempData["ErrorMessage"] = "Failed to delete book.";
+
+            return RedirectToAction("AllBooks");
         }
 
         public IActionResult ReturnedBooks()
@@ -198,7 +230,29 @@ namespace LibrarySystem.Controllers
             else
                 TempData["ErrorMessage"] = "Failed to return book.";
 
-            return RedirectToAction("AllBooks");
+            return RedirectToAction("Requests");
+        }
+
+        [HttpPost]
+        public IActionResult ApproveBorrowRequest(int transactionId)
+        {
+            if (_libraryService.ApproveBorrowRequest(transactionId))
+                TempData["SuccessMessage"] = "Borrow request approved.";
+            else
+                TempData["ErrorMessage"] = "Failed to approve borrow request. The book may be out of stock.";
+
+            return RedirectToAction("Requests");
+        }
+
+        [HttpPost]
+        public IActionResult DeclineBorrowRequest(int transactionId)
+        {
+            if (_libraryService.DeclineBorrowRequest(transactionId))
+                TempData["SuccessMessage"] = "Borrow request declined.";
+            else
+                TempData["ErrorMessage"] = "Failed to decline borrow request.";
+
+            return RedirectToAction("Requests");
         }
 
         public IActionResult TransactionHistory(string? filter = null, string? search = null)
@@ -242,7 +296,8 @@ namespace LibrarySystem.Controllers
         {
             var model = new AdminCategoriesViewModel
             {
-                Categories = _libraryService.GetAllCategories()
+                Categories = _libraryService.GetAllCategories(),
+                Books = _libraryService.GetAllBooks()
             };
 
             return View(model);
@@ -316,8 +371,11 @@ namespace LibrarySystem.Controllers
         [HttpPost]
         public IActionResult DeleteCategory(string id)
         {
-            _libraryService.DeleteCategory(id);
-            TempData["SuccessMessage"] = "Category deleted successfully!";
+            if (_libraryService.DeleteCategory(id))
+                TempData["SuccessMessage"] = "Category deleted successfully!";
+            else
+                TempData["ErrorMessage"] = "Failed to delete category. Remove or move its books first.";
+
             return RedirectToAction("Categories");
         }
 
@@ -400,27 +458,45 @@ namespace LibrarySystem.Controllers
 
         public IActionResult Reservations()
         {
-            var model = new AdminReservationsViewModel
-            {
-                Reservations = _libraryService.GetAllReservations(),
-                Books = _libraryService.GetAllBooks(),
-                Users = _libraryService.GetAllUsers()
-            };
+            return RedirectToAction("Requests");
+        }
 
-            return View(model);
+        [HttpPost]
+        public IActionResult ApproveReservation(int reservationId)
+        {
+            if (_libraryService.ApproveReservation(reservationId))
+                TempData["SuccessMessage"] = "Reservation approved successfully.";
+            else
+                TempData["ErrorMessage"] = "Failed to approve reservation.";
+
+            return RedirectToAction("Requests");
+        }
+
+        [HttpPost]
+        public IActionResult DeclineReservation(int reservationId)
+        {
+            if (_libraryService.DeclineReservation(reservationId))
+                TempData["SuccessMessage"] = "Reservation declined.";
+            else
+                TempData["ErrorMessage"] = "Failed to decline reservation.";
+
+            return RedirectToAction("Requests");
         }
     }
 
-    public class AdminDashboardViewModel
+        public class AdminDashboardViewModel
     {
         public int TotalBooks { get; set; }
         public int AvailableBooks { get; set; }
         public int TotalUsers { get; set; }
         public int ActiveBorrows { get; set; }
+        public int ReturnedBooks { get; set; }
         public int OverdueBooks { get; set; }
         public int TotalCategories { get; set; }
         public List<InMemoryBorrowTransaction> RecentTransactions { get; set; } = new();
         public List<InMemoryUser> RecentUsers { get; set; } = new();
+        public List<InMemoryBook> Books { get; set; } = new();
+        public List<InMemoryUser> Users { get; set; } = new();
     }
 
     public class AdminAllBooksViewModel
@@ -435,6 +511,11 @@ namespace LibrarySystem.Controllers
     {
         public List<InMemoryBook> Books { get; set; } = new();
         public List<InMemoryCategory> Categories { get; set; } = new();
+        public List<InMemoryBorrowTransaction> Transactions { get; set; } = new();
+        public List<InMemoryBorrowTransaction> BorrowRequests { get; set; } = new();
+        public List<InMemoryBorrowTransaction> ApprovedBorrowRequests { get; set; } = new();
+        public List<InMemoryUser> Users { get; set; } = new();
+        public List<InMemoryReservation> Reservations { get; set; } = new();
     }
 
     public class AdminBookViewModel
@@ -471,6 +552,7 @@ namespace LibrarySystem.Controllers
     public class AdminCategoriesViewModel
     {
         public List<InMemoryCategory> Categories { get; set; } = new();
+        public List<InMemoryBook> Books { get; set; } = new();
     }
 
     public class AdminCategoryViewModel

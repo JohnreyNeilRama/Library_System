@@ -1,14 +1,32 @@
+@model LibrarySystem.Controllers.AdminManageBooksViewModel
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Borrowed Books";
+    ViewData["Title"] = "Requests";
+
+    var now = DateTime.Now;
+    var dueSoon = Model.Transactions.Count(t => t.DueDate >= now && t.DueDate <= now.AddDays(3));
+    var overdue = Model.Transactions.Count(t => t.DueDate < now);
+    var pendingBorrowRequests = Model.BorrowRequests
+        .OrderByDescending(t => t.BorrowDate)
+        .ToList();
+    var approvedBorrowRequests = Model.ApprovedBorrowRequests
+        .OrderByDescending(t => t.BorrowDate)
+        .ToList();
+    var pendingReservations = Model.Reservations
+        .Where(r => r.IsActive && r.Status == "Pending")
+        .OrderByDescending(r => r.ReservationDate)
+        .ToList();
+    var approvedReservations = Model.Reservations
+        .Where(r => r.IsActive && r.Status == "Approved")
+        .OrderByDescending(r => r.ApprovedAt)
+        .ToList();
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div>
-        <h4 class="fw-bold mb-1">Borrowed Books</h4>
-        <p class="text-muted mb-0 small">Monitor and manage currently borrowed library assets.</p>
+        <h4 class="fw-bold mb-1">Requests</h4>
+        <p class="text-muted mb-0 small">Approve borrow requests, manage reservations, and monitor borrowed books.</p>
     </div>
-
 </div>
 
 <div class="card border-0 shadow-sm mb-4">
@@ -16,39 +34,259 @@
         <div class="row g-4 text-center">
             <div class="col-4 border-end">
                 <div class="text-muted small fw-bold text-uppercase mb-1">Total Borrowed</div>
-                <h3 class="fw-bold text-dark mb-0">124</h3>
+                <h3 class="fw-bold text-dark mb-0">@Model.Transactions.Count</h3>
             </div>
             <div class="col-4 border-end">
                 <div class="text-muted small fw-bold text-uppercase mb-1">Due Soon</div>
-                <h3 class="fw-bold text-warning mb-0">18</h3>
+                <h3 class="fw-bold text-warning mb-0">@dueSoon</h3>
             </div>
             <div class="col-4">
                 <div class="text-muted small fw-bold text-uppercase mb-1">Overdue</div>
-                <h3 class="fw-bold text-danger mb-0">5</h3>
+                <h3 class="fw-bold text-danger mb-0">@overdue</h3>
             </div>
         </div>
     </div>
 </div>
 
+<section class="mb-5">
+    <h5 class="fw-bold mb-3">
+        <i class="bi bi-journal-check me-2"></i>Pending Book Approvals (@pendingBorrowRequests.Count)
+    </h5>
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4">User</th>
+                        <th>Book</th>
+                        <th>Available</th>
+                        <th>Requested</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (pendingBorrowRequests.Any())
+                    {
+                        foreach (var request in pendingBorrowRequests)
+                        {
+                            var user = Model.Users.FirstOrDefault(u => u.Id == request.UserId);
+                            var book = Model.Books.FirstOrDefault(b => b.Id == request.BookId);
+                            var canApprove = book?.AvailableCopies > 0;
+                            <tr>
+                                <td class="ps-4">
+                                    <i class="bi bi-person me-2"></i>@(user?.FullName ?? request.UserId)
+                                </td>
+                                <td>@(book?.Title ?? "Unknown book")</td>
+                                <td>
+                                    <span class="badge @(canApprove ? "bg-success" : "bg-danger")">
+                                        @(book == null ? "Unknown" : $"{book.AvailableCopies}/{book.TotalCopies}")
+                                    </span>
+                                </td>
+                                <td>@FormatRelativeTime(request.BorrowDate)</td>
+                                <td class="text-end pe-4">
+                                    <form asp-controller="Admin" asp-action="ApproveBorrowRequest" method="post" class="d-inline">
+                                        <input type="hidden" name="transactionId" value="@request.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success fw-bold" disabled="@(!canApprove)">
+                                            <i class="bi bi-check-circle me-1"></i>Approve
+                                        </button>
+                                    </form>
+                                    <form asp-controller="Admin" asp-action="DeclineBorrowRequest" method="post" class="d-inline ms-2">
+                                        <input type="hidden" name="transactionId" value="@request.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-x-circle me-1"></i>Decline
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">No pending borrow requests.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h5 class="fw-bold mb-3">
+        <i class="bi bi-check-circle text-success me-2"></i>Approved Borrows (@approvedBorrowRequests.Count)
+    </h5>
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4">User</th>
+                        <th>Book</th>
+                        <th>Approved</th>
+                        <th>Claim Deadline</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (approvedBorrowRequests.Any())
+                    {
+                        foreach (var request in approvedBorrowRequests)
+                        {
+                            var user = Model.Users.FirstOrDefault(u => u.Id == request.UserId);
+                            var book = Model.Books.FirstOrDefault(b => b.Id == request.BookId);
+                            <tr>
+                                <td class="ps-4">
+                                    <i class="bi bi-person me-2"></i>@(user?.FullName ?? request.UserId)
+                                </td>
+                                <td>@(book?.Title ?? "Unknown book")</td>
+                                <td>@FormatRelativeTime(request.BorrowDate)</td>
+                                <td>@FormatDeadline(request.BorrowDate.AddHours(24))</td>
+                                <td><span class="badge bg-warning text-white">Awaiting Claim</span></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">No approved borrows awaiting claim.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h5 class="fw-bold mb-3">
+        <i class="bi bi-clock me-2"></i>Pending Reservations (@pendingReservations.Count)
+    </h5>
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4">User</th>
+                        <th>Book</th>
+                        <th>Available</th>
+                        <th>Requested</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (pendingReservations.Any())
+                    {
+                        foreach (var reservation in pendingReservations)
+                        {
+                            var user = Model.Users.FirstOrDefault(u => u.Id == reservation.UserId);
+                            var book = Model.Books.FirstOrDefault(b => b.Id == reservation.BookId);
+                            var canApprove = book?.AvailableCopies > 0;
+                            <tr>
+                                <td class="ps-4">
+                                    <i class="bi bi-person me-2"></i>@(user?.FullName ?? reservation.UserId)
+                                </td>
+                                <td>@(book?.Title ?? "Unknown book")</td>
+                                <td>
+                                    <span class="badge @(canApprove ? "bg-success" : "bg-danger")">
+                                        @(book == null ? "Unknown" : $"{book.AvailableCopies}/{book.TotalCopies}")
+                                    </span>
+                                </td>
+                                <td>@FormatRelativeTime(reservation.ReservationDate)</td>
+                                <td class="text-end pe-4">
+                                    <form asp-controller="Admin" asp-action="ApproveReservation" method="post" class="d-inline">
+                                        <input type="hidden" name="reservationId" value="@reservation.Id" />
+                                        <button type="submit"
+                                                class="btn btn-sm btn-success fw-bold"
+                                                title="Approve this reservation">
+                                            <i class="bi bi-check-circle me-1"></i>Approve
+                                        </button>
+                                    </form>
+                                    <form asp-controller="Admin" asp-action="DeclineReservation" method="post" class="d-inline ms-2">
+                                        <input type="hidden" name="reservationId" value="@reservation.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-x-circle me-1"></i>Decline
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">No pending reservations.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h5 class="fw-bold mb-3">
+        <i class="bi bi-check-circle text-success me-2"></i>Approved Reservations (@approvedReservations.Count)
+    </h5>
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4">User</th>
+                        <th>Book</th>
+                        <th>Approved</th>
+                        <th>Claim Deadline</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (approvedReservations.Any())
+                    {
+                        foreach (var reservation in approvedReservations)
+                        {
+                            var user = Model.Users.FirstOrDefault(u => u.Id == reservation.UserId);
+                            var book = Model.Books.FirstOrDefault(b => b.Id == reservation.BookId);
+                            <tr>
+                                <td class="ps-4">
+                                    <i class="bi bi-person me-2"></i>@(user?.FullName ?? reservation.UserId)
+                                </td>
+                                <td>@(book?.Title ?? "Unknown book")</td>
+                                <td>@(reservation.ApprovedAt.HasValue ? FormatRelativeTime(reservation.ApprovedAt.Value) : "-")</td>
+                                <td>@FormatDeadline(reservation.ClaimDeadline)</td>
+                                <td><span class="badge bg-warning text-white">Awaiting Claim</span></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">No approved reservations awaiting claim.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
 <div class="card border-0 shadow-sm">
     <div class="card-body p-0">
-        <!-- Search Bar -->
         <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
             <div class="input-group" style="max-width: 350px;">
                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" class="form-control border-start-0 ps-0" placeholder="Search title or borrower...">
+                <input type="text" id="borrowSearchInput" class="form-control border-start-0 ps-0" placeholder="Search title or borrower...">
             </div>
             <div>
-                <select class="form-select form-select-sm" style="min-width: 140px;">
-                    <option>All Status</option>
-                    <option>On Time</option>
-                    <option>Due Soon</option>
-                    <option>Overdue</option>
+                <select class="form-select form-select-sm" id="borrowStatusFilter" style="min-width: 140px;">
+                    <option value="all">All Status</option>
+                    <option value="On Time">On Time</option>
+                    <option value="Due Soon">Due Soon</option>
+                    <option value="Overdue">Overdue</option>
                 </select>
             </div>
         </div>
 
-        <!-- Table -->
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light text-muted small text-uppercase">
@@ -63,85 +301,52 @@
                         <th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="ps-4">1</td>
-                        <td><div class="fw-bold text-dark">The Great Gatsby</div></td>
-                        <td class="text-muted small">F. Scott Fitzgerald</td>
-                        <td>John Doe</td>
-                        <td class="text-muted small">2026-04-16</td>
-                        <td class="text-muted small">2026-05-04</td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
-                        <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="John Doe" data-book="The Great Gatsby">
-                                <i class="bi bi-bell"></i>
-                            </button>
-                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">2</td>
-                        <td><div class="fw-bold text-dark">To Kill a Mockingbird</div></td>
-                        <td class="text-muted small">Harper Lee</td>
-                        <td>Jane Smith</td>
-                        <td class="text-muted small">2026-04-11</td>
-                        <td class="text-muted small">2026-04-28</td>
-                        <td><span class="badge bg-warning bg-opacity-10 text-warning px-2 py-1"><i class="bi bi-clock me-1"></i>Due Soon</span></td>
-                        <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="Jane Smith" data-book="To Kill a Mockingbird">
-                                <i class="bi bi-bell"></i>
-                            </button>
-                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">3</td>
-                        <td><div class="fw-bold text-dark">1984</div></td>
-                        <td class="text-muted small">George Orwell</td>
-                        <td>Bob Wilson</td>
-                        <td class="text-muted small">2026-04-06</td>
-                        <td class="text-muted small">2026-04-23</td>
-                        <td><span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1"><i class="bi bi-exclamation-circle me-1"></i>Overdue</span></td>
-                        <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="Bob Wilson" data-book="1984">
-                                <i class="bi bi-bell"></i>
-                            </button>
-                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">4</td>
-                        <td><div class="fw-bold text-dark">Pride and Prejudice</div></td>
-                        <td class="text-muted small">Jane Austen</td>
-                        <td>Alice Brown</td>
-                        <td class="text-muted small">2026-04-21</td>
-                        <td class="text-muted small">2026-05-10</td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success px-2 py-1"><i class="bi bi-check-circle me-1"></i>On Time</span></td>
-                        <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="Alice Brown" data-book="Pride and Prejudice">
-                                <i class="bi bi-bell"></i>
-                            </button>
-                            <button class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
-                        </td>
-                    </tr>
+                <tbody id="borrowedBooksTableBody">
+                    @if (Model.Transactions.Any())
+                    {
+                        var rowNumber = 1;
+                        foreach (var transaction in Model.Transactions)
+                        {
+                            var book = Model.Books.FirstOrDefault(b => b.Id == transaction.BookId);
+                            var user = Model.Users.FirstOrDefault(u => u.Id == transaction.UserId);
+                            var status = GetBorrowStatus(transaction);
+                            <tr data-status="@status" data-search="@($"{book?.Title} {book?.Author} {user?.FullName}".ToLowerInvariant())">
+                                <td class="ps-4">@rowNumber</td>
+                                <td><div class="fw-bold text-dark">@(book?.Title ?? "Unknown book")</div></td>
+                                <td class="text-muted small">@(book?.Author ?? "Unknown")</td>
+                                <td>@(user?.FullName ?? "Unknown user")</td>
+                                <td class="text-muted small">@transaction.BorrowDate.ToString("yyyy-MM-dd")</td>
+                                <td class="text-muted small">@transaction.DueDate.ToString("yyyy-MM-dd")</td>
+                                <td>@Html.Raw(StatusBadge(status))</td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="@(user?.FullName ?? "Unknown user")" data-book="@(book?.Title ?? "Unknown book")">
+                                        <i class="bi bi-bell"></i>
+                                    </button>
+                                    <form asp-controller="Admin" asp-action="ReturnBook" method="post" class="d-inline">
+                                        <input type="hidden" name="transactionId" value="@transaction.Id" />
+                                        <button type="submit" class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                            rowNumber++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">No active borrowed books.</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
         <div class="p-3 border-top d-flex justify-content-between align-items-center text-muted small bg-white rounded-bottom">
-            <div>Showing <span class="fw-medium text-dark">1</span> to <span class="fw-medium text-dark">4</span> entries</div>
-            <nav aria-label="Page navigation">
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+            <div>Showing <span class="fw-medium text-dark">@Model.Transactions.Count</span> entries</div>
         </div>
     </div>
 </div>
 
-<!-- Notify Borrower Modal -->
 <div class="modal fade" id="notifyBorrowerModal" tabindex="-1" aria-labelledby="notifyBorrowerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
@@ -179,30 +384,85 @@
             const borrowerInput = document.getElementById('notifyBorrowerName');
             const bookInput = document.getElementById('notifyBookTitle');
             const messageInput = document.getElementById('notifyMessage');
+            const searchInput = document.getElementById('borrowSearchInput');
+            const statusFilter = document.getElementById('borrowStatusFilter');
+            const rows = document.querySelectorAll('#borrowedBooksTableBody tr[data-status]');
 
             notifyBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const borrower = this.getAttribute('data-borrower');
-                    const book = this.getAttribute('data-book');
-                    
-                    borrowerInput.value = borrower;
-                    bookInput.value = book;
-                    messageInput.value = ''; // Clear previous message
+                    borrowerInput.value = this.getAttribute('data-borrower');
+                    bookInput.value = this.getAttribute('data-book');
+                    messageInput.value = '';
                 });
             });
+
+            function filterRows() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const status = statusFilter.value;
+
+                rows.forEach(row => {
+                    const matchesSearch = row.getAttribute('data-search').includes(searchTerm);
+                    const matchesStatus = status === 'all' || row.getAttribute('data-status') === status;
+                    row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+                });
+            }
+
+            searchInput.addEventListener('input', filterRows);
+            statusFilter.addEventListener('change', filterRows);
 
             document.getElementById('confirmNotifyBtn').addEventListener('click', function() {
                 const borrower = borrowerInput.value;
                 const message = messageInput.value;
-                
-                // In a real app, you'd send an AJAX request here
-                alert(`Notification sent to ${borrower}! ${message ? '\nMessage: ' + message : ''}`);
-                
-                // Close modal
+                alert(`Notification prepared for ${borrower}. ${message ? '\nMessage: ' + message : ''}`);
+
                 const modalElement = document.getElementById('notifyBorrowerModal');
                 const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
                 modal.hide();
             });
         });
     </script>
+}
+
+@functions {
+    private static string GetBorrowStatus(LibrarySystem.Services.InMemoryBorrowTransaction transaction)
+    {
+        if (transaction.DueDate < DateTime.Now)
+            return "Overdue";
+
+        if (transaction.DueDate <= DateTime.Now.AddDays(3))
+            return "Due Soon";
+
+        return "On Time";
+    }
+
+    private static string StatusBadge(string status)
+    {
+        return status switch
+        {
+            "Overdue" => "<span class=\"badge bg-danger bg-opacity-10 text-danger px-2 py-1\"><i class=\"bi bi-exclamation-circle me-1\"></i>Overdue</span>",
+            "Due Soon" => "<span class=\"badge bg-warning bg-opacity-10 text-warning px-2 py-1\"><i class=\"bi bi-clock me-1\"></i>Due Soon</span>",
+            _ => "<span class=\"badge bg-success bg-opacity-10 text-success px-2 py-1\"><i class=\"bi bi-check-circle me-1\"></i>On Time</span>"
+        };
+    }
+
+    private static string FormatRelativeTime(DateTime date)
+    {
+        var elapsed = DateTime.Now - date;
+
+        if (elapsed.TotalMinutes < 1) return "0m ago";
+        if (elapsed.TotalMinutes < 60) return $"{(int)elapsed.TotalMinutes}m ago";
+        if (elapsed.TotalHours < 24) return $"{(int)elapsed.TotalHours}h ago";
+        return $"{(int)elapsed.TotalDays}d ago";
+    }
+
+    private static string FormatDeadline(DateTime? deadline)
+    {
+        if (!deadline.HasValue) return "-";
+
+        var remaining = deadline.Value - DateTime.Now;
+        if (remaining.TotalMinutes <= 0) return "Expired";
+        if (remaining.TotalHours < 1) return $"{(int)remaining.TotalMinutes}m";
+
+        return $"{(int)remaining.TotalHours}h {remaining.Minutes}m";
+    }
 }

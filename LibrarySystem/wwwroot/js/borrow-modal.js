@@ -6,25 +6,44 @@ function openBorrowModalFromCard(button) {
     var title = card.dataset.bookTitle;
     var author = card.dataset.bookAuthor;
 
+    resetForm();
     document.getElementById('modalBookTitle').textContent = title;
     document.getElementById('modalBookAuthor').textContent = 'by ' + author;
     document.getElementById('bookIdInput').value = bookId;
-    // Set default borrow date to today
     var today = new Date();
-    var yyyy = today.getFullYear();
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var dd = String(today.getDate()).padStart(2, '0');
-    var dateString = yyyy + '-' + mm + '-' + dd;
-    
+    var endDate = new Date(today);
+    endDate.setDate(endDate.getDate() + 14);
+    var dateString = formatDateForInput(today);
+
     var borrowDateInput = document.getElementById('borrowDateInput');
     if (borrowDateInput) {
         borrowDateInput.value = dateString;
-        borrowDateInput.min = dateString;
+    }
+    document.getElementById('borrowDateDisplay').textContent = formatDateForDisplay(today);
+    var endDateInput = document.getElementById('endDateInput');
+    if (endDateInput) {
+        endDateInput.min = dateString;
+        endDateInput.max = formatDateForInput(endDate);
+        endDateInput.value = formatDateForInput(endDate);
     }
 
-    resetForm();
     document.getElementById('borrowModal').classList.add('active');
     document.body.style.overflow = 'hidden';
+}
+
+function formatDateForInput(date) {
+    var yyyy = date.getFullYear();
+    var mm = String(date.getMonth() + 1).padStart(2, '0');
+    var dd = String(date.getDate()).padStart(2, '0');
+    return yyyy + '-' + mm + '-' + dd;
+}
+
+function formatDateForDisplay(date) {
+    return date.toLocaleDateString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
 }
 
 function closeBorrowModal() {
@@ -73,7 +92,7 @@ document.getElementById('borrowForm').addEventListener('submit', async function(
         } else if (contentType && contentType.indexOf('application/json') !== -1) {
             var result = await res.json();
             if (result.success) {
-                showSuccess(result.message || 'Borrowed successfully!');
+                showSuccess(result.message || 'Borrow request submitted.');
             } else {
                 document.getElementById('formContent').style.display = 'block';
                 alert(result.message || 'Borrow failed');
@@ -87,7 +106,7 @@ document.getElementById('borrowForm').addEventListener('submit', async function(
             btn.classList.remove('loading');
         } else {
             // Assume success if no error and no JSON
-            showSuccess('Borrowed successfully!');
+            showSuccess('Borrow request submitted.');
         }
     } catch (err) {
         if (formLoading) formLoading.style.display = 'none';
@@ -100,7 +119,7 @@ document.getElementById('borrowForm').addEventListener('submit', async function(
 
 function handleRedirect(url) {
     if (url.indexOf('BorrowedBooks') !== -1 || url.indexOf('Dashboard') !== -1) {
-        showSuccess('Book borrowed successfully!');
+        showSuccess('Borrow request submitted.');
     } else if (url.indexOf('Index') !== -1) {
         closeBorrowModal();
         alert('This book is currently out of stock or action cannot be completed.');

@@ -2,6 +2,7 @@ namespace LibrarySystem.Models;
 
 public class UserCategoryBooksViewModel
 {
+    public string? CategoryId { get; set; }
     public string? CategoryName { get; set; }
     public string? CategoryDisplayName { get; set; }
     public string? Description { get; set; }
@@ -18,6 +19,9 @@ public class CategoryBookItem
     public int Id { get; set; }
     public string? Title { get; set; }
     public string? Author { get; set; }
+    public string? ISBN { get; set; }
     public int AvailableCopies { get; set; }
     public string? CoverImageUrl { get; set; }
+    public int? ReservationId { get; set; }
+    public string? ReservationStatus { get; set; }
 }

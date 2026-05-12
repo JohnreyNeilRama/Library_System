@@ -230,6 +230,7 @@ namespace LibrarySystem.Services
         {
             var category = _db.Categories.Find(categoryId);
             if (category == null) return false;
+            if (_db.Books.Any(b => b.CategoryId == categoryId)) return false;
 
             _db.Categories.Remove(category);
             _db.SaveChanges();
@@ -238,21 +239,27 @@ namespace LibrarySystem.Services
 
         // ── BORROW TRANSACTIONS ───────────────────────────────────────────────
 
-        public InMemoryBorrowTransaction? BorrowBook(string userId, int bookId, int borrowDays = 14)
+        public InMemoryBorrowTransaction? BorrowBook(string userId, int bookId, DateTime? requestedEndDate = null, int borrowDays = 14)
         {
             var book = _db.Books.Find(bookId);
             var user = _db.Users.Find(userId);
             if (book == null || user == null || book.AvailableCopies <= 0) return null;
 
-            book.AvailableCopies--;
+            var hasOpenRequest = _db.BorrowTransactions.Any(t =>
+                t.UserId == userId &&
+                t.BookId == bookId &&
+                t.ReturnDate == null &&
+                (t.Status == "Pending" || t.Status == "On Time"));
+
+            if (hasOpenRequest) return null;
 
             var transaction = new BorrowTransaction
             {
                 UserId = userId,
                 BookId = bookId,
                 BorrowDate = DateTime.Now,
-                DueDate = DateTime.Now.AddDays(borrowDays),
-                Status = "On Time"
+                DueDate = (requestedEndDate ?? DateTime.Now.AddDays(borrowDays)).Date.AddDays(1).AddTicks(-1),
+                Status = "Pending"
             };
 
             _db.BorrowTransactions.Add(transaction);
@@ -260,10 +267,49 @@ namespace LibrarySystem.Services
             return MapTransaction(transaction);
         }
 
+        public bool ApproveBorrowRequest(int transactionId, int borrowDays = 14)
+        {
+            var t = _db.BorrowTransactions.Find(transactionId);
+            if (t == null || t.ReturnDate.HasValue || t.Status != "Pending") return false;
+
+            var book = _db.Books.Find(t.BookId);
+            if (book == null || book.AvailableCopies <= 0) return false;
+
+            book.AvailableCopies--;
+            t.BorrowDate = DateTime.Now;
+            t.Status = "Approved";
+
+            _db.SaveChanges();
+            return true;
+        }
+
+        public bool DeclineBorrowRequest(int transactionId)
+        {
+            var t = _db.BorrowTransactions.Find(transactionId);
+            if (t == null || t.ReturnDate.HasValue || t.Status != "Pending") return false;
+
+            t.Status = "Declined";
+            _db.SaveChanges();
+            return true;
+        }
+
+        public bool ClaimBorrowRequest(int transactionId, int borrowDays = 14)
+        {
+            var t = _db.BorrowTransactions.Find(transactionId);
+            if (t == null || t.ReturnDate.HasValue || t.Status != "Approved") return false;
+            if (t.BorrowDate.AddHours(24) < DateTime.Now) return false;
+
+            t.BorrowDate = DateTime.Now;
+            t.Status = "On Time";
+
+            _db.SaveChanges();
+            return true;
+        }
+
         public bool ReturnBook(int transactionId)
         {
             var t = _db.BorrowTransactions.Find(transactionId);
-            if (t == null || t.ReturnDate.HasValue) return false;
+            if (t == null || t.ReturnDate.HasValue || t.Status == "Pending" || t.Status == "Approved" || t.Status == "Declined") return false;
 
             t.ReturnDate = DateTime.Now;
             t.Status = t.ReturnDate.Value <= t.DueDate ? "On Time" : "Returned Late";
@@ -278,14 +324,14 @@ namespace LibrarySystem.Services
         public List<InMemoryBorrowTransaction> GetUserBorrowedBooks(string userId)
         {
             return _db.BorrowTransactions
-                .Where(t => t.UserId == userId && t.ReturnDate == null)
+                .Where(t => t.UserId == userId && t.ReturnDate == null && t.Status != "Declined")
                 .Select(t => MapTransaction(t)).ToList();
         }
 
         public List<InMemoryBorrowTransaction> GetUserReturnedBooks(string userId)
         {
             return _db.BorrowTransactions
-                .Where(t => t.UserId == userId && t.ReturnDate != null)
+                .Where(t => t.UserId == userId && t.ReturnDate != null && t.Status != "Declined")
                 .Select(t => MapTransaction(t)).ToList();
         }
 
@@ -298,7 +344,7 @@ namespace LibrarySystem.Services
         public List<InMemoryBorrowTransaction> GetActiveBorrows()
         {
             return _db.BorrowTransactions
-                .Where(t => t.ReturnDate == null)
+                .Where(t => t.ReturnDate == null && t.Status != "Pending" && t.Status != "Approved" && t.Status != "Declined")
                 .Select(t => MapTransaction(t)).ToList();
         }
 
@@ -306,7 +352,7 @@ namespace LibrarySystem.Services
         {
             var now = DateTime.Now;
             return _db.BorrowTransactions
-                .Where(t => t.ReturnDate == null && t.DueDate < now)
+                .Where(t => t.ReturnDate == null && t.Status != "Pending" && t.Status != "Approved" && t.Status != "Declined" && t.DueDate < now)
                 .Select(t => MapTransaction(t)).ToList();
         }
 
@@ -316,7 +362,7 @@ namespace LibrarySystem.Services
         {
             var book = _db.Books.Find(bookId);
             var user = _db.Users.Find(userId);
-            if (book == null || user == null) return null;
+            if (book == null || user == null || book.AvailableCopies > 0) return null;
 
             var reservation = new Reservation
             {
@@ -324,12 +370,62 @@ namespace LibrarySystem.Services
                 BookId = bookId,
                 ReservationDate = DateTime.Now,
                 ExpiryDate = DateTime.Now.AddDays(reserveDays),
+                Status = "Pending",
                 IsActive = true
             };
 
             _db.Reservations.Add(reservation);
             _db.SaveChanges();
             return MapReservation(reservation);
+        }
+
+        public bool ApproveReservation(int reservationId, int claimHours = 24)
+        {
+            var r = _db.Reservations.Find(reservationId);
+            if (r == null || !r.IsActive || r.Status != "Pending") return false;
+
+            var now = DateTime.Now;
+            r.Status = "Approved";
+            r.ApprovedAt = now;
+            r.ClaimDeadline = now.AddHours(claimHours);
+            _db.SaveChanges();
+            return true;
+        }
+
+        public bool DeclineReservation(int reservationId)
+        {
+            var r = _db.Reservations.Find(reservationId);
+            if (r == null || !r.IsActive || r.Status != "Pending") return false;
+
+            r.Status = "Declined";
+            r.IsActive = false;
+            _db.SaveChanges();
+            return true;
+        }
+
+        public bool ClaimReservation(int reservationId)
+        {
+            var r = _db.Reservations.Find(reservationId);
+            if (r == null || !r.IsActive || r.Status != "Approved") return false;
+            if (r.ClaimDeadline.HasValue && r.ClaimDeadline.Value < DateTime.Now) return false;
+            var book = _db.Books.Find(r.BookId);
+            if (_db.Users.Find(r.UserId) == null || book == null) return false;
+
+            if (book.AvailableCopies > 0)
+                book.AvailableCopies--;
+            r.Status = "Claimed";
+            r.ClaimedAt = DateTime.Now;
+            r.IsActive = false;
+            _db.BorrowTransactions.Add(new BorrowTransaction
+            {
+                UserId = r.UserId,
+                BookId = r.BookId,
+                BorrowDate = DateTime.Now,
+                DueDate = DateTime.Now.AddDays(14),
+                Status = "On Time"
+            });
+            _db.SaveChanges();
+            return true;
         }
 
         public bool CancelReservation(int reservationId)
@@ -345,7 +441,7 @@ namespace LibrarySystem.Services
         public List<InMemoryReservation> GetUserReservations(string userId)
         {
             return _db.Reservations
-                .Where(r => r.UserId == userId && r.IsActive)
+                .Where(r => r.UserId == userId && r.IsActive && r.Status != "Declined" && r.Status != "Expired")
                 .Select(r => MapReservation(r)).ToList();
         }
 
@@ -407,6 +503,10 @@ namespace LibrarySystem.Services
             BookId = r.BookId,
             ReservationDate = r.ReservationDate,
             ExpiryDate = r.ExpiryDate,
+            Status = r.Status,
+            ApprovedAt = r.ApprovedAt,
+            ClaimDeadline = r.ClaimDeadline,
+            ClaimedAt = r.ClaimedAt,
             IsActive = r.IsActive
         };
     }

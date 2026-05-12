@@ -144,6 +144,10 @@ namespace LibrarySystem.Models
 
         public DateTime ReservationDate { get; set; }
         public DateTime ExpiryDate { get; set; }
+        public string Status { get; set; } = "Pending"; // "Pending" | "Approved" | "Declined" | "Claimed" | "Expired"
+        public DateTime? ApprovedAt { get; set; }
+        public DateTime? ClaimDeadline { get; set; }
+        public DateTime? ClaimedAt { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

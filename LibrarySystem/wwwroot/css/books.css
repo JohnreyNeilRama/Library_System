@@ -184,6 +184,12 @@
     margin: 0;
 }
 
+.book-isbn {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin: 0;
+}
+
 .book-meta {
     display: flex;
     justify-content: space-between;
@@ -237,6 +243,7 @@
 .status-badge.unavailable {
     background: #fee2e2;
     color: #991b1b;
+    text-transform: none;
 }
 
 .btn-borrow {
@@ -266,6 +273,50 @@
     background: #e5e7eb;
     color: #9ca3af;
     cursor: not-allowed;
+}
+
+.reserve-form {
+    margin-top: auto;
+}
+
+.btn-borrow.reserve {
+    background: #f59e0b;
+    color: white;
+}
+
+.btn-borrow.reserve:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.btn-borrow.awaiting {
+    background: white;
+    border: 1px solid #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+    text-transform: uppercase;
+}
+
+.reservation-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-top: auto;
+}
+
+.reservation-notice.pending {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.reservation-notice.approved {
+    background: #ecfdf5;
+    color: #047857;
 }
 
 .empty-state {
