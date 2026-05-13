@@ -155,18 +155,7 @@
                 <div class="modal-body p-4">
                     <form id="globalAddBookForm" asp-controller="Admin" asp-action="AddBook" method="post">
                         <div class="row">
-                            <div class="col-md-4 mb-4 text-center">
-                                <div class="position-relative d-inline-block">
-                                    <img src="https://via.placeholder.com/150x200?text=Upload+Cover" id="addBookCoverPreview" class="img-fluid rounded shadow-sm" alt="Book Cover" style="width: 150px; height: 200px; object-fit: cover;">
-                                    <label for="addBookCoverInput" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2 shadow" style="transform: translate(25%, 25%); cursor: pointer;" title="Upload Picture">
-                                        <i class="bi bi-camera-fill"></i>
-                                    </label>
-                                    <input type="file" id="addBookCoverInput" class="d-none" accept="image/*">
-                                    <input type="hidden" name="CoverImageUrl" id="addBookCoverImageUrl">
-                                </div>
-                                <div class="mt-2 small text-muted">Book Cover</div>
-                            </div>
-                            <div class="col-md-8">
+                            <div class="col-12">
                                 <div class="mb-3">
                                     <label class="form-label text-muted small fw-bold text-uppercase">Book Title <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control bg-light" name="Title" required placeholder="Enter book title">
@@ -232,17 +221,6 @@
         });
 
         // Global Add Book Modal Logic
-        document.getElementById('addBookCoverInput')?.addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('addBookCoverPreview').src = evt.target.result;
-                    document.getElementById('addBookCoverImageUrl').value = evt.target.result;
-                };
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        });
-
         document.getElementById('globalAddBookForm')?.addEventListener('submit', function() {
             const availableCopies = document.getElementById('addBookAvailableCopies')?.value || '1';
             document.getElementById('addBookTotalCopies').value = availableCopies;

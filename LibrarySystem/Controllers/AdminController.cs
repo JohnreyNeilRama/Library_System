@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using LibrarySystem.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibrarySystem.Controllers
 {
@@ -104,7 +105,9 @@ namespace LibrarySystem.Controllers
         {
             var model = new AdminBookViewModel
             {
-                Categories = _libraryService.GetAllCategories()
+                Categories = _libraryService.GetAllCategories(),
+                AvailableCopies = 1,
+                TotalCopies = 1
             };
 
             return View(model);
@@ -115,16 +118,25 @@ namespace LibrarySystem.Controllers
         {
             model.Categories = _libraryService.GetAllCategories();
 
+            if (!model.Categories.Any())
+                ModelState.AddModelError(nameof(model.CategoryId), "Add a category before adding books.");
+
+            if (model.TotalCopies <= 0)
+                model.TotalCopies = model.AvailableCopies;
+
+            if (model.AvailableCopies > model.TotalCopies)
+                model.TotalCopies = model.AvailableCopies;
+
             if (ModelState.IsValid)
             {
                 var book = new InMemoryBook
                 {
-                    Title = model.Title,
-                    Author = model.Author,
-                    Description = model.Description,
-                    ISBN = model.ISBN,
+                    Title = model.Title.Trim(),
+                    Author = model.Author.Trim(),
+                    Description = model.Description?.Trim() ?? string.Empty,
+                    ISBN = model.ISBN?.Trim() ?? string.Empty,
                     PublishedYear = model.PublishedYear,
-                    CoverImageUrl = model.CoverImageUrl,
+                    CoverImageUrl = string.IsNullOrWhiteSpace(model.CoverImageUrl) ? null : model.CoverImageUrl.Trim(),
                     AvailableCopies = model.AvailableCopies,
                     TotalCopies = model.TotalCopies,
                     CategoryId = model.CategoryId
@@ -172,12 +184,12 @@ namespace LibrarySystem.Controllers
                 var book = new InMemoryBook
                 {
                     Id = model.Id,
-                    Title = model.Title,
-                    Author = model.Author,
-                    Description = model.Description,
-                    ISBN = model.ISBN,
+                    Title = model.Title.Trim(),
+                    Author = model.Author.Trim(),
+                    Description = model.Description?.Trim() ?? string.Empty,
+                    ISBN = model.ISBN?.Trim() ?? string.Empty,
                     PublishedYear = model.PublishedYear,
-                    CoverImageUrl = model.CoverImageUrl,
+                    CoverImageUrl = string.IsNullOrWhiteSpace(model.CoverImageUrl) ? null : model.CoverImageUrl.Trim(),
                     AvailableCopies = model.AvailableCopies,
                     TotalCopies = model.TotalCopies,
                     CategoryId = model.CategoryId
@@ -529,15 +541,31 @@ namespace LibrarySystem.Controllers
     public class AdminBookViewModel
     {
         public int Id { get; set; }
+
+        [Required]
         public string Title { get; set; } = string.Empty;
+
+        [Required]
         public string Author { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string ISBN { get; set; } = string.Empty;
+
+        public string? Description { get; set; }
+
+        public string? ISBN { get; set; }
+
+        [Range(0, 2100)]
         public int PublishedYear { get; set; }
+
         public string? CoverImageUrl { get; set; }
+
+        [Range(0, int.MaxValue)]
         public int AvailableCopies { get; set; }
+
+        [Range(1, int.MaxValue)]
         public int TotalCopies { get; set; }
+
+        [Required]
         public string CategoryId { get; set; } = string.Empty;
+
         public List<InMemoryCategory> Categories { get; set; } = new();
     }
 
