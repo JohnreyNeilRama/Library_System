@@ -132,7 +132,7 @@ namespace LibrarySystem.Controllers
 
                 _libraryService.AddBook(book);
                 TempData["SuccessMessage"] = "Book added successfully!";
-                return RedirectToAction("ManageBooks");
+                return RedirectToAction("AllBooks");
             }
 
             return View(model);
@@ -206,29 +206,16 @@ namespace LibrarySystem.Controllers
             return RedirectToAction("AllBooks");
         }
 
-        public IActionResult ReturnedBooks()
-        {
-            var returnedTransactions = _libraryService.GetAllTransactions()
-                .Where(t => t.ReturnDate.HasValue)
-                .ToList();
-
-            var model = new AdminReturnedBooksViewModel
-            {
-                Transactions = returnedTransactions,
-                Books = _libraryService.GetAllBooks(),
-                Users = _libraryService.GetAllUsers()
-            };
-
-            return View(model);
-        }
-
         [HttpPost]
-        public IActionResult ReturnBook(int transactionId)
+        public IActionResult ReturnBook(int transactionId, string? returnTo = null)
         {
             if (_libraryService.ReturnBook(transactionId))
                 TempData["SuccessMessage"] = "Book returned successfully!";
             else
                 TempData["ErrorMessage"] = "Failed to return book.";
+
+            if (returnTo == "TransactionHistory")
+                return RedirectToAction("TransactionHistory");
 
             return RedirectToAction("Requests");
         }
@@ -283,6 +270,13 @@ namespace LibrarySystem.Controllers
             var model = new AdminTransactionHistoryViewModel
             {
                 Transactions = transactions,
+                ActiveBorrows = _libraryService.GetActiveBorrows()
+                    .OrderBy(t => t.DueDate)
+                    .ToList(),
+                ReturnedTransactions = _libraryService.GetAllTransactions()
+                    .Where(t => t.ReturnDate.HasValue)
+                    .OrderByDescending(t => t.ReturnDate)
+                    .ToList(),
                 Books = _libraryService.GetAllBooks(),
                 Users = _libraryService.GetAllUsers(),
                 Filter = filter,
@@ -451,8 +445,22 @@ namespace LibrarySystem.Controllers
         [HttpPost]
         public IActionResult ToggleUserStatus(string id)
         {
-            _libraryService.ToggleUserActiveStatus(id);
-            TempData["SuccessMessage"] = "User status updated successfully!";
+            if (_libraryService.ToggleUserActiveStatus(id))
+                TempData["SuccessMessage"] = "User status updated successfully!";
+            else
+                TempData["ErrorMessage"] = "Failed to update user status.";
+
+            return RedirectToAction("ManageUsers");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteUser(string id)
+        {
+            if (_libraryService.DeleteUser(id))
+                TempData["SuccessMessage"] = "User deleted successfully!";
+            else
+                TempData["ErrorMessage"] = "Failed to delete user. Make sure the user has no active borrows or reservations.";
+
             return RedirectToAction("ManageUsers");
         }
 
@@ -533,16 +541,11 @@ namespace LibrarySystem.Controllers
         public List<InMemoryCategory> Categories { get; set; } = new();
     }
 
-    public class AdminReturnedBooksViewModel
-    {
-        public List<InMemoryBorrowTransaction> Transactions { get; set; } = new();
-        public List<InMemoryBook> Books { get; set; } = new();
-        public List<InMemoryUser> Users { get; set; } = new();
-    }
-
     public class AdminTransactionHistoryViewModel
     {
         public List<InMemoryBorrowTransaction> Transactions { get; set; } = new();
+        public List<InMemoryBorrowTransaction> ActiveBorrows { get; set; } = new();
+        public List<InMemoryBorrowTransaction> ReturnedTransactions { get; set; } = new();
         public List<InMemoryBook> Books { get; set; } = new();
         public List<InMemoryUser> Users { get; set; } = new();
         public string? Filter { get; set; }

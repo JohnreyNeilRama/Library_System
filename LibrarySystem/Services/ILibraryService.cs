@@ -20,6 +20,7 @@ namespace LibrarySystem.Services
         List<InMemoryUser> GetAllUsers();
         bool UpdateUser(InMemoryUser user);
         bool ToggleUserActiveStatus(string userId);
+        bool DeleteUser(string userId);
 
         // Book Operations
         InMemoryBook? GetBookById(int bookId);

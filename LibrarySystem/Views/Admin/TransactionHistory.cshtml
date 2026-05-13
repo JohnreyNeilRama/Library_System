@@ -2,6 +2,9 @@
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Transaction History";
+
+    var returnedOnTime = Model.ReturnedTransactions.Count(t => t.Status == "On Time");
+    var returnedLate = Model.ReturnedTransactions.Count(t => t.Status == "Returned Late");
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
@@ -14,21 +17,18 @@
 <div class="card border-0 shadow-sm">
     <div class="card-body p-0">
         <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
-            <form asp-controller="Admin" asp-action="TransactionHistory" method="get" class="d-flex gap-2 flex-wrap w-100 justify-content-between">
-                <div class="input-group" style="max-width: 350px;">
-                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" name="search" value="@Model.Search" class="form-control border-start-0 ps-0" placeholder="Search title, author, or borrower...">
-                </div>
-                <div class="d-flex gap-2">
-                    <select class="form-select form-select-sm" name="filter" style="min-width: 140px;">
-                        <option value="">All Types</option>
-                        <option value="Borrowed" selected="@(Model.Filter == "Borrowed")">Borrowed</option>
-                        <option value="Returned" selected="@(Model.Filter == "Returned")">Returned</option>
-                        <option value="Overdue" selected="@(Model.Filter == "Overdue")">Overdue</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                </div>
-            </form>
+            <div class="input-group" style="max-width: 350px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="borrowSearchInput" class="form-control border-start-0 ps-0" placeholder="Search title or borrower...">
+            </div>
+            <div>
+                <select class="form-select form-select-sm" id="borrowStatusFilter" style="min-width: 140px;">
+                    <option value="all">All Status</option>
+                    <option value="On Time">On Time</option>
+                    <option value="Due Soon">Due Soon</option>
+                    <option value="Overdue">Overdue</option>
+                </select>
+            </div>
         </div>
 
         <div class="table-responsive">
@@ -37,39 +37,49 @@
                     <tr>
                         <th class="ps-4">#</th>
                         <th>Title</th>
-                        <th>Type</th>
+                        <th>Author</th>
                         <th>Borrower</th>
                         <th>Borrow Date</th>
-                        <th>Return Date</th>
+                        <th>Due Date</th>
                         <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @if (Model.Transactions.Any())
+                <tbody id="borrowedBooksTableBody">
+                    @if (Model.ActiveBorrows.Any())
                     {
-                        var rowNumber = 1;
-                        foreach (var transaction in Model.Transactions.OrderByDescending(t => t.ReturnDate ?? t.BorrowDate))
+                        var activeRowNumber = 1;
+                        foreach (var transaction in Model.ActiveBorrows)
                         {
                             var book = Model.Books.FirstOrDefault(b => b.Id == transaction.BookId);
                             var user = Model.Users.FirstOrDefault(u => u.Id == transaction.UserId);
-                            var type = transaction.ReturnDate.HasValue ? "Returned" : "Borrowed";
                             var status = GetTransactionStatus(transaction);
-                            <tr>
-                                <td class="ps-4">@rowNumber</td>
+                            <tr data-status="@status" data-search="@($"{book?.Title} {book?.Author} {user?.FullName}".ToLowerInvariant())">
+                                <td class="ps-4">@activeRowNumber</td>
                                 <td><div class="fw-bold text-dark">@(book?.Title ?? "Unknown book")</div></td>
-                                <td>@Html.Raw(TypeBadge(type))</td>
+                                <td class="text-muted small">@(book?.Author ?? "Unknown")</td>
                                 <td>@(user?.FullName ?? "Unknown user")</td>
                                 <td class="text-muted small">@transaction.BorrowDate.ToString("yyyy-MM-dd")</td>
-                                <td class="text-muted small">@(transaction.ReturnDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                                <td class="text-muted small">@transaction.DueDate.ToString("yyyy-MM-dd")</td>
                                 <td>@Html.Raw(StatusBadge(status))</td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-light text-warning notify-btn" title="Notify Borrower" data-bs-toggle="modal" data-bs-target="#notifyBorrowerModal" data-borrower="@(user?.FullName ?? "Unknown user")" data-book="@(book?.Title ?? "Unknown book")">
+                                        <i class="bi bi-bell"></i>
+                                    </button>
+                                    <form asp-controller="Admin" asp-action="ReturnBook" method="post" class="d-inline">
+                                        <input type="hidden" name="transactionId" value="@transaction.Id" />
+                                        <input type="hidden" name="returnTo" value="TransactionHistory" />
+                                        <button type="submit" class="btn btn-sm btn-light text-danger" title="Return"><i class="bi bi-arrow-return-left"></i></button>
+                                    </form>
+                                </td>
                             </tr>
-                            rowNumber++;
+                            activeRowNumber++;
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">No transactions found.</td>
+                            <td colspan="8" class="text-center text-muted py-4">No active borrowed books.</td>
                         </tr>
                     }
                 </tbody>
@@ -77,10 +87,192 @@
         </div>
 
         <div class="p-3 border-top d-flex justify-content-between align-items-center text-muted small bg-white rounded-bottom">
-            <div>Showing <span class="fw-medium text-dark">@Model.Transactions.Count</span> entries</div>
+            <div>Showing <span class="fw-medium text-dark">@Model.ActiveBorrows.Count</span> entries</div>
         </div>
     </div>
 </div>
+
+<div class="card border-0 shadow-sm mt-4 mb-4">
+    <div class="card-body p-4">
+        <div class="row g-4 text-center">
+            <div class="col-4 border-end">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Total Returns</div>
+                <h3 class="fw-bold text-dark mb-0">@Model.ReturnedTransactions.Count</h3>
+            </div>
+            <div class="col-4 border-end">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Returned On Time</div>
+                <h3 class="fw-bold text-success mb-0">@returnedOnTime</h3>
+            </div>
+            <div class="col-4">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Returned Late</div>
+                <h3 class="fw-bold text-warning mb-0">@returnedLate</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+            <div class="input-group" style="max-width: 350px;">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="returnedSearchInput" class="form-control border-start-0 ps-0" placeholder="Search title or borrower...">
+            </div>
+            <div class="d-flex gap-2">
+                <input type="date" id="returnedDateFilter" class="form-control form-control-sm text-muted" style="min-width: 140px;">
+                <select class="form-select form-select-sm" id="returnedStatusFilter" style="min-width: 140px;">
+                    <option value="all">All Status</option>
+                    <option value="On Time">On Time</option>
+                    <option value="Returned Late">Returned Late</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Borrower</th>
+                        <th>Borrow Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="returnedBooksTableBody">
+                    @if (Model.ReturnedTransactions.Any())
+                    {
+                        var returnedRowNumber = 1;
+                        foreach (var transaction in Model.ReturnedTransactions)
+                        {
+                            var book = Model.Books.FirstOrDefault(b => b.Id == transaction.BookId);
+                            var user = Model.Users.FirstOrDefault(u => u.Id == transaction.UserId);
+                            <tr data-status="@transaction.Status" data-return-date="@transaction.ReturnDate?.ToString("yyyy-MM-dd")" data-search="@($"{book?.Title} {book?.Author} {user?.FullName}".ToLowerInvariant())">
+                                <td class="ps-4">@returnedRowNumber</td>
+                                <td><div class="fw-bold text-dark">@(book?.Title ?? "Unknown book")</div></td>
+                                <td class="text-muted small">@(book?.Author ?? "Unknown")</td>
+                                <td>@(user?.FullName ?? "Unknown user")</td>
+                                <td class="text-muted small">@transaction.BorrowDate.ToString("yyyy-MM-dd")</td>
+                                <td class="text-muted small">@transaction.ReturnDate?.ToString("yyyy-MM-dd")</td>
+                                <td>@Html.Raw(ReturnStatusBadge(transaction.Status))</td>
+                            </tr>
+                            returnedRowNumber++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">No returned books yet.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="p-3 border-top d-flex justify-content-between align-items-center text-muted small bg-white rounded-bottom">
+            <div>Showing <span class="fw-medium text-dark">@Model.ReturnedTransactions.Count</span> entries</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="notifyBorrowerModal" tabindex="-1" aria-labelledby="notifyBorrowerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light border-bottom-0">
+                <h5 class="modal-title fw-bold" id="notifyBorrowerModalLabel"><i class="bi bi-bell-fill me-2 text-warning"></i>Send Return Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Borrower</label>
+                    <input type="text" class="form-control bg-light fw-bold" id="notifyBorrowerName" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Book Title</label>
+                    <input type="text" class="form-control bg-light" id="notifyBookTitle" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold text-uppercase">Message (Optional)</label>
+                    <textarea class="form-control" id="notifyMessage" rows="3" placeholder="e.g. Please remember to return the book by tomorrow."></textarea>
+                </div>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-warning fw-bold text-dark" id="confirmNotifyBtn">
+                        <i class="bi bi-send me-1"></i> Send Notification
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifyBtns = document.querySelectorAll('.notify-btn');
+            const borrowerInput = document.getElementById('notifyBorrowerName');
+            const bookInput = document.getElementById('notifyBookTitle');
+            const messageInput = document.getElementById('notifyMessage');
+            const searchInput = document.getElementById('borrowSearchInput');
+            const statusFilter = document.getElementById('borrowStatusFilter');
+            const rows = document.querySelectorAll('#borrowedBooksTableBody tr[data-status]');
+            const returnedSearchInput = document.getElementById('returnedSearchInput');
+            const returnedDateFilter = document.getElementById('returnedDateFilter');
+            const returnedStatusFilter = document.getElementById('returnedStatusFilter');
+            const returnedRows = document.querySelectorAll('#returnedBooksTableBody tr[data-status]');
+
+            notifyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    borrowerInput.value = this.getAttribute('data-borrower');
+                    bookInput.value = this.getAttribute('data-book');
+                    messageInput.value = '';
+                });
+            });
+
+            function filterRows() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const status = statusFilter.value;
+
+                rows.forEach(row => {
+                    const matchesSearch = row.getAttribute('data-search').includes(searchTerm);
+                    const matchesStatus = status === 'all' || row.getAttribute('data-status') === status;
+                    row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+                });
+            }
+
+            searchInput.addEventListener('input', filterRows);
+            statusFilter.addEventListener('change', filterRows);
+
+            function filterReturnedRows() {
+                const searchTerm = returnedSearchInput.value.toLowerCase();
+                const selectedDate = returnedDateFilter.value;
+                const selectedStatus = returnedStatusFilter.value;
+
+                returnedRows.forEach(row => {
+                    const matchesSearch = row.getAttribute('data-search').includes(searchTerm);
+                    const matchesDate = !selectedDate || row.getAttribute('data-return-date') === selectedDate;
+                    const matchesStatus = selectedStatus === 'all' || row.getAttribute('data-status') === selectedStatus;
+                    row.style.display = matchesSearch && matchesDate && matchesStatus ? '' : 'none';
+                });
+            }
+
+            returnedSearchInput.addEventListener('input', filterReturnedRows);
+            returnedDateFilter.addEventListener('change', filterReturnedRows);
+            returnedStatusFilter.addEventListener('change', filterReturnedRows);
+
+            document.getElementById('confirmNotifyBtn').addEventListener('click', function() {
+                const borrower = borrowerInput.value;
+                const message = messageInput.value;
+                alert(`Notification prepared for ${borrower}. ${message ? '\nMessage: ' + message : ''}`);
+
+                const modalElement = document.getElementById('notifyBorrowerModal');
+                const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                modal.hide();
+            });
+        });
+    </script>
+}
 
 @functions {
     private static string GetTransactionStatus(LibrarySystem.Services.InMemoryBorrowTransaction transaction)
@@ -97,11 +289,11 @@
         return "On Time";
     }
 
-    private static string TypeBadge(string type)
+    private static string ReturnStatusBadge(string status)
     {
-        return type == "Returned"
-            ? "<span class=\"badge bg-secondary bg-opacity-10 text-secondary px-2 py-1\">Returned</span>"
-            : "<span class=\"badge bg-primary bg-opacity-10 text-primary px-2 py-1\">Borrowed</span>";
+        return status == "Returned Late"
+            ? "<span class=\"badge bg-warning bg-opacity-10 text-warning px-2 py-1\"><i class=\"bi bi-exclamation-triangle me-1\"></i>Returned Late</span>"
+            : "<span class=\"badge bg-success bg-opacity-10 text-success px-2 py-1\"><i class=\"bi bi-check-circle me-1\"></i>On Time</span>";
     }
 
     private static string StatusBadge(string status)

@@ -18,6 +18,7 @@
     @{
         var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
         var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+        var addBookCategories = LibraryService.GetAllCategories();
     }
 
     <div class="admin-wrapper">
@@ -77,11 +78,6 @@
                     <li class="admin-nav-item">
                         <a asp-controller="Admin" asp-action="Requests" class="admin-nav-link @(currentAction == "Requests" || currentAction == "ManageBooks" || currentAction == "Reservations" ? "active" : "")">
                             <i class="bi bi-bookmark-dash"></i> Requests
-                        </a>
-                    </li>
-                    <li class="admin-nav-item">
-                        <a asp-controller="Admin" asp-action="ReturnedBooks" class="admin-nav-link @(currentAction == "ReturnedBooks" ? "active" : "")">
-                            <i class="bi bi-bookmark-check"></i> Returned Books
                         </a>
                     </li>
                     <li class="admin-nav-item">
@@ -157,7 +153,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form id="globalAddBookForm">
+                    <form id="globalAddBookForm" asp-controller="Admin" asp-action="AddBook" method="post">
                         <div class="row">
                             <div class="col-md-4 mb-4 text-center">
                                 <div class="position-relative d-inline-block">
@@ -166,48 +162,48 @@
                                         <i class="bi bi-camera-fill"></i>
                                     </label>
                                     <input type="file" id="addBookCoverInput" class="d-none" accept="image/*">
+                                    <input type="hidden" name="CoverImageUrl" id="addBookCoverImageUrl">
                                 </div>
                                 <div class="mt-2 small text-muted">Book Cover</div>
                             </div>
                             <div class="col-md-8">
                                 <div class="mb-3">
                                     <label class="form-label text-muted small fw-bold text-uppercase">Book Title <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control bg-light" required placeholder="Enter book title">
+                                    <input type="text" class="form-control bg-light" name="Title" required placeholder="Enter book title">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-muted small fw-bold text-uppercase">Author <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control bg-light" required placeholder="Enter author name">
+                                    <input type="text" class="form-control bg-light" name="Author" required placeholder="Enter author name">
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label text-muted small fw-bold text-uppercase">Category</label>
-                                        <select class="form-select bg-light">
-                                            <option value="Fiction">Fiction</option>
-                                            <option value="Science">Science</option>
-                                            <option value="History">History</option>
-                                            <option value="Biography">Biography</option>
-                                            <option value="Technology">Technology</option>
-                                            <option value="Children">Children</option>
+                                        <select class="form-select bg-light" name="CategoryId" required>
+                                            @foreach (var category in addBookCategories)
+                                            {
+                                                <option value="@category.Id">@category.Name</option>
+                                            }
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label text-muted small fw-bold text-uppercase">ISBN</label>
-                                        <input type="text" class="form-control bg-light" placeholder="Optional">
+                                        <input type="text" class="form-control bg-light" name="ISBN" placeholder="Optional">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label text-muted small fw-bold text-uppercase">Quantity</label>
-                                        <input type="number" class="form-control bg-light" value="1" min="1">
+                                        <input type="number" class="form-control bg-light" name="AvailableCopies" id="addBookAvailableCopies" value="1" min="1" required>
+                                        <input type="hidden" name="TotalCopies" id="addBookTotalCopies" value="1">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label text-muted small fw-bold text-uppercase">Published Year</label>
-                                        <input type="number" class="form-control bg-light" placeholder="e.g. 2024">
+                                        <input type="number" class="form-control bg-light" name="PublishedYear" id="addBookPublishedYear" placeholder="e.g. 2024">
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label text-muted small fw-bold text-uppercase">Description</label>
-                                    <textarea class="form-control bg-light" rows="3" placeholder="Brief description of the book..."></textarea>
+                                    <textarea class="form-control bg-light" name="Description" rows="3" placeholder="Brief description of the book..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +211,7 @@
                 </div>
                 <div class="modal-footer border-top-0 bg-light">
                     <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary px-4" id="saveNewBookBtn" data-bs-dismiss="modal">Add Book</button>
+                    <button type="submit" form="globalAddBookForm" class="btn btn-primary px-4" id="saveNewBookBtn">Add Book</button>
                 </div>
             </div>
         </div>
@@ -241,16 +237,19 @@
                 const reader = new FileReader();
                 reader.onload = function(evt) {
                     document.getElementById('addBookCoverPreview').src = evt.target.result;
+                    document.getElementById('addBookCoverImageUrl').value = evt.target.result;
                 };
                 reader.readAsDataURL(e.target.files[0]);
             }
         });
 
-        document.getElementById('saveNewBookBtn')?.addEventListener('click', function() {
-            // Optional: Mock saving action
-            document.getElementById('globalAddBookForm').reset();
-            document.getElementById('addBookCoverPreview').src = "https://via.placeholder.com/150x200?text=Upload+Cover";
-            // Could display a bootstrap toast here in real app
+        document.getElementById('globalAddBookForm')?.addEventListener('submit', function() {
+            const availableCopies = document.getElementById('addBookAvailableCopies')?.value || '1';
+            document.getElementById('addBookTotalCopies').value = availableCopies;
+            const publishedYear = document.getElementById('addBookPublishedYear');
+            if (publishedYear && publishedYear.value === '') {
+                publishedYear.value = '0';
+            }
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

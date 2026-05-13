@@ -53,10 +53,10 @@
 
             <!-- Search Bar -->
             <div class="nav-search-wrapper ms-auto me-4">
-                <div class="nav-search-container">
+                <form class="nav-search-container" asp-controller="User" asp-action="Books" method="get">
                     <i class="bi bi-search search-icon"></i>
-                    <input type="text" placeholder="Search for books, authors..." class="search-input">
-                </div>
+                    <input type="text" name="search" placeholder="Search for books, authors..." class="search-input">
+                </form>
             </div>
             
             <!-- User Actions -->

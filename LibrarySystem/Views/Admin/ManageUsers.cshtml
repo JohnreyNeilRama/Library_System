@@ -15,6 +15,20 @@
     </div>
 </div>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success border-0 shadow-sm" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger border-0 shadow-sm" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-body p-4">
         <div class="row g-4 text-center">
@@ -94,9 +108,22 @@
                                     <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-light text-primary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a asp-controller="Admin" asp-action="ToggleUserStatus" asp-route-id="@user.Id" class="btn btn-sm btn-light @(user.IsActive ? "text-danger" : "text-success")" title="@(user.IsActive ? "Deactivate" : "Activate")">
-                                        <i class="bi @(user.IsActive ? "bi-slash-circle" : "bi-check-circle")"></i>
-                                    </a>
+                                    <form asp-controller="Admin" asp-action="ToggleUserStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        <button type="submit" class="btn btn-sm btn-light @(user.IsActive ? "text-warning" : "text-success")" title="@(user.IsActive ? "Deactivate" : "Activate")">
+                                            <i class="bi @(user.IsActive ? "bi-slash-circle" : "bi-check-circle")"></i>
+                                        </button>
+                                    </form>
+                                    <form asp-controller="Admin"
+                                          asp-action="DeleteUser"
+                                          method="post"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Delete @user.FullName? This will remove their account and completed history.');">
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        <button type="submit" class="btn btn-sm btn-light text-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         }

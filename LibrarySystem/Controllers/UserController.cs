@@ -356,22 +356,49 @@ namespace LibrarySystem.Controllers
         }
 
         [HttpGet]
-        public IActionResult Books(string? category)
+        public IActionResult Books(string? category, string? search = null, string? filter = "all")
         {
-            if (string.IsNullOrEmpty(category))
-                return RedirectToAction("Categories");
+            var categoryKey = category?.Trim();
+            InMemoryCategory? cat = null;
 
-            var categoryKey = category.Trim();
-            var cat = _libraryService.GetCategoryById(categoryKey);
-            if (cat == null)
-                return NotFound();
+            if (!string.IsNullOrEmpty(categoryKey))
+            {
+                cat = _libraryService.GetCategoryById(categoryKey);
+                if (cat == null)
+                    return NotFound();
+            }
 
             var user = GetCurrentUser();
             var reservations = user == null
                 ? new List<InMemoryReservation>()
                 : _libraryService.GetUserReservations(user.Id);
 
-            var books = _libraryService.GetBooksByCategory(categoryKey)
+            var sourceBooks = string.IsNullOrEmpty(categoryKey)
+                ? _libraryService.GetAllBooks()
+                : _libraryService.GetBooksByCategory(categoryKey);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var searchLower = search.Trim().ToLower();
+                sourceBooks = sourceBooks.Where(b =>
+                    b.Title.ToLower().Contains(searchLower) ||
+                    b.Author.ToLower().Contains(searchLower) ||
+                    b.ISBN.ToLower().Contains(searchLower)).ToList();
+            }
+
+            var totalBooksCount = sourceBooks.Count;
+            var availableBooksCount = sourceBooks.Count(b => b.AvailableCopies > 0);
+            var unavailableBooksCount = sourceBooks.Count(b => b.AvailableCopies <= 0);
+
+            filter = string.IsNullOrWhiteSpace(filter) ? "all" : filter.ToLower();
+            sourceBooks = filter switch
+            {
+                "available" => sourceBooks.Where(b => b.AvailableCopies > 0).ToList(),
+                "unavailable" => sourceBooks.Where(b => b.AvailableCopies <= 0).ToList(),
+                _ => sourceBooks
+            };
+
+            var books = sourceBooks
                 .Select(b =>
                 {
                     var reservation = reservations.FirstOrDefault(r => r.BookId == b.Id);
@@ -390,9 +417,14 @@ namespace LibrarySystem.Controllers
 
             return View(new UserCategoryBooksViewModel
             {
-                CategoryId = cat.Id,
-                CategoryName = cat.Name,
-                Books = books
+                CategoryId = cat?.Id,
+                CategoryName = cat?.Name ?? "All",
+                Books = books,
+                Search = search,
+                Filter = filter,
+                TotalBooksCount = totalBooksCount,
+                AvailableBooksCount = availableBooksCount,
+                UnavailableBooksCount = unavailableBooksCount
             });
         }
 

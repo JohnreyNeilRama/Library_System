@@ -112,9 +112,32 @@ namespace LibrarySystem.Services
         public bool ToggleUserActiveStatus(string userId)
         {
             var user = _db.Users.Find(userId);
-            if (user == null) return false;
+            if (user == null || user.IsAdmin) return false;
 
             user.IsActive = !user.IsActive;
+            _db.SaveChanges();
+            return true;
+        }
+
+        public bool DeleteUser(string userId)
+        {
+            var user = _db.Users.Find(userId);
+            if (user == null || user.IsAdmin) return false;
+
+            var hasOpenBorrow = _db.BorrowTransactions.Any(t =>
+                t.UserId == userId &&
+                t.ReturnDate == null &&
+                t.Status != "Declined");
+
+            var hasActiveReservation = _db.Reservations.Any(r =>
+                r.UserId == userId &&
+                r.IsActive &&
+                r.Status != "Declined" &&
+                r.Status != "Expired");
+
+            if (hasOpenBorrow || hasActiveReservation) return false;
+
+            _db.Users.Remove(user);
             _db.SaveChanges();
             return true;
         }

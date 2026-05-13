@@ -1,0 +1,79 @@
+@model LibrarySystem.Controllers.AdminUserViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <h4 class="fw-bold mb-1">Edit User</h4>
+        <p class="text-muted mb-0 small">Update the selected student's profile and account status.</p>
+    </div>
+    <a asp-controller="Admin" asp-action="ManageUsers" class="btn btn-light btn-sm">
+        <i class="bi bi-arrow-left"></i> Back to Users
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <form asp-controller="Admin" asp-action="EditUser" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserName" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row g-4">
+                <div class="col-12 col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label text-muted small fw-bold text-uppercase">Full Name</label>
+                        <input asp-for="FullName" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label text-muted small fw-bold text-uppercase">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label text-muted small fw-bold text-uppercase">Username</label>
+                        <input asp-for="UserName" class="form-control bg-light" readonly />
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="mb-3">
+                        <label asp-for="IdNumber" class="form-label text-muted small fw-bold text-uppercase">Student ID</label>
+                        <input asp-for="IdNumber" class="form-control" />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label asp-for="Course" class="form-label text-muted small fw-bold text-uppercase">Course</label>
+                            <input asp-for="Course" class="form-control" />
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label asp-for="YearLevel" class="form-label text-muted small fw-bold text-uppercase">Year Level</label>
+                            <input asp-for="YearLevel" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="MembershipTier" class="form-label text-muted small fw-bold text-uppercase">Membership Tier</label>
+                        <input asp-for="MembershipTier" class="form-control" />
+                    </div>
+
+                    <div class="form-check form-switch mt-4">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" role="switch" />
+                        <label asp-for="IsActive" class="form-check-label fw-medium">Active account</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 border-top pt-4 mt-2">
+                <a asp-controller="Admin" asp-action="ManageUsers" class="btn btn-light">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save me-1"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

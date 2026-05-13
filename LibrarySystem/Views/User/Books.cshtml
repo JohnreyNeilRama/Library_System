@@ -12,24 +12,31 @@
     <div class="page-header">
         <div class="breadcrumb-nav">
             <a asp-controller="User" asp-action="Categories">Categories</a>
-            <span class="breadcrumb-separator">&#8250;</span>
-            <span>@Model.CategoryName</span>
+            @if (!string.IsNullOrEmpty(Model.CategoryId))
+            {
+                <span class="breadcrumb-separator">&#8250;</span>
+                <span>@Model.CategoryName</span>
+            }
         </div>
-        <h1 class="page-title">@Model.CategoryName Books</h1>
-        <p class="page-subtitle">Browse and borrow books from this category</p>
+        <h1 class="page-title">@(string.IsNullOrEmpty(Model.CategoryId) ? "All Books" : $"{Model.CategoryName} Books")</h1>
+        <p class="page-subtitle">Browse and borrow books@(string.IsNullOrEmpty(Model.CategoryId) ? "" : " from this category")</p>
     </div>
 
-    <div class="toolbar">
+    <form asp-controller="User" asp-action="Books" method="get" class="toolbar">
+        @if (!string.IsNullOrEmpty(Model.CategoryId))
+        {
+            <input type="hidden" name="category" value="@Model.CategoryId" />
+        }
         <div class="search-box">
             <span class="search-icon">&#128269;</span>
-            <input type="text" id="searchInput" placeholder="Search by title or author..." />
+            <input type="text" id="searchInput" name="search" value="@Model.Search" placeholder="Search by title, author, or ISBN..." />
         </div>
         <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all">All (@Model.TotalBooks)</button>
-            <button class="filter-btn" data-filter="available">Available (@Model.AvailableCount)</button>
-            <button class="filter-btn" data-filter="unavailable">Out of Stock (@Model.UnavailableCount)</button>
+            <button type="submit" name="filter" value="all" class="filter-btn @(Model.Filter == "all" || string.IsNullOrEmpty(Model.Filter) ? "active" : "")">All (@Model.TotalBooks)</button>
+            <button type="submit" name="filter" value="available" class="filter-btn @(Model.Filter == "available" ? "active" : "")">Available (@Model.AvailableCount)</button>
+            <button type="submit" name="filter" value="unavailable" class="filter-btn @(Model.Filter == "unavailable" ? "active" : "")">Out of Stock (@Model.UnavailableCount)</button>
         </div>
-    </div>
+    </form>
 
     @if (Model?.Books != null && Model.Books.Any())
     {
@@ -38,8 +45,8 @@
             {
                 var isAvailable = book.AvailableCopies > 0;
                 <div class="book-card"
-                     data-title="@book.Title.ToLower()"
-                     data-author="@book.Author.ToLower()"
+                     data-title="@((book.Title ?? string.Empty).ToLower())"
+                     data-author="@((book.Author ?? string.Empty).ToLower())"
                      data-availability="@(isAvailable ? "available" : "unavailable")"
                      data-book-id="@book.Id"
                      data-book-title="@book.Title"
@@ -119,7 +126,7 @@
         <div class="empty-state">
             <div class="empty-icon">&#128218;</div>
             <h3>No books in this category</h3>
-            <p>There are currently no books available in @Model.CategoryName. Please check back later.</p>
+            <p>No books match the current search or filter. Please try another keyword or status.</p>
         </div>
     }
 </div>

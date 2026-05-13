@@ -9,9 +9,12 @@ public class UserCategoryBooksViewModel
     public List<CategoryBookItem> Books { get; set; } = new List<CategoryBookItem>();
     public string? Search { get; set; }
     public string? Filter { get; set; }
-    public int TotalBooks => Books?.Count ?? 0;
-    public int AvailableCount => Books?.Count(b => b.AvailableCopies > 0) ?? 0;
-    public int UnavailableCount => Books?.Count(b => b.AvailableCopies == 0) ?? 0;
+    public int TotalBooksCount { get; set; }
+    public int AvailableBooksCount { get; set; }
+    public int UnavailableBooksCount { get; set; }
+    public int TotalBooks => TotalBooksCount > 0 ? TotalBooksCount : Books?.Count ?? 0;
+    public int AvailableCount => TotalBooksCount > 0 ? AvailableBooksCount : Books?.Count(b => b.AvailableCopies > 0) ?? 0;
+    public int UnavailableCount => TotalBooksCount > 0 ? UnavailableBooksCount : Books?.Count(b => b.AvailableCopies == 0) ?? 0;
 }
 
 public class CategoryBookItem
