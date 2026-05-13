@@ -97,8 +97,8 @@ main {
 }
 
 .hero-section {
-    min-height: 85vh;
-    padding: 5rem 0 4rem;
+    min-height: 62vh;
+    padding: 4rem 0 3rem;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     background-size: cover;
     background-position: center;
@@ -121,6 +121,7 @@ main {
     position: relative;
     z-index: 1;
     text-align: center;
+    transform: translateY(-2rem);
 }
 
 .hero-title {
@@ -186,6 +187,15 @@ main {
 }
 
 @media (max-width: 768px) {
+    .hero-section {
+        min-height: 58vh;
+        padding: 3rem 0 2rem;
+    }
+
+    .hero-content {
+        transform: translateY(-1rem);
+    }
+
     .hero-title {
         font-size: clamp(2.5rem, 12vw, 3.6rem);
         line-height: 1.05;
@@ -235,7 +245,7 @@ main {
 
 .cta-section {
     background-color: white;
-    padding: 4rem 0 8rem 0;
+    padding: 2rem 0 3rem 0;
 }
 
 /* User Navbar Avatars */
